@@ -1,12 +1,11 @@
 package keystore
 
 import (
+	"encoding/json"
 	"fmt"
-	"testing"
 	"math/big"
+	"testing"
 
-	//"github.com/Layr-Labs/eigenda/core"
-	//"github.com/Layr-Labs/eigenda/core/bn254"
 	"github.com/consensys/gnark-crypto/ecc/bn254"
 	"github.com/consensys/gnark-crypto/ecc/bn254/fp"
 	"github.com/stretchr/testify/assert"
@@ -33,6 +32,12 @@ func TestKeystore_Load(t *testing.T) {
 	fmt.Printf("g2.x2: %s\n", blsKeyPair.GetPubKeyG2().X.A1.String())
 	fmt.Printf("g2.y1: %s\n", blsKeyPair.GetPubKeyG2().Y.A0.String())
 	fmt.Printf("g2.y2: %s\n", blsKeyPair.GetPubKeyG2().Y.A1.String())
+
+	d, err := json.Marshal(blsKeyPair.GetPubKeyG1())
+	fmt.Println(string(d), err)
+
+	d, err = json.Marshal(blsKeyPair.GetPubKeyG2())
+	fmt.Println(string(d), err)
 }
 
 func TestKeystore_BLSSign(t *testing.T) {

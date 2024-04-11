@@ -1,4 +1,4 @@
-module github.com/etherfi-protocol/etherfi-avs-operator-CLI
+module github.com/dsrvlabs/etherfi-avs-operator-tool
 
 go 1.22.0
 
@@ -6,6 +6,7 @@ require (
 	github.com/Layr-Labs/eigensdk-go v0.1.5
 	github.com/consensys/gnark-crypto v0.12.1
 	github.com/stretchr/testify v1.9.0
+	github.com/urfave/cli/v3 v3.0.0-alpha9
 )
 
 require (
@@ -30,6 +31,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.10.0 // indirect
 	github.com/supranational/blst v0.3.11 // indirect
+	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
 	golang.org/x/crypto v0.18.0 // indirect
 	golang.org/x/exp v0.0.0-20231110203233-9a3e6036ecaa // indirect
 	golang.org/x/sync v0.5.0 // indirect

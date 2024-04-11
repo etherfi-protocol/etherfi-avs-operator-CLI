@@ -1,0 +1,6 @@
+#!/bin/bash
+
+./dist/etherfi avs \
+    --reg-msg "11585465638708266108361152098279500636157001421482828607025343733987420072556,5318931059680524364682626761127819527218661448312628369870425610763164501616" \
+    --bls-key-file "/Users/rootwarp/.eigenlayer/operator_keys/etherfi.bls.key.json" \
+    --bls-key-password "Etherfi@dsrv2024"
