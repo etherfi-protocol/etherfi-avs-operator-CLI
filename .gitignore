@@ -1,0 +1,6 @@
+go.work
+
+*.swo
+*.swp
+
+/dist
