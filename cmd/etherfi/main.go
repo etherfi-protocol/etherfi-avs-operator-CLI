@@ -19,6 +19,34 @@ import (
 )
 
 var (
+	registerBLSCmd = &cli.Command{
+		Name:   "register-bls",
+		Usage:  "register a bls key with the avsManager contract",
+		Action: registerBLS,
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:  "bls-signature-file",
+				Usage: "BLS signature json file",
+			},
+			&cli.IntFlag{
+				Name:  "operator-id",
+				Usage: "Operator ID",
+			},
+			&cli.IntSliceFlag{
+				Name:  "quorum-numbers",
+				Usage: "Quorum Numbers",
+			},
+			&cli.StringFlag{
+				Name:  "socket",
+				Usage: "Socket",
+			},
+			&cli.BoolFlag{
+				Name:  "broadcast",
+				Usage: "broadcast signed tx to network",
+			},
+		},
+	}
+
 	// TODO: refactoring
 	avsCmd = &cli.Command{
 		Name:  "avs",
@@ -108,9 +136,13 @@ func main() {
 	cmd := &cli.Command{
 		Commands: []*cli.Command{
 			avsCmd,
+			registerBLSCmd,
 		},
 	}
 
 	ctx := context.Background()
-	cmd.Run(ctx, os.Args)
+	if err := cmd.Run(ctx, os.Args); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }
