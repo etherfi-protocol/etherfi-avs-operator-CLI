@@ -1,12 +1,15 @@
 package main
 
 import (
+	"bytes"
 	"context"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"math/big"
 	"os"
 
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/types"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
@@ -26,7 +29,7 @@ var (
 func registerBLS(ctx context.Context, cli *cli.Command) error {
 
 	// TODO: network selection
-	chainID := 1
+	chainID := 17000
 
 	// load key for signing tx
 	privateKey, err := crypto.HexToECDSA(os.Getenv("PRIVATE_KEY"))
@@ -40,7 +43,7 @@ func registerBLS(ctx context.Context, cli *cli.Command) error {
 	}
 
 	// toggle whether tx is broadcast to network
-	transactor.NoSend = cli.Bool("broadcast")
+	transactor.NoSend = !cli.Bool("broadcast")
 
 	// connect to RPC node
 	rpcClient, err := ethclient.Dial(os.Getenv("RPC_URL"))
@@ -49,14 +52,14 @@ func registerBLS(ctx context.Context, cli *cli.Command) error {
 	}
 
 	// bind rpc to contract abi
-	operatorContract, err := NewAVSOperator(operatorManagerMainnet, rpcClient)
+	operatorContract, err := bindings.NewAVSOperator(operatorManagerHolesky, rpcClient)
 	if err != nil {
 		return fmt.Errorf("binding contract: %w", err)
 	}
 
-	// TODO: validato params
+	// TODO: validate params
 	operatorID := big.NewInt(cli.Int("operator-id"))
-	registryCoordinator := registryCoordinatorMainnet // TODO: network selection
+	registryCoordinator := registryCoordinatorHolesky // TODO: network selection
 	socket := cli.String("socket")
 	var quorumNumbers []uint8
 	for _, v := range cli.IntSlice("quorum-numbers") {
@@ -72,13 +75,16 @@ func registerBLS(ctx context.Context, cli *cli.Command) error {
 	// Sign transaction and broadcast if requested
 	tx, err := operatorContract.RegisterBlsKeyAsDelegatedNodeOperator(transactor, operatorID, registryCoordinator, quorumNumbers, socket, *params)
 	if err != nil {
-		return fmt.Errorf("signing and broadcasting tx: %w", err)
+		return fmt.Errorf("failed to sign and/or broadcast tx: %w", err)
 	}
-	fmt.Printf("raw tx: %+v\n", tx)
+	var buf bytes.Buffer
+	tx.EncodeRLP(&buf)
+	fmt.Printf("raw tx: %s\n", hex.EncodeToString(buf.Bytes()))
+
 	return nil
 }
 
-func BLSJsonToRegistrationParams(filepath string) (*IBLSApkRegistryPubkeyRegistrationParams, error) {
+func BLSJsonToRegistrationParams(filepath string) (*bindings.IBLSApkRegistryPubkeyRegistrationParams, error) {
 
 	buf, err := os.ReadFile(filepath)
 	if err != nil {
@@ -101,16 +107,16 @@ func BLSJsonToRegistrationParams(filepath string) (*IBLSApkRegistryPubkeyRegistr
 	sigX, _ := big.NewInt(0).SetString(input.Signature.X, 10)
 	sigY, _ := big.NewInt(0).SetString(input.Signature.Y, 10)
 
-	contractParams := IBLSApkRegistryPubkeyRegistrationParams{
-		PubkeyRegistrationSignature: BN254G1Point{
+	contractParams := bindings.IBLSApkRegistryPubkeyRegistrationParams{
+		PubkeyRegistrationSignature: bindings.BN254G1Point{
 			X: sigX,
 			Y: sigY,
 		},
-		PubkeyG1: BN254G1Point{
+		PubkeyG1: bindings.BN254G1Point{
 			X: g1x,
 			Y: g1y,
 		},
-		PubkeyG2: BN254G2Point{
+		PubkeyG2: bindings.BN254G2Point{
 			X: [2]*big.Int{g2x0, g2x1},
 			Y: [2]*big.Int{g2y0, g2y1},
 		},
@@ -118,26 +124,3 @@ func BLSJsonToRegistrationParams(filepath string) (*IBLSApkRegistryPubkeyRegistr
 
 	return &contractParams, nil
 }
-
-var sampleJson = `
-{
-  "g1": {
-    "x": "15218112579367957411928954156670379256187395672498320260043799151083351607878",
-    "y": "1829093517312581359150964593061338525079957054057037886068815759612114045222"
-  },
-  "g2": {
-    "x": [
-      "2627565466878260585387522540939104292574753779200643920609949107130139616193",
-      "7261989353910828479771287209995474709109618234767145072862270353781610454899"
-    ],
-    "y": [
-      "5149090414582510750269480612330833866066911566206397912648971332104940904083",
-      "10300083260136129484702287768515135649716536253731847889418957492428969904730"
-    ]
-  },
-  "signature": {
-    "x": "17587541414338937490318634396336343655022504812039872978230542318938302397665",
-    "y": "3494028518829950357281653456620060411555755988257320462632996122767491526394"
-  }
-}
-`
