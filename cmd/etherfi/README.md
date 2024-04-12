@@ -28,14 +28,25 @@ Run,
     --reg-msg <pubkeyRegistrationMessageHash> \
     --bls-key-file <BLS key file> \
     --bls-key-password <Password of keyfile>
+
+~$ ./dist/etherfi avs \
+    --bls-key-file <BLS key file> \
+    --bls-key-password <Password of keyfile>
+    --service-manager <Contract Address of AVS Service Manager> \
+    --eigenlayer-operator <Registered Eigenlayer Operator> \
+    --rpc <EL RPC>
+
 ```
 
 Example:
 ```
-./dist/etherfi avs \
-    --reg-msg "11585465638708266108361152098279500636157001421482828607025343733987420072556,5318931059680524364682626761127819527218661448312628369870425610763164501616" \
-    --bls-key-file "/Users/rootwarp/.eigenlayer/operator_keys/etherfi.bls.key.json" \
-    --bls-key-password "<Password string for BLS key>"
+~$ ./dist/etherfi avs \
+    --bls-key-file  ./keyfile.bls.json \
+    --bls-key-password thisisyourpassword \
+    --service-manager "0xd4a7e1bd8015057293f0d0a557088c286942e84b" \
+    --eigenlayer-operator "0x53F69255A16E6a924665EB839f2730bFF01BE7D8" \
+    --rpc https://ethereum-holesky-rpc.publicnode.com
+
 ```
 
 Then, the new json file will be created.
@@ -67,4 +78,5 @@ Example of created json file seems like below
 ## TODO
 
 - Retrieve `pubkeyRegistrationMessageHash` from contract.
-- Create operator signature
+- Create operator signature.
+- Send transaction to store BLS signature.
