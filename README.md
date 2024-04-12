@@ -8,7 +8,7 @@ https://etherfi.notion.site/Node-Operator-on-chain-operator-as-a-contract-9e86d3
 
 ## Register BLS key as Delegated node operator
 
-    ./etherfi register-bls --bls-signature-file keystore/fixtures/fixture.bls.signature.json --operator-id 1 --quorum-numbers 16,32,3 --socket "TEST_SOCKET"
+    ./etherfi register-bls --bls-signature-file keystore/fixtures/fixture.bls.signature.json --operator-id 1 --quorum-numbers 16,32,3 --socket "TEST_SOCKET" --chain-id 17000
 
     // Add --broadcast flag to submit transaction onchain
 

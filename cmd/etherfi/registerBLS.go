@@ -28,8 +28,22 @@ var (
 // Needs a bunch of refactoring
 func registerBLS(ctx context.Context, cli *cli.Command) error {
 
-	// TODO: network selection
-	chainID := 17000
+	var (
+		registryCoordinatorAddress common.Address
+		operatorManagerAddress     common.Address
+	)
+
+	chainID := cli.Int("chain-id")
+	switch chainID {
+	case 1:
+		registryCoordinatorAddress = registryCoordinatorMainnet
+		operatorManagerAddress = operatorManagerMainnet
+	case 17000:
+		registryCoordinatorAddress = registryCoordinatorHolesky
+		operatorManagerAddress = operatorManagerHolesky
+	default:
+		return fmt.Errorf("unimplemented chain: %d", chainID)
+	}
 
 	// load key for signing tx
 	privateKey, err := crypto.HexToECDSA(os.Getenv("PRIVATE_KEY"))
@@ -37,7 +51,7 @@ func registerBLS(ctx context.Context, cli *cli.Command) error {
 		return fmt.Errorf("loading signing key: %w", err)
 	}
 
-	transactor, err := bind.NewKeyedTransactorWithChainID(privateKey, big.NewInt(int64(chainID)))
+	transactor, err := bind.NewKeyedTransactorWithChainID(privateKey, big.NewInt(chainID))
 	if err != nil {
 		return fmt.Errorf("creating signer from key: %w", err)
 	}
@@ -52,14 +66,14 @@ func registerBLS(ctx context.Context, cli *cli.Command) error {
 	}
 
 	// bind rpc to contract abi
-	operatorContract, err := bindings.NewAVSOperator(operatorManagerHolesky, rpcClient)
+	operatorContract, err := bindings.NewAVSOperator(operatorManagerAddress, rpcClient)
 	if err != nil {
 		return fmt.Errorf("binding contract: %w", err)
 	}
 
 	// TODO: validate params
 	operatorID := big.NewInt(cli.Int("operator-id"))
-	registryCoordinator := registryCoordinatorHolesky // TODO: network selection
+	registryCoordinator := registryCoordinatorAddress
 	socket := cli.String("socket")
 	var quorumNumbers []uint8
 	for _, v := range cli.IntSlice("quorum-numbers") {

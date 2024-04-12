@@ -43,6 +43,11 @@ var (
 				Name:  "broadcast",
 				Usage: "broadcast signed tx to network",
 			},
+			&cli.IntFlag{
+				Name:  "chain-id",
+				Usage: "Chain ID",
+				Value: 1, // default to mainnet
+			},
 		},
 	}
 
