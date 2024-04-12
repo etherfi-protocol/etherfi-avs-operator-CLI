@@ -2,7 +2,7 @@
 
 build:
 	@echo "Building..."
-	@go build -o dist/etherfi cmd/etherfi/main.go
+	@go build -o dist/etherfi ./cmd/etherfi/
 
 test:
 	@echo "Testing..."
