@@ -6,16 +6,15 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"math/big"
 	"os"
-	"strings"
 
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/keystore"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/types"
-
-	"github.com/consensys/gnark-crypto/ecc/bn254"
-	"github.com/consensys/gnark-crypto/ecc/bn254/fp"
+	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/urfave/cli/v3"
+
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/keystore"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/logging"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/types"
 )
 
 var (
@@ -54,40 +53,45 @@ var (
 		Action: func(ctx context.Context, cli *cli.Command) error {
 			blsKeyFile := cli.String("bls-key-file")
 			blsKeyPassword := cli.String("bls-key-password")
-			regMsg := cli.String("reg-msg")
+
+			serviceManager := cli.String("service-manager")
+			eigenlayerOperator := cli.String("eigenlayer-operator")
+
+			rpc := cli.String("rpc")
+
+			logging.Info("main", "rpc", rpc)
+			logging.Info("main", "servicemanager addr", serviceManager)
 
 			// TODO: Get password by prompt
-
 			ks := keystore.NewKeystore()
-			keyPair, err := ks.Load(blsKeyFile, blsKeyPassword)
+			keyPair, err := ks.LoadBLS(blsKeyFile, blsKeyPassword)
 			if err != nil {
+				logging.Error("main", err)
 				return err
 			}
 
-			msgTokens := strings.Split(regMsg, ",")
-			if len(msgTokens) != 2 {
-				return fmt.Errorf("invalid registration message")
+			//
+			client, err := ethclient.Dial(rpc)
+
+			daServiceManager, err := bindings.NewEigenDAServiceManager(serviceManager, client)
+			if err != nil {
+				logging.Error("main", err)
+				return err
 			}
 
-			msgG1X := new(big.Int)
-			msgG1X.SetString(msgTokens[0], 10)
-
-			msgG1Y := new(big.Int)
-			msgG1Y.SetString(msgTokens[1], 10)
-
-			xElem := fp.NewElement(0)
-			xElem.SetBigInt(msgG1X)
-
-			yElem := fp.NewElement(0)
-			yElem.SetBigInt(msgG1Y)
-
-			g1PointMsg := bn254.G1Affine{
-				X: xElem,
-				Y: yElem,
+			coordinator, err := daServiceManager.RegistryCoordinator()
+			if err != nil {
+				logging.Error("main", err)
+				return err
 			}
 
-			// Sign
-			signature := keyPair.SignHashedToCurveMessage(&g1PointMsg)
+			g1MsgToSign, err := coordinator.PubkeyRegistrationMessageHash(eigenlayerOperator)
+			if err != nil {
+				logging.Error("main", err)
+				return err
+			}
+
+			signature := keyPair.SignHashedToCurveMessage(g1MsgToSign)
 
 			sig := new(types.AVSBLSSignature)
 			sig.G1.X = keyPair.GetPubKeyG1().X.String()
@@ -100,6 +104,10 @@ var (
 			sig.Signature.Y = signature.Y.String()
 
 			d, err := json.Marshal(sig)
+			if err != nil {
+				logging.Error("main", err)
+				return err
+			}
 
 			// Write into json
 			// TODO: or send contract transaction
@@ -107,10 +115,11 @@ var (
 			filename := hex.EncodeToString(sha256sum[:]) + ".json"
 			err = os.WriteFile(filename, d, 0644)
 			if err != nil {
+				logging.Error("main", err)
 				return err
 			}
 
-			fmt.Println("Signature file: ", filename)
+			logging.Info("main", "Signature file: ", filename)
 
 			return nil
 		},
@@ -127,6 +136,19 @@ var (
 			&cli.StringFlag{
 				Name:  "reg-msg",
 				Usage: "PubkeyRegistragionMessageHash",
+			},
+
+			&cli.StringFlag{
+				Name:  "rpc",
+				Usage: "RPC Endpoint",
+			},
+			&cli.StringFlag{
+				Name:  "service-manager",
+				Usage: "Contract Address of Service Manager",
+			},
+			&cli.StringFlag{
+				Name:  "eigenlayer-operator",
+				Usage: "Address of Registered Eigenlayer Operator",
 			},
 		},
 	}
