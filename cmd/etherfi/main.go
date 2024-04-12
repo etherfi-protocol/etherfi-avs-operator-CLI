@@ -59,7 +59,7 @@ var (
 			// TODO: Get password by prompt
 
 			ks := keystore.NewKeystore()
-			keyPair, err := ks.Load(blsKeyFile, blsKeyPassword)
+			keyPair, err := ks.LoadBLS(blsKeyFile, blsKeyPassword)
 			if err != nil {
 				return err
 			}

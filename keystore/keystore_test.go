@@ -18,7 +18,7 @@ func TestKeystore_Load(t *testing.T) {
 	passwd := "fixture@test1234"
 
 	ks := NewKeystore()
-	blsKeyPair, err := ks.Load(blsKeyFile, passwd)
+	blsKeyPair, err := ks.LoadBLS(blsKeyFile, passwd)
 
 	assert.Nil(t, err)
 	assert.Equal(t, privKey, blsKeyPair.PrivKey.String())
@@ -46,7 +46,7 @@ func TestKeystore_BLSSign(t *testing.T) {
 	passwd := "fixture@test1234"
 
 	ks := NewKeystore()
-	blsKeyPair, err := ks.Load(blsKeyFile, passwd)
+	blsKeyPair, err := ks.LoadBLS(blsKeyFile, passwd)
 
 	assert.Nil(t, err)
 
