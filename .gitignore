@@ -3,5 +3,6 @@ go.work
 *.swo
 *.swp
 
+etherfi
 .env
 /dist
