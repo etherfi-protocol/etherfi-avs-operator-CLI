@@ -9,7 +9,7 @@ import (
 	"math/big"
 	"os"
 
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/types"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
@@ -19,10 +19,11 @@ import (
 )
 
 var (
-	registryCoordinatorMainnet = common.HexToAddress("0x0BAAc79acD45A023E19345c352d8a7a83C4e5656")
-	registryCoordinatorHolesky = common.HexToAddress("0x53012C69A189cfA2D9d29eb6F19B32e0A2EA3490")
-	operatorManagerMainnet     = common.HexToAddress("0x2093Bbb221f1d8C7c932c32ee28Be6dEe4a37A6a")
-	operatorManagerHolesky     = common.HexToAddress("0xdf9679e8bfce22ae503fd2726cb1218a18cd8bf4")
+	// TODO: I think the registry coordinator needs to be a provided paramater?
+	EigenDARegistryCoordinatorMainnet = common.HexToAddress("0x0BAAc79acD45A023E19345c352d8a7a83C4e5656")
+	EigenDARegistryCoordinatorHolesky = common.HexToAddress("0x53012C69A189cfA2D9d29eb6F19B32e0A2EA3490")
+	operatorManagerMainnet            = common.HexToAddress("0x2093Bbb221f1d8C7c932c32ee28Be6dEe4a37A6a")
+	operatorManagerHolesky            = common.HexToAddress("0xdf9679e8bfce22ae503fd2726cb1218a18cd8bf4")
 )
 
 // Needs a bunch of refactoring
@@ -36,10 +37,10 @@ func registerBLS(ctx context.Context, cli *cli.Command) error {
 	chainID := cli.Int("chain-id")
 	switch chainID {
 	case 1:
-		registryCoordinatorAddress = registryCoordinatorMainnet
+		registryCoordinatorAddress = EigenDARegistryCoordinatorMainnet
 		operatorManagerAddress = operatorManagerMainnet
 	case 17000:
-		registryCoordinatorAddress = registryCoordinatorHolesky
+		registryCoordinatorAddress = EigenDARegistryCoordinatorHolesky
 		operatorManagerAddress = operatorManagerHolesky
 	default:
 		return fmt.Errorf("unimplemented chain: %d", chainID)
@@ -66,7 +67,7 @@ func registerBLS(ctx context.Context, cli *cli.Command) error {
 	}
 
 	// bind rpc to contract abi
-	operatorContract, err := bindings.NewAVSOperator(operatorManagerAddress, rpcClient)
+	operatorContract, err := contracts.NewEtherfiAVSOperatorsManager(operatorManagerAddress, rpcClient)
 	if err != nil {
 		return fmt.Errorf("binding contract: %w", err)
 	}
@@ -98,7 +99,7 @@ func registerBLS(ctx context.Context, cli *cli.Command) error {
 	return nil
 }
 
-func BLSJsonToRegistrationParams(filepath string) (*bindings.IBLSApkRegistryPubkeyRegistrationParams, error) {
+func BLSJsonToRegistrationParams(filepath string) (*contracts.IBLSApkRegistryPubkeyRegistrationParams, error) {
 
 	buf, err := os.ReadFile(filepath)
 	if err != nil {
@@ -121,16 +122,16 @@ func BLSJsonToRegistrationParams(filepath string) (*bindings.IBLSApkRegistryPubk
 	sigX, _ := big.NewInt(0).SetString(input.Signature.X, 10)
 	sigY, _ := big.NewInt(0).SetString(input.Signature.Y, 10)
 
-	contractParams := bindings.IBLSApkRegistryPubkeyRegistrationParams{
-		PubkeyRegistrationSignature: bindings.BN254G1Point{
+	contractParams := contracts.IBLSApkRegistryPubkeyRegistrationParams{
+		PubkeyRegistrationSignature: contracts.BN254G1Point{
 			X: sigX,
 			Y: sigY,
 		},
-		PubkeyG1: bindings.BN254G1Point{
+		PubkeyG1: contracts.BN254G1Point{
 			X: g1x,
 			Y: g1y,
 		},
-		PubkeyG2: bindings.BN254G2Point{
+		PubkeyG2: contracts.BN254G2Point{
 			X: [2]*big.Int{g2x0, g2x1},
 			Y: [2]*big.Int{g2y0, g2y1},
 		},

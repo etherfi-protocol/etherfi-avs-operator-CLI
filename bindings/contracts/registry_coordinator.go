@@ -1,7 +1,7 @@
 // Code generated - DO NOT EDIT.
 // This file is a generated binding and any manual changes will be lost.
 
-package registry_coordinator
+package contracts
 
 import (
 	"errors"
@@ -28,35 +28,10 @@ var (
 	_ = event.NewSubscription
 )
 
-// BN254G1Point is an auto generated low-level Go binding around an user-defined struct.
-type BN254G1Point struct {
-	X *big.Int
-	Y *big.Int
-}
-
-// BN254G2Point is an auto generated low-level Go binding around an user-defined struct.
-type BN254G2Point struct {
-	X [2]*big.Int
-	Y [2]*big.Int
-}
-
-// IBLSApkRegistryPubkeyRegistrationParams is an auto generated low-level Go binding around an user-defined struct.
-type IBLSApkRegistryPubkeyRegistrationParams struct {
-	PubkeyRegistrationSignature BN254G1Point
-	PubkeyG1                    BN254G1Point
-	PubkeyG2                    BN254G2Point
-}
-
 // IRegistryCoordinatorOperatorInfo is an auto generated low-level Go binding around an user-defined struct.
 type IRegistryCoordinatorOperatorInfo struct {
 	OperatorId [32]byte
 	Status     uint8
-}
-
-// IRegistryCoordinatorOperatorKickParam is an auto generated low-level Go binding around an user-defined struct.
-type IRegistryCoordinatorOperatorKickParam struct {
-	QuorumNumber uint8
-	Operator     common.Address
 }
 
 // IRegistryCoordinatorOperatorSetParam is an auto generated low-level Go binding around an user-defined struct.
@@ -71,13 +46,6 @@ type IRegistryCoordinatorQuorumBitmapUpdate struct {
 	UpdateBlockNumber     uint32
 	NextUpdateBlockNumber uint32
 	QuorumBitmap          *big.Int
-}
-
-// ISignatureUtilsSignatureWithSaltAndExpiry is an auto generated low-level Go binding around an user-defined struct.
-type ISignatureUtilsSignatureWithSaltAndExpiry struct {
-	Signature []byte
-	Salt      [32]byte
-	Expiry    *big.Int
 }
 
 // IStakeRegistryStrategyParams is an auto generated low-level Go binding around an user-defined struct.
