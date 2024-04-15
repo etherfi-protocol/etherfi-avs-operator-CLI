@@ -2,11 +2,11 @@
 
 ## Contracts
 - Code
- - https://github.com/etherfi-protocol/smart-contracts/blob/syko/feature/etherfi_avs_operator/src/EtherFiAvsOperatorsManager.sol
- - https://github.com/etherfi-protocol/smart-contracts/blob/syko/feature/etherfi_avs_operator/src/EtherFiAvsOperator.sol
+  - https://github.com/etherfi-protocol/smart-contracts/blob/syko/feature/etherfi_avs_operator/src/EtherFiAvsOperatorsManager.sol
+  - https://github.com/etherfi-protocol/smart-contracts/blob/syko/feature/etherfi_avs_operator/src/EtherFiAvsOperator.sol
 - Deployment
- - Mainnet: 0x2093Bbb221f1d8C7c932c32ee28Be6dEe4a37A6a
- - Holesky: 0xdf9679e8bfce22ae503fd2726cb1218a18cd8bf4
+  - Mainnet: 0x2093Bbb221f1d8C7c932c32ee28Be6dEe4a37A6a
+  - Holesky: 0xdf9679e8bfce22ae503fd2726cb1218a18cd8bf4
 
 ## Prerequisites
 
