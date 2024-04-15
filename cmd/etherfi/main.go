@@ -192,10 +192,12 @@ var (
 			sig := new(types.AVSBLSSignature)
 			sig.G1.X = keyPair.GetPubKeyG1().X.String()
 			sig.G1.Y = keyPair.GetPubKeyG1().Y.String()
-			sig.G2.X[0] = keyPair.GetPubKeyG2().X.A0.String()
-			sig.G2.X[1] = keyPair.GetPubKeyG2().X.A1.String()
-			sig.G2.Y[0] = keyPair.GetPubKeyG2().Y.A0.String()
-			sig.G2.Y[1] = keyPair.GetPubKeyG2().Y.A1.String()
+			
+			sig.G2.X[1] = keyPair.GetPubKeyG2().X.A0.String()
+			sig.G2.X[0] = keyPair.GetPubKeyG2().X.A1.String()
+			sig.G2.Y[1] = keyPair.GetPubKeyG2().Y.A0.String()
+			sig.G2.Y[0] = keyPair.GetPubKeyG2().Y.A1.String()
+			
 			sig.Signature.X = signature.X.String()
 			sig.Signature.Y = signature.Y.String()
 
