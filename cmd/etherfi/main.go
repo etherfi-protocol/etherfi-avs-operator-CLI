@@ -135,7 +135,7 @@ var (
 
 	// TODO: refactoring
 	createBlsCmd = &cli.Command{
-		Name:   "create-bls",
+		Name:   "create-bls-signature",
 		Usage:  "Create BLS signature for AVS registration",
 		Action: createBLS,
 		// TODO: Check flags details
