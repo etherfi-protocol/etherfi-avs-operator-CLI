@@ -8,11 +8,11 @@
   - Mainnet: 0x2093Bbb221f1d8C7c932c32ee28Be6dEe4a37A6a
   - Holesky: 0xdf9679e8bfce22ae503fd2726cb1218a18cd8bf4
 
-## Prerequisites
+## Prerequisites as AVS operator
 
 - Environment file for expected ENV variables(See sample.env).
-- ECDSA key file which is a account to be delegated by ether.fi team.
 - BLS key file which is used for AVS operation.
+- a wallet (EOA or gnosis safe) to interact with ether.fi AVS operator contracts.
 - Etherereum RPC endpoint to send transactions.
 
 ## Scenario
@@ -37,7 +37,7 @@ dist
 
 ### Step 2: Request to register Delegated AVS operator
 
-Request to ether.fi team to register the ECDSA key as delegated AVS operator.
+Request to ether.fi team to register your wallet address as delegated AVS operator.
 Then, ether.fi team will register submitted account to `ether.fiAvsOperatorManager` contract.
 
 After ether.fi team register the information, delegted AVS operator should have the following information.
