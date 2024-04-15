@@ -10,6 +10,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -31,18 +32,18 @@ func registrationDigest(ctx context.Context, cli *cli.Command) error {
 		return fmt.Errorf("dialing RPC: %w", err)
 	}
 
-	var operatorManagerAddress common.Address
+	var cfg bindings.Config
 	switch chainID {
 	case 1:
-		operatorManagerAddress = operatorManagerMainnet
+		cfg = bindings.Mainnet
 	case 17000:
-		operatorManagerAddress = operatorManagerHolesky
+		cfg = bindings.Holesky
 	default:
 		return fmt.Errorf("unimplemented chain: %d", chainID)
 	}
 
 	// bind rpc to contract abi
-	operatorManagerContract, err := contracts.NewEtherfiAVSOperatorsManager(operatorManagerAddress, rpcClient)
+	operatorManagerContract, err := contracts.NewEtherfiAVSOperatorsManager(cfg.OperatorManagerAddress, rpcClient)
 	if err != nil {
 		return fmt.Errorf("binding operatorManager: %w", err)
 	}

@@ -1,50 +1,32 @@
 package main
 
 import (
-	"bytes"
 	"context"
-	"crypto/rand"
 	"encoding/hex"
 	"fmt"
 	"math/big"
 	"os"
-	"time"
 
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/urfave/cli/v3"
 )
 
-var (
-	avsDirectoryMainnet = common.HexToAddress("0x135DDa560e946695d6f155dACaFC6f1F25C1F5AF")
-	avsDirectoryHolesky = common.HexToAddress("0x055733000064333CaDDbC92763c58BF0192fFeBf")
-)
-
-// TODO: Inject
-//var etherfi
-
 // Needs a bunch of refactoring
+
+// TODO: This function is still a WIP as I debug an issue related to the BLS keys
 func registerOperator(ctx context.Context, cli *cli.Command) error {
 
-	var (
-		registryCoordinatorAddress common.Address
-		operatorManagerAddress     common.Address
-		avsDirectoryAddress        common.Address
-	)
-
+	var cfg bindings.Config
 	chainID := cli.Int("chain-id")
 	switch chainID {
 	case 1:
-		registryCoordinatorAddress = EigenDARegistryCoordinatorMainnet
-		operatorManagerAddress = operatorManagerMainnet
-		avsDirectoryAddress = avsDirectoryMainnet
+		cfg = bindings.Mainnet
 	case 17000:
-		registryCoordinatorAddress = EigenDARegistryCoordinatorHolesky
-		operatorManagerAddress = operatorManagerHolesky
-		avsDirectoryAddress = avsDirectoryHolesky
+		cfg = bindings.Holesky
 	default:
 		return fmt.Errorf("unimplemented chain: %d", chainID)
 	}
@@ -62,92 +44,91 @@ func registerOperator(ctx context.Context, cli *cli.Command) error {
 	}
 
 	// bind rpc to contract abi
-	operatorManagerContract, err := contracts.NewEtherfiAVSOperatorsManager(operatorManagerAddress, rpcClient)
+	operatorManagerContract, err := contracts.NewEtherfiAVSOperatorsManager(cfg.OperatorManagerAddress, rpcClient)
 	if err != nil {
 		return fmt.Errorf("binding contract: %w", err)
 	}
-	directoryContract, err := contracts.NewAVSDirectory(avsDirectoryAddress, rpcClient)
-	if err != nil {
-		return fmt.Errorf("binding contract: %w", err)
-	}
-
-	// get hash to sign
-
-	/*
-		// convert to ethereum address
-		publicKey := privateKey.Public()
-		publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
-		if !ok {
-			return fmt.Errorf("publicKey is not of type *ecdsa.PublicKey")
-		}
-		operatorAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
-	*/
+	fmt.Println(operatorManagerContract)
 
 	transactor, err := bind.NewKeyedTransactorWithChainID(privateKey, big.NewInt(chainID))
 	if err != nil {
 		return fmt.Errorf("creating signer from key: %w", err)
 	}
 
+	/*
+		debugSigningFunc := func(address common.Address, tx *types.Transaction) (*types.Transaction, error) {
+			fmt.Printf("--------------------------------------\n")
+
+			signer := types.LatestSignerForChainID(big.NewInt(17000))
+			keyAddr := common.HexToAddress("0xD0d7F8a5a86d8271ff87ff24145Cf40CEa9F7A39")
+
+			if address != keyAddr {
+				return nil, fmt.Errorf("wrong signing key")
+			}
+			signature, err := crypto.Sign(signer.Hash(tx).Bytes(), privateKey)
+			if err != nil {
+				return nil, err
+			}
+
+			test, err := tx.WithSignature(signer, signature)
+			if err != nil {
+				return nil, fmt.Errorf("unable to sign: %w", err)
+			}
+			buf := bytes.Buffer{}
+			if err := test.EncodeRLP(&buf); err != nil {
+				panic(err)
+			}
+
+			fmt.Printf("signed tx: %s\n", string(buf.Bytes()))
+
+			return tx.WithSignature(signer, signature)
+		}
+		transactor.Signer = debugSigningFunc
+	*/
+
 	// toggle whether tx is broadcast to network
 	transactor.NoSend = !cli.Bool("broadcast")
 
-	// calculate the hash
-	//directoryContract.CalculateOperatorAVSRegistrationDigestHash(nil, ope
-	salt := make([]byte, 32)
-	if _, err := rand.Read(salt); err != nil {
-		return fmt.Errorf("unable to generate salt: %w", err)
-	}
-
-	// TODO: Inject
-	//operatorID := 1
-	operatorID := big.NewInt(cli.Int("operator-id"))
-
-	// grab the operator
-	operatorAddr, err := operatorManagerContract.AvsOperators(nil, operatorID)
+	// hardcoded test
+	operatorID := big.NewInt(1)
+	registryCoordinator := cfg.BrevisRegistryCoordinator
+	quorumNumbers := []byte{2}
+	socket := "no need"
+	blsParams, err := BLSJsonToRegistrationParams("keystore/fixtures/brevis.json")
 	if err != nil {
-		return fmt.Errorf("failed to look up operator address: %w", err)
+		return fmt.Errorf("loading bls json: %w", err)
 	}
 
-	// figure out who needs to sign the message
-	signerAddr, err := operatorManagerContract.EcdsaSigner(nil, operatorID)
+	sig, err := hex.DecodeString("79f529ba4257af48865fcec577fd08a506e9aa7f38cc727a674301682c8b40a20fa28b13cde6127b98079366edf5c603aba582fa90a1c3b2847cfb96d8a94df21c")
 	if err != nil {
-		return fmt.Errorf("failed to look up operator address: %w", err)
+		return fmt.Errorf("invalid signature value: %w", err)
 	}
-	fmt.Printf("signerAddr: %s\n", signerAddr)
-	return nil
-
-	expiry := new(big.Int).SetInt64(time.Now().Add(24 * time.Hour * 365).Unix())
-
-	// sign
-
-	// pass along
-
-	// operator, avs, salt, expiry
-
-	directoryContract.CalculateOperatorAVSRegistrationDigestHash(nil, operatorAddr, EigenDARegistryCoordinatorHolesky, [32]byte(salt), expiry)
-
-	// TODO: validate params
-	registryCoordinator := registryCoordinatorAddress
-	socket := cli.String("socket")
-	var quorumNumbers []uint8
-	for _, v := range cli.IntSlice("quorum-numbers") {
-		quorumNumbers = append(quorumNumbers, uint8(v))
-	}
-
-	// load bls signature and convert to format expected by contract
-	params, err := BLSJsonToRegistrationParams(cli.String("bls-signature-file"))
+	salt, err := hex.DecodeString("bd320e070eceae61901e284e73b45355833172dc8fa97cc2fe10a76660aa97a8")
 	if err != nil {
-		return fmt.Errorf("barsing bls signature file: %w", err)
+		return fmt.Errorf("invalid salt value: %w", err)
+	}
+	expiry := 1744684487
+
+	fmt.Printf("operatorID: %s\n", operatorID)
+	fmt.Printf("registryCoordinator: %s\n", registryCoordinator)
+	fmt.Printf("quorumNumbers: %v\n", quorumNumbers)
+	fmt.Printf("socket: %s\n", socket)
+	fmt.Printf("BLS: %+v\n", blsParams)
+
+	sigParams := contracts.ISignatureUtilsSignatureWithSaltAndExpiry{
+		Signature: sig,
+		Salt:      [32]byte(salt),
+		Expiry:    big.NewInt(int64(expiry)),
+	}
+	fmt.Printf("SigParams: %+v\n", sigParams)
+
+	_, err = operatorManagerContract.RegisterOperator(transactor, operatorID, registryCoordinator, quorumNumbers, socket, *blsParams, sigParams)
+	if err != nil {
+		return fmt.Errorf("registering operator: %w", err)
 	}
 
-	// Sign transaction and broadcast if requested
-	tx, err := operatorManagerContract.RegisterBlsKeyAsDelegatedNodeOperator(transactor, operatorID, registryCoordinator, quorumNumbers, socket, *params)
-	if err != nil {
-		return fmt.Errorf("failed to sign and/or broadcast tx: %w", err)
-	}
-	var buf bytes.Buffer
-	tx.EncodeRLP(&buf)
-	fmt.Printf("raw tx: %s\n", hex.EncodeToString(buf.Bytes()))
+	//return _EtherfiAVSOperatorsManager.contract.Transact(opts, "registerOperator", _id, _avsRegistryCoordinator, _quorumNumbers, _socket, _params, _operatorSignature)
+	//input, err := c.abi.Pack(method, params...)
 
 	return nil
 }

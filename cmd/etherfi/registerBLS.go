@@ -9,6 +9,7 @@ import (
 	"math/big"
 	"os"
 
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/types"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -18,30 +19,16 @@ import (
 	"github.com/urfave/cli/v3"
 )
 
-var (
-	// TODO: I think the registry coordinator needs to be a provided paramater?
-	EigenDARegistryCoordinatorMainnet = common.HexToAddress("0x0BAAc79acD45A023E19345c352d8a7a83C4e5656")
-	EigenDARegistryCoordinatorHolesky = common.HexToAddress("0x53012C69A189cfA2D9d29eb6F19B32e0A2EA3490")
-	operatorManagerMainnet            = common.HexToAddress("0x2093Bbb221f1d8C7c932c32ee28Be6dEe4a37A6a")
-	operatorManagerHolesky            = common.HexToAddress("0xdf9679e8bfce22ae503fd2726cb1218a18cd8bf4")
-)
-
 // Needs a bunch of refactoring
 func registerBLS(ctx context.Context, cli *cli.Command) error {
 
-	var (
-		registryCoordinatorAddress common.Address
-		operatorManagerAddress     common.Address
-	)
-
+	var cfg bindings.Config
 	chainID := cli.Int("chain-id")
 	switch chainID {
 	case 1:
-		registryCoordinatorAddress = EigenDARegistryCoordinatorMainnet
-		operatorManagerAddress = operatorManagerMainnet
+		cfg = bindings.Mainnet
 	case 17000:
-		registryCoordinatorAddress = EigenDARegistryCoordinatorHolesky
-		operatorManagerAddress = operatorManagerHolesky
+		cfg = bindings.Holesky
 	default:
 		return fmt.Errorf("unimplemented chain: %d", chainID)
 	}
@@ -67,14 +54,14 @@ func registerBLS(ctx context.Context, cli *cli.Command) error {
 	}
 
 	// bind rpc to contract abi
-	operatorContract, err := contracts.NewEtherfiAVSOperatorsManager(operatorManagerAddress, rpcClient)
+	operatorContract, err := contracts.NewEtherfiAVSOperatorsManager(cfg.OperatorManagerAddress, rpcClient)
 	if err != nil {
 		return fmt.Errorf("binding contract: %w", err)
 	}
 
 	// TODO: validate params
 	operatorID := big.NewInt(cli.Int("operator-id"))
-	registryCoordinator := registryCoordinatorAddress
+	registryCoordinator := common.HexToAddress(cli.String("registry-coordinator"))
 	socket := cli.String("socket")
 	var quorumNumbers []uint8
 	for _, v := range cli.IntSlice("quorum-numbers") {
@@ -84,7 +71,7 @@ func registerBLS(ctx context.Context, cli *cli.Command) error {
 	// load bls signature and convert to format expected by contract
 	params, err := BLSJsonToRegistrationParams(cli.String("bls-signature-file"))
 	if err != nil {
-		return fmt.Errorf("barsing bls signature file: %w", err)
+		return fmt.Errorf("parsing bls signature file: %w", err)
 	}
 
 	// Sign transaction and broadcast if requested

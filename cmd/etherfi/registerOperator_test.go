@@ -11,6 +11,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
@@ -26,11 +27,11 @@ func TestSignerForOperatorID(t *testing.T) {
 	}
 
 	// bind rpc to contract abi
-	operatorManagerContract, err := contracts.NewEtherfiAVSOperatorsManager(operatorManagerHolesky, rpcClient)
+	operatorManagerContract, err := contracts.NewEtherfiAVSOperatorsManager(bindings.Holesky.OperatorManagerAddress, rpcClient)
 	if err != nil {
 		t.Fatal(err)
 	}
-	directoryContract, err := contracts.NewAVSDirectory(avsDirectoryHolesky, rpcClient)
+	directoryContract, err := contracts.NewAVSDirectory(bindings.Holesky.AvsDirectoryAddress, rpcClient)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -58,7 +59,7 @@ func TestSignerForOperatorID(t *testing.T) {
 	expiry := new(big.Int).SetInt64(time.Now().Add(24 * time.Hour * 365).Unix())
 	fmt.Printf("Expiry: %s\n", expiry)
 
-	hash, err := directoryContract.CalculateOperatorAVSRegistrationDigestHash(nil, operatorAddr, EigenDARegistryCoordinatorHolesky, [32]byte(salt), expiry)
+	hash, err := directoryContract.CalculateOperatorAVSRegistrationDigestHash(nil, operatorAddr, bindings.Holesky.EigenDARegistryCoordinator, [32]byte(salt), expiry)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -144,6 +145,6 @@ func TestSignerForOperatorID(t *testing.T) {
 	*/
 }
 
-func TestCalculateDigestHash(t *testing.T) {
+func TestRegisterOperator(t *testing.T) {
 
 }
