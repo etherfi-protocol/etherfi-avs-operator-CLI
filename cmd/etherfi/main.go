@@ -24,12 +24,19 @@ var (
 		Action: registerBLS,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:  "bls-signature-file",
-				Usage: "BLS signature json file",
+				Name:     "bls-signature-file",
+				Usage:    "BLS signature json file",
+				Required: true,
 			},
 			&cli.IntFlag{
-				Name:  "operator-id",
-				Usage: "Operator ID",
+				Name:     "operator-id",
+				Usage:    "Operator ID",
+				Required: true,
+			},
+			&cli.StringFlag{
+				Name:     "registry-coordinator",
+				Usage:    "Registry Coordinator address",
+				Required: true,
 			},
 			&cli.IntSliceFlag{
 				Name:  "quorum-numbers",
@@ -43,6 +50,63 @@ var (
 				Name:  "broadcast",
 				Usage: "broadcast signed tx to network",
 			},
+			&cli.IntFlag{
+				Name:  "chain-id",
+				Usage: "Chain ID",
+				Value: 1, // default to mainnet
+			},
+		},
+	}
+
+	registerOperatorCmd = &cli.Command{
+		Name:   "register-operator",
+		Usage:  "register an operator with the eigenlayer core contracts",
+		Action: registerOperator,
+		Flags: []cli.Flag{
+			/*
+				&cli.StringFlag{
+					Name:     "bls-signature-file",
+					Usage:    "BLS signature json file",
+					Required: true,
+				},
+				&cli.IntFlag{
+					Name:     "operator-id",
+					Usage:    "Operator ID",
+					Required: true,
+				},
+				&cli.StringFlag{
+					Name:     "registry-coordinator",
+					Usage:    "Registry Coordinator address",
+					Required: true,
+				},
+				&cli.StringFlag{
+					Name:     "signature",
+					Usage:    "Signature",
+					Required: true,
+				},
+				&cli.StringFlag{
+					Name:     "salt",
+					Usage:    "salt",
+					Required: true,
+				},
+				&cli.IntFlag{
+					Name:     "expiration",
+					Usage:    "expiration",
+					Required: true,
+				},
+				&cli.IntSliceFlag{
+					Name:  "quorum-numbers",
+					Usage: "Quorum Numbers",
+				},
+				&cli.StringFlag{
+					Name:  "socket",
+					Usage: "Socket",
+				},
+				&cli.BoolFlag{
+					Name:  "broadcast",
+					Usage: "broadcast signed tx to network",
+				},
+			*/
 			&cli.IntFlag{
 				Name:  "chain-id",
 				Usage: "Chain ID",
@@ -192,6 +256,7 @@ func main() {
 			avsCmd,
 			registerBLSCmd,
 			registrationDigestCmd,
+			registerOperatorCmd,
 		},
 	}
 
