@@ -3,16 +3,16 @@
 ## Prerequisites
 
 - Environment file for expected ENV variables(See sample.env).
-- ECDSA key file which is a account to be delegated by EtherFi team.
+- ECDSA key file which is a account to be delegated by ether.fi team.
 - BLS key file which is used for AVS operation.
 - Etherereum RPC endpoint to send transactions.
 
 ## Scenario
 
-1. AVS operators prepare their keys(ECDSA and BLS).
-2. EtherFi team registers above ECDSA key as Delegated AVS operator.
+1. AVS operators prepare their BLS and a wallet (EOA or gnosis safe).
+2. ether.fi team registers the AVS operator's wallet address as Delegated AVS operator (or AVS runner).
 3. AVS operators register their BLS key to `EtherFiAvsOperator' contract.
-4. EtherFi team trigger `registerOperator` function to register BLS key which is submitted by AVS operator.
+4. ether.fi team trigger `registerOperator` function with their ECDSA signature to register the node to the AVS.
 
 ## Workflows
 
@@ -29,17 +29,17 @@ dist
 
 ### Step 2: Request to register Delegated AVS operator
 
-Request to EtherFi team to register the ECDSA key as delegated AVS operator.
-Then, EtherFi team will register submitted account to `EtherFiAvsOperatorManager` contract.
+Request to ether.fi team to register the ECDSA key as delegated AVS operator.
+Then, ether.fi team will register submitted account to `ether.fiAvsOperatorManager` contract.
 
-After EtherFi team register the information, delegted AVS operator should have the following information.
-- `operatorId`: AVS operator ID assigned by EtherFi team.
-- `operatorAddress`: Eigenlayer operator address, which is managed by EtherFi team.
+After ether.fi team register the information, delegted AVS operator should have the following information.
+- `operatorId`: AVS operator ID assigned by ether.fi team.
+- `operatorAddress`: Eigenlayer operator address, which is managed by ether.fi team.
 
 ### Step 3: Create BLS signature
 
-If *delegated AVS operator* decide to opt-in to AVS through EtherFi contract,
-delegated AVS operator should submit BLS signature to `EtherFiAvsOperator` contract.
+If *delegated AVS operator* decide to opt-in to AVS through ether.fi contract,
+delegated AVS operator should submit BLS signature to `ether.fiAvsOperator` contract.
 
 First, the AVS operator should create BLS signature using BLS key file.
 To create BLS signaure, *service manager* address is required,
@@ -100,7 +100,7 @@ The BLS signature file created on the previous step should be registered on-chai
 ```bash
 ~$ ./dist/etherfi register-bls \
 		--bls-signature-file "<BLS signature file created on the previous stpe>" \
-		--operator-id <Deleted AVS Operator ID assigned by EtherFi> \
+		--operator-id <Deleted AVS Operator ID assigned by ether.fi> \
 		--quorum-numbers <Quorum code, 0> \
 		--socket "not yet decided" \
 		--broadcast \
@@ -129,7 +129,7 @@ raw tx: b9027802f902748242680d8404906e0385010e48ff858301d2cd94df9679e8bfce22ae50
 ### Step 5: registerOperator
 
 After all the above steps are completed,
-EtherFi team should trigger `registerOperator` function to register BLS key which is submitted by AVS operator.
+ether.fi team should trigger `registerOperator` function to register BLS key which is submitted by AVS operator.
 
 ## Ref.
 - [on-chain “operator” as a contract](https://etherfi.notion.site/Node-Operator-on-chain-operator-as-a-contract-9e86d3390a9e45df8c088d0c283a7dd1)
