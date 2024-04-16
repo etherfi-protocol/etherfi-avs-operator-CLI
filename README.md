@@ -112,6 +112,7 @@ The BLS signature file created on the previous step should be registered on-chai
 ~$ ./dist/etherfi register-bls \
 		--bls-signature-file "<BLS signature file created on the previous stpe>" \
 		--operator-id <Deleted AVS Operator ID assigned by ether.fi> \
+		--registry-coordinator <RegistryCoordinator of AVS> \
 		--quorum-numbers <Quorum code, 0> \
 		--socket "not yet decided" \
 		--broadcast \
@@ -128,6 +129,7 @@ source .env
 ~$ ./dist/etherfi register-bls \
 		--bls-signature-file "b1585827df842b01be31601d3b09fa094a40a59a2bd67e1a1cf8fad52a8bad86.json" \
 		--operator-id 1 \
+		--registry-coordinator "0x0BAAc79acD45A023E19345c352d8a7a83C4e5656" \
 		--quorum-numbers 0x0000 \
 		--socket "not yet decided" \
 		--broadcast \
