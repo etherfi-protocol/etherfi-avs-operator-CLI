@@ -55,37 +55,6 @@ func registerOperator(ctx context.Context, cli *cli.Command) error {
 		return fmt.Errorf("creating signer from key: %w", err)
 	}
 
-	/*
-		debugSigningFunc := func(address common.Address, tx *types.Transaction) (*types.Transaction, error) {
-			fmt.Printf("--------------------------------------\n")
-
-			signer := types.LatestSignerForChainID(big.NewInt(17000))
-			keyAddr := common.HexToAddress("0xD0d7F8a5a86d8271ff87ff24145Cf40CEa9F7A39")
-
-			if address != keyAddr {
-				return nil, fmt.Errorf("wrong signing key")
-			}
-			signature, err := crypto.Sign(signer.Hash(tx).Bytes(), privateKey)
-			if err != nil {
-				return nil, err
-			}
-
-			test, err := tx.WithSignature(signer, signature)
-			if err != nil {
-				return nil, fmt.Errorf("unable to sign: %w", err)
-			}
-			buf := bytes.Buffer{}
-			if err := test.EncodeRLP(&buf); err != nil {
-				panic(err)
-			}
-
-			fmt.Printf("signed tx: %s\n", string(buf.Bytes()))
-
-			return tx.WithSignature(signer, signature)
-		}
-		transactor.Signer = debugSigningFunc
-	*/
-
 	// toggle whether tx is broadcast to network
 	transactor.NoSend = !cli.Bool("broadcast")
 
@@ -122,10 +91,49 @@ func registerOperator(ctx context.Context, cli *cli.Command) error {
 	}
 	fmt.Printf("SigParams: %+v\n", sigParams)
 
-	_, err = operatorManagerContract.RegisterOperator(transactor, operatorID, registryCoordinator, quorumNumbers, socket, *blsParams, sigParams)
+	_, err = operatorManagerContract.RegisterOperator(transactor, operatorID, registryCoordinator, sigParams)
 	if err != nil {
 		return fmt.Errorf("registering operator: %w", err)
 	}
+	return nil
+	/*
+		abi, err := contracts.EtherfiAVSOperatorsManagerMetaData.GetAbi()
+		if err != nil {
+			panic(err)
+		}
+		for name, method := range abi.Methods {
+			fmt.Printf("manager: %s: %s\n", name, hex.EncodeToString(method.ID))
+		}
+
+		operatorAbi, err := contracts.EtherfiAVSOperatorMetaData.GetAbi()
+		if err != nil {
+			panic(err)
+		}
+		for name, method := range operatorAbi.Methods {
+			fmt.Printf("operator: %s: %s\n", name, hex.EncodeToString(method.ID))
+		}
+	*/
+
+	/*
+
+		fmt.Printf("\nmanager-registerOperator: %s\n", hex.EncodeToString(abi.Methods["registerOperator"].ID))
+		fmt.Printf("operator-registerOperator: %s\n", hex.EncodeToString(operatorAbi.Methods["registerOperator"].ID))
+
+		fmt.Printf("getAvsInfo: %s\n", hex.EncodeToString(operatorAbi.Methods["getAvsInfo"].ID))
+	*/
+
+	//	return nil
+	managerABI, err := contracts.EtherfiAVSOperatorsManagerMetaData.GetAbi()
+	if err != nil {
+		panic(err)
+	}
+
+	//input, err := managerABI.Pack("registerOperator", operatorID, registryCoordinator, quorumNumbers, socket, *blsParams, sigParams)
+	input, err := managerABI.Pack("registerOperator", operatorID, registryCoordinator, sigParams)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("input: %s\n", hex.EncodeToString(input))
 
 	//return _EtherfiAVSOperatorsManager.contract.Transact(opts, "registerOperator", _id, _avsRegistryCoordinator, _quorumNumbers, _socket, _params, _operatorSignature)
 	//input, err := c.abi.Pack(method, params...)
