@@ -38,7 +38,7 @@ dist
 ### Step 2: Request to register Delegated AVS operator
 
 Request to ether.fi team to register your wallet address as delegated AVS operator.
-Then, ether.fi team will register submitted account to `ether.fiAvsOperatorManager` contract.
+Then, ether.fi team will register submitted account to `EtherFiAvsOperatorManager` contract.
 
 After ether.fi team register the information, delegted AVS operator should have the following information.
 - `operatorId`: AVS operator ID assigned by ether.fi team.
@@ -47,7 +47,7 @@ After ether.fi team register the information, delegted AVS operator should have 
 ### Step 3: Create BLS signature
 
 If *delegated AVS operator* decide to opt-in to AVS through ether.fi contract,
-delegated AVS operator should submit BLS signature to `ether.fiAvsOperator` contract.
+delegated AVS operator should submit BLS signature to `EtherFiAvsOperator` contract.
 
 First, the AVS operator should create BLS signature using BLS key file.
 To create BLS signaure, *service manager* address is required,
