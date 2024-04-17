@@ -141,24 +141,24 @@ var (
 		// TODO: Check flags details
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:     "bls-key-file",
-				Usage:    "BLS key file",
+				Name:  "bls-key-file",
+				Usage: "BLS key file",
 			},
 			&cli.StringFlag{
-				Name:     "bls-key-password",
-				Usage:    "BLS key password",
+				Name:  "bls-key-password",
+				Usage: "BLS key password",
 			},
 			&cli.StringFlag{
-				Name:     "rpc",
-				Usage:    "RPC Endpoint",
+				Name:  "rpc",
+				Usage: "RPC Endpoint",
 			},
 			&cli.StringFlag{
-				Name:     "service-manager",
-				Usage:    "Contract Address of Service Manager",
+				Name:  "service-manager",
+				Usage: "Contract Address of Service Manager",
 			},
 			&cli.StringFlag{
-				Name:     "eigenlayer-operator",
-				Usage:    "Address of Registered Eigenlayer Operator",
+				Name:  "eigenlayer-operator",
+				Usage: "Address of Registered Eigenlayer Operator",
 			},
 		},
 	}

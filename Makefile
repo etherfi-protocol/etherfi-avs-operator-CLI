@@ -1,4 +1,4 @@
-.PHONY: build, test, coverage, clean
+.PHONY: build, test, coverage, clean, mocks
 
 build:
 	@echo "Building..."
@@ -12,6 +12,10 @@ coverage:
 	@echo "Testing with coverage..."
 	@go test -coverprofile=coverage.out ./...
 	#@go tool cover -html=coverage.out
+
+mocks:
+	@echo "Generating mocks..."
+	@mockery --recursive --output ./mocks --name BLSAvsSigner
 
 clean:
 	@echo "Cleaning..."
