@@ -54,50 +54,35 @@ var (
 		Usage:  "register an operator with the eigenlayer core contracts",
 		Action: registerOperator,
 		Flags: []cli.Flag{
-			/*
-				&cli.StringFlag{
-					Name:     "bls-signature-file",
-					Usage:    "BLS signature json file",
-					Required: true,
-				},
-				&cli.IntFlag{
-					Name:     "operator-id",
-					Usage:    "Operator ID",
-					Required: true,
-				},
-				&cli.StringFlag{
-					Name:     "registry-coordinator",
-					Usage:    "Registry Coordinator address",
-					Required: true,
-				},
-				&cli.StringFlag{
-					Name:     "signature",
-					Usage:    "Signature",
-					Required: true,
-				},
-				&cli.StringFlag{
-					Name:     "salt",
-					Usage:    "salt",
-					Required: true,
-				},
-				&cli.IntFlag{
-					Name:     "expiration",
-					Usage:    "expiration",
-					Required: true,
-				},
-				&cli.IntSliceFlag{
-					Name:  "quorum-numbers",
-					Usage: "Quorum Numbers",
-				},
-				&cli.StringFlag{
-					Name:  "socket",
-					Usage: "Socket",
-				},
-				&cli.BoolFlag{
-					Name:  "broadcast",
-					Usage: "broadcast signed tx to network",
-				},
-			*/
+			&cli.IntFlag{
+				Name:     "operator-id",
+				Usage:    "(Required) Operator ID",
+				Required: true,
+			},
+			&cli.StringFlag{
+				Name:     "registry-coordinator",
+				Usage:    "(Required) Registry Coordinator address",
+				Required: true,
+			},
+			&cli.StringFlag{
+				Name:     "signature",
+				Usage:    "(Required) Signature",
+				Required: true,
+			},
+			&cli.StringFlag{
+				Name:     "salt",
+				Usage:    "(Required) Salt used for ECDSA signature",
+				Required: true,
+			},
+			&cli.IntFlag{
+				Name:     "expiry",
+				Usage:    "(Required) Expiry used for ECDSA signature",
+				Required: true,
+			},
+			&cli.BoolFlag{
+				Name:  "broadcast",
+				Usage: "broadcast signed tx to network",
+			},
 			&cli.IntFlag{
 				Name:  "chain-id",
 				Usage: "Chain ID",
@@ -141,24 +126,24 @@ var (
 		// TODO: Check flags details
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:     "bls-key-file",
-				Usage:    "BLS key file",
+				Name:  "bls-key-file",
+				Usage: "BLS key file",
 			},
 			&cli.StringFlag{
-				Name:     "bls-key-password",
-				Usage:    "BLS key password",
+				Name:  "bls-key-password",
+				Usage: "BLS key password",
 			},
 			&cli.StringFlag{
-				Name:     "rpc",
-				Usage:    "RPC Endpoint",
+				Name:  "rpc",
+				Usage: "RPC Endpoint",
 			},
 			&cli.StringFlag{
-				Name:     "service-manager",
-				Usage:    "Contract Address of Service Manager",
+				Name:  "service-manager",
+				Usage: "Contract Address of Service Manager",
 			},
 			&cli.StringFlag{
-				Name:     "eigenlayer-operator",
-				Usage:    "Address of Registered Eigenlayer Operator",
+				Name:  "eigenlayer-operator",
+				Usage: "Address of Registered Eigenlayer Operator",
 			},
 		},
 	}
