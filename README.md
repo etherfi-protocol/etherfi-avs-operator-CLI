@@ -56,7 +56,7 @@ The AVS operator should create BLS signature using BLS key file.
 To create BLS signaure, *service manager* address is required,
 which is provided by [AVS Dashboard](https://app.eigenlayer.xyz/avs/0x870679e138bcdf293b7ff14dd44b70fc97e12fc0).
 
-You can find your <Address of Eigenlayer Operator> at https://app.eigenlayer.xyz/operator by 'ether.fi-${operatorId}'
+You can find your `eigenlayer-operator` at https://app.eigenlayer.xyz/operator by 'ether.fi-${operatorId}'
 
 If all the required information is ready, then run the following command to create BLS signature.
 
