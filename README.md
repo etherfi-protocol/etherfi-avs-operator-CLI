@@ -46,8 +46,10 @@ After ether.fi team register the information, delegted AVS operator should have 
 - `operatorAddress`: Eigenlayer operator address, which is managed by ether.fi team.
 
 ### Step 2: Request ether.fi team to whitelist the target AVSs
+- the target AVS
 - `operatorId`
 - `registryCoordinator`: the address of the RegistryCoordinator contract of the target AVS
+You can request, but ether.fi might not be able to whitelist because of security & constraints
 
 ### Step 3: Create BLS signature
 
