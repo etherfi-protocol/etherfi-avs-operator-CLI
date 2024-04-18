@@ -163,5 +163,18 @@ source .env
         --chain-id 17000
 ```
 
+### Update Whitelist (by ether.fi team)
+
+```bash
+#!/bin/bash
+source .env
+
+~$ ./dist/etherfi register-operator \
+        --operator-id 1 \
+        --registry-coordinator 0x0dB4ceE042705d47Ef6C0818E82776359c3A80Ca \
+        --is-whitelisted true \
+        --chain-id 17000
+```
+
 ## Ref.
 - [on-chain “operator” as a contract](https://etherfi.notion.site/Node-Operator-on-chain-operator-as-a-contract-9e86d3390a9e45df8c088d0c283a7dd1)
