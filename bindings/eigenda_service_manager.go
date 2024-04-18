@@ -27,7 +27,7 @@ func (m *eigenDAServiceManager) RegistryCoordinator() (RegistryCoordinator, erro
 		return nil, err
 	}
 
-	logging.Info("eigenDAServiceManager", "addr " + addr.String())
+	logging.Info("eigenDAServiceManager", "addr "+addr.String())
 
 	return NewRegistryCoordinator(addr.String(), m.ethClient)
 }

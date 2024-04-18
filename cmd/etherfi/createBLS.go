@@ -5,11 +5,13 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"os"
 
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/urfave/cli/v3"
 
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/avs/signer"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/keystore"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/logging"
@@ -35,7 +37,6 @@ func createBLS(ctx context.Context, cli *cli.Command) error {
 		logging.Error("main", err)
 		return err
 	}
-
 	//
 	client, err := ethclient.Dial(rpc)
 
@@ -57,19 +58,22 @@ func createBLS(ctx context.Context, cli *cli.Command) error {
 		return err
 	}
 
-	signature := keyPair.SignHashedToCurveMessage(g1MsgToSign)
+	avsSigner := signer.NewAVSSigner(keyPair)
+	g1Sig, err := avsSigner.Sign(g1MsgToSign)
+	if err != nil {
+		return err
+	}
 
 	sig := new(types.AVSBLSSignature)
-	sig.G1.X = keyPair.GetPubKeyG1().X.String()
-	sig.G1.Y = keyPair.GetPubKeyG1().Y.String()
-	
-	sig.G2.X[1] = keyPair.GetPubKeyG2().X.A0.String()
-	sig.G2.X[0] = keyPair.GetPubKeyG2().X.A1.String()
-	sig.G2.Y[1] = keyPair.GetPubKeyG2().Y.A0.String()
-	sig.G2.Y[0] = keyPair.GetPubKeyG2().Y.A1.String()
-	
-	sig.Signature.X = signature.X.String()
-	sig.Signature.Y = signature.Y.String()
+	sig.Load(keyPair.GetPubKeyG1().G1Affine, keyPair.GetPubKeyG2().G2Affine, g1Sig)
+
+	logging.Info("main", "Verify Created Signature")
+	isValid, err := avsSigner.Verify(g1MsgToSign, g1Sig)
+	if err != nil {
+		return err
+	}
+
+	logging.Info("main", fmt.Sprintf("Signature is valid: %v", isValid))
 
 	d, err := json.Marshal(sig)
 	if err != nil {
@@ -78,7 +82,6 @@ func createBLS(ctx context.Context, cli *cli.Command) error {
 	}
 
 	// Write into json
-	// TODO: or send contract transaction
 	sha256sum := sha256.Sum256(d)
 	filename := hex.EncodeToString(sha256sum[:]) + ".json"
 	err = os.WriteFile(filename, d, 0644)
@@ -90,5 +93,4 @@ func createBLS(ctx context.Context, cli *cli.Command) error {
 	logging.Info("main", "Signature file: ", filename)
 
 	return nil
-
 }
