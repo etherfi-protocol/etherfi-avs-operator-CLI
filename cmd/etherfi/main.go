@@ -156,6 +156,7 @@ func main() {
 			registerBLSCmd,
 			registrationDigestCmd,
 			registerOperatorCmd,
+			updateWhitelistCmd,
 		},
 	}
 
