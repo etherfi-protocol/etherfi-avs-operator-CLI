@@ -157,6 +157,7 @@ func main() {
 			registrationDigestCmd,
 			registerOperatorCmd,
 			updateWhitelistCmd,
+			operatorDetailsCmd,
 		},
 	}
 

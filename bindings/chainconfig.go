@@ -6,6 +6,7 @@ type Config struct {
 	AvsDirectoryAddress        common.Address
 	OperatorManagerAddress     common.Address
 	EigenDARegistryCoordinator common.Address
+	EigenDAServiceManager      common.Address
 	BrevisRegistryCoordinator  common.Address
 }
 
@@ -20,4 +21,5 @@ var Mainnet = Config{
 	AvsDirectoryAddress:        common.HexToAddress("0x135DDa560e946695d6f155dACaFC6f1F25C1F5AF"),
 	OperatorManagerAddress:     common.HexToAddress("0x2093Bbb221f1d8C7c932c32ee28Be6dEe4a37A6a"),
 	EigenDARegistryCoordinator: common.HexToAddress("0x0BAAc79acD45A023E19345c352d8a7a83C4e5656"),
+	EigenDAServiceManager:      common.HexToAddress("0x870679E138bCdf293b7Ff14dD44b70FC97e12fc0"),
 }
