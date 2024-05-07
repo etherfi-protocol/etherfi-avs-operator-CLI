@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"math/big"
-	"os"
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/ethereum/go-ethereum/ethclient"
@@ -15,6 +14,7 @@ var operatorDetailsCmd = &cli.Command{
 	Name:   "operator-details",
 	Usage:  "Information about the current configuration of target operator",
 	Action: handleOperatorDetails,
+	Before: setupCommand,
 	Flags: []cli.Flag{
 		&cli.IntFlag{
 			Name:     "operator-id",
@@ -33,11 +33,13 @@ func handleOperatorDetails(ctx context.Context, cli *cli.Command) error {
 
 	operatorID := cli.Int("operator-id")
 
-	// connect to RPC node
-	rpcClient, err := ethclient.Dial(os.Getenv("RPC_URL"))
-	if err != nil {
-		return fmt.Errorf("dialing rpc: %w", err)
-	}
+	/*
+		// connect to RPC node
+		rpcClient, err := ethclient.Dial(os.Getenv("RPC_URL"))
+		if err != nil {
+			return fmt.Errorf("dialing rpc: %w", err)
+		}
+	*/
 
 	return operatorDetails(operatorID, rpcClient)
 }
@@ -74,7 +76,25 @@ func operatorDetails(operatorID int64, rpcClient *ethclient.Client) error {
 	if err != nil {
 		return fmt.Errorf("fetching operator status: %w", err)
 	}
+	signer, err := avsManager.EcdsaSigner(nil, big.NewInt(operatorID))
+	if err != nil {
+		return fmt.Errorf("fetching ECDSAsigner: %w", err)
+	}
+	nodeRunner, err := avsManager.AvsNodeRunner(nil, big.NewInt(operatorID))
+	if err != nil {
+		return fmt.Errorf("fetching avsNodeRunner: %w", err)
+	}
+
+	/*
+		deprecatedDeets, err := avsManager.GetAvsInfo(nil, big.NewInt(operatorID), cfg.EigenDARegistryCoordinator)
+		if err != nil {
+			return fmt.Errorf("fetching deprecated avsInfo: %w", err)
+		}
+	*/
 
 	fmt.Printf("OperatorID: %d, Registered: %d\n", operatorID, status)
+	fmt.Printf("ecdsaSigner: %s\n", signer)
+	fmt.Printf("runner: %s\n", nodeRunner)
+	//fmt.Printf("deets %+v\n", deprecatedDeets)
 	return nil
 }

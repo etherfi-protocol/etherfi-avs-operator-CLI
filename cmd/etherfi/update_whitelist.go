@@ -103,6 +103,13 @@ func updateWhitelist(ctx context.Context, cli *cli.Command) error {
 		if err != nil {
 			return fmt.Errorf("updating whitelist tx: %w", err)
 		}
+		/*
+			nodeRunner := common.HexToAddress("0x81c6b7Bb50232d6a7467c035165A31C823B6DECd")
+			_, err = operatorManagerContract.UpdateAvsNodeRunner(transactor, operatorID, nodeRunner)
+			if err != nil {
+				return fmt.Errorf("updating whitelist tx: %w", err)
+			}
+		*/
 
 	}
 

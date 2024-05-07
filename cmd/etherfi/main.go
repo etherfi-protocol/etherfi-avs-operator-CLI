@@ -5,8 +5,11 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/urfave/cli/v3"
 )
+
+var rpcClient *ethclient.Client
 
 var (
 	registerBLSCmd = &cli.Command{

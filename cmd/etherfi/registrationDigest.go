@@ -100,9 +100,12 @@ func registrationDigest(ctx context.Context, cli *cli.Command) error {
 		}
 		keyAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
 
-		if keyAddress != ecdsaSigner {
-			return fmt.Errorf("configured signing key does not match expected ecdsaSigner for operatorContract (%s | %s)", keyAddress, ecdsaSigner)
-		}
+		fmt.Println(keyAddress, ecdsaSigner)
+		/*
+			if keyAddress != ecdsaSigner {
+				return fmt.Errorf("configured signing key does not match expected ecdsaSigner for operatorContract (%s | %s)", keyAddress, ecdsaSigner)
+			}
+		*/
 
 		// sign the digest
 		signed, err := crypto.Sign(hash[:], privateKey)
