@@ -161,6 +161,7 @@ func main() {
 			registerOperatorCmd,
 			updateWhitelistCmd,
 			operatorDetailsCmd,
+			updateEcdsaSignerCmd,
 		},
 	}
 
