@@ -56,13 +56,6 @@ type IBLSApkRegistryPubkeyRegistrationParams struct {
 	PubkeyG2                    BN254G2Point
 }
 
-// IDelegationManagerOperatorDetails is an auto generated low-level Go binding around an user-defined struct.
-type IDelegationManagerOperatorDetails struct {
-	EarningsReceiver         common.Address
-	DelegationApprover       common.Address
-	StakerOptOutWindowBlocks uint32
-}
-
 // IRegistryCoordinatorOperatorKickParam is an auto generated low-level Go binding around an user-defined struct.
 type IRegistryCoordinatorOperatorKickParam struct {
 	QuorumNumber uint8

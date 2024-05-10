@@ -52,48 +52,6 @@ var (
 		},
 	}
 
-	registerOperatorCmd = &cli.Command{
-		Name:   "register-operator",
-		Usage:  "register an operator with the eigenlayer core contracts",
-		Action: registerOperator,
-		Flags: []cli.Flag{
-			&cli.IntFlag{
-				Name:     "operator-id",
-				Usage:    "(Required) Operator ID",
-				Required: true,
-			},
-			&cli.StringFlag{
-				Name:     "registry-coordinator",
-				Usage:    "(Required) Registry Coordinator address",
-				Required: true,
-			},
-			&cli.StringFlag{
-				Name:     "signature",
-				Usage:    "(Required) Signature",
-				Required: true,
-			},
-			&cli.StringFlag{
-				Name:     "salt",
-				Usage:    "(Required) Salt used for ECDSA signature",
-				Required: true,
-			},
-			&cli.IntFlag{
-				Name:     "expiry",
-				Usage:    "(Required) Expiry used for ECDSA signature",
-				Required: true,
-			},
-			&cli.BoolFlag{
-				Name:  "broadcast",
-				Usage: "broadcast signed tx to network",
-			},
-			&cli.IntFlag{
-				Name:  "chain-id",
-				Usage: "Chain ID",
-				Value: 1, // default to mainnet
-			},
-		},
-	}
-
 	registrationDigestCmd = &cli.Command{
 		Name:   "registration-digest",
 		Usage:  "compute and optionally sign registration digest for registering an operator",
