@@ -39,6 +39,7 @@ func TestRegistrationEvents(t *testing.T) {
 func TestOperatorDetails(t *testing.T) {
 
 	rpcClient, err := ethclient.Dial(os.Getenv("RPC_URL"))
+
 	if err != nil {
 		t.Fatal(err)
 	}

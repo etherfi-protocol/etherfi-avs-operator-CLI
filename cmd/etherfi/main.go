@@ -52,33 +52,6 @@ var (
 		},
 	}
 
-	registrationDigestCmd = &cli.Command{
-		Name:   "registration-digest",
-		Usage:  "compute and optionally sign registration digest for registering an operator",
-		Action: registrationDigest,
-		Flags: []cli.Flag{
-			&cli.IntFlag{
-				Name:     "operator-id",
-				Usage:    "Operator ID",
-				Required: true,
-			},
-			&cli.StringFlag{
-				Name:     "registry-coordinator",
-				Usage:    "address of the registry-coordinator associated with the avs your are registering to",
-				Required: true,
-			},
-			&cli.IntFlag{
-				Name:  "chain-id",
-				Usage: "Chain ID",
-				Value: 1, // default to mainnet
-			},
-			&cli.BoolFlag{
-				Name:  "sign",
-				Usage: "sign the created digest with configured private key",
-			},
-		},
-	}
-
 	// TODO: refactoring
 	createBlsCmd = &cli.Command{
 		Name:   "create-bls-signature",

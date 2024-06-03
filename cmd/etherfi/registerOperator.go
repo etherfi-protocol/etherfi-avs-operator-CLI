@@ -92,7 +92,8 @@ func registerOperator(ctx context.Context, cli *cli.Command) error {
 	}
 
 	// connect to RPC node
-	rpcClient, err := ethclient.Dial(os.Getenv("RPC_URL"))
+	// TODO: FIX URL
+	rpcClient, err := ethclient.Dial(os.Getenv("HOLESKY_RPC_URL"))
 	if err != nil {
 		return fmt.Errorf("dialing rpc: %w", err)
 	}

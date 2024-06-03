@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"math/big"
-	"os"
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -24,10 +23,10 @@ var operatorDetailsCmd = &cli.Command{
 			Usage:    "Operator ID",
 			Required: true,
 		},
-		&cli.IntFlag{
-			Name:  "chain-id",
-			Usage: "Chain ID",
-			Value: 1, // default to mainnet
+		&cli.StringFlag{
+			Name:     "rpc-url",
+			Usage:    "rpc url",
+			Required: true,
 		},
 	},
 }
@@ -35,10 +34,10 @@ var operatorDetailsCmd = &cli.Command{
 func handleOperatorDetails(ctx context.Context, cli *cli.Command) error {
 
 	operatorID := cli.Int("operator-id")
+	rpcURL := cli.String("rpc-url")
 
 	// connect to RPC node
-	// TODO: FIX URL
-	rpcClient, err := ethclient.Dial(os.Getenv("HOLESKY_RPC_URL"))
+	rpcClient, err := ethclient.Dial(rpcURL)
 	if err != nil {
 		return fmt.Errorf("dialing rpc: %w", err)
 	}
@@ -71,10 +70,12 @@ func operatorDetails(operatorID int64, rpcClient *ethclient.Client) error {
 	if err != nil {
 		return fmt.Errorf("binding delegationManager: %w", err)
 	}
-	strategyManager, err := contracts.NewStrategyManager(cfg.StrategyManager, rpcClient)
-	if err != nil {
-		return fmt.Errorf("binding strategyManager: %w", err)
-	}
+	/*
+		strategyManager, err := contracts.NewStrategyManager(cfg.StrategyManager, rpcClient)
+		if err != nil {
+			return fmt.Errorf("binding strategyManager: %w", err)
+		}
+	*/
 
 	// look up address of operator contract
 	operatorAddr, err := avsManager.AvsOperators(nil, big.NewInt(operatorID))
@@ -90,9 +91,17 @@ func operatorDetails(operatorID int64, rpcClient *ethclient.Client) error {
 	if err != nil {
 		return fmt.Errorf("fetching avsNodeRunner: %w", err)
 	}
+	shares, err := delegationManager.GetOperatorShares(&bind.CallOpts{}, operatorAddr, []common.Address{cfg.BeaconEthStrategy})
+	if err != nil {
+		return fmt.Errorf("fetching delegated shares: %w", err)
+	}
+
 	fmt.Printf("OperatorID: %d - %s\n", operatorID, operatorAddr)
 	fmt.Printf("ecdsaSigner: %s\n", signer)
 	fmt.Printf("runner: %s\n", nodeRunner)
+
+	beaconShares, _ := shares[0].Float64()
+	fmt.Printf("beaconEthShares: %.2f\n", beaconShares/1e18)
 
 	type AVS struct {
 		Name                string
@@ -104,27 +113,31 @@ func operatorDetails(operatorID int64, rpcClient *ethclient.Client) error {
 		{Name: "Brevis", ServiceManager: cfg.BrevisServiceManager, RegistryCoordinator: cfg.BrevisRegistryCoordinator},
 	}
 	for _, avs := range activeAVS {
-		status, err := avsDirectory.AvsOperatorStatus(nil, cfg.EigenDAServiceManager, operatorAddr)
+		status, err := avsDirectory.AvsOperatorStatus(nil, avs.ServiceManager, operatorAddr)
 		if err != nil {
 			return fmt.Errorf("fetching operator status: %w", err)
 		}
-		deprecatedDeets, err := avsManager.GetAvsInfo(nil, big.NewInt(operatorID), cfg.EigenDARegistryCoordinator)
+		deprecatedDeets, err := avsManager.GetAvsInfo(nil, big.NewInt(operatorID), avs.RegistryCoordinator)
 		if err != nil {
 			return fmt.Errorf("fetching deprecated avsInfo: %w", err)
 		}
 		hasUploadedPubkey := deprecatedDeets.Params.PubkeyG1.X != nil && deprecatedDeets.Params.PubkeyG1.X.Cmp(big.NewInt(0)) != 0
 		//shares, amounts, err := delegationManager.GetDelegatableShares(&bind.CallOpts{}, operatorAddr)
-		shares, err := delegationManager.GetOperatorShares(&bind.CallOpts{}, operatorAddr, []common.Address{cfg.BeaconEthStrategy, cfg.WethStrategy})
-		if err != nil {
-			return fmt.Errorf("fetching delegated shares: %w", err)
-		}
-		strats, amts, err := strategyManager.GetDeposits(&bind.CallOpts{}, operatorAddr)
-		if err != nil {
-			return fmt.Errorf("fetching deposits: %w", err)
-		}
+		/*
+			shares, err := delegationManager.GetOperatorShares(&bind.CallOpts{}, operatorAddr, []common.Address{cfg.BeaconEthStrategy, cfg.WethStrategy})
+			if err != nil {
+				return fmt.Errorf("fetching delegated shares: %w", err)
+			}
+		*/
+		/*
+			strats, amts, err := strategyManager.GetDeposits(&bind.CallOpts{}, operatorAddr)
+			if err != nil {
+				return fmt.Errorf("fetching deposits: %w", err)
+			}
+		*/
 
-		fmt.Printf("shares: %+v\n", shares)
-		fmt.Printf("deposits: %+v - %+v\n", strats, amts)
+		//		fmt.Printf("shares: %+v\n", shares)
+		//fmt.Printf("deposits: %+v - %+v\n", strats, amts)
 
 		fmt.Printf("AVS: %s\n", avs.Name)
 		fmt.Printf("Registered: %v\n", status == 1)
