@@ -9,6 +9,7 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/fatih/color"
 	"github.com/urfave/cli/v3"
 )
 
@@ -103,6 +104,9 @@ func operatorDetails(operatorID int64, rpcClient *ethclient.Client) error {
 	beaconShares, _ := shares[0].Float64()
 	fmt.Printf("beaconEthShares: %.2f\n", beaconShares/1e18)
 
+	greenText := color.New(color.FgHiGreen)
+	redText := color.New(color.FgHiRed)
+
 	type AVS struct {
 		Name                string
 		ServiceManager      common.Address
@@ -117,32 +121,43 @@ func operatorDetails(operatorID int64, rpcClient *ethclient.Client) error {
 		if err != nil {
 			return fmt.Errorf("fetching operator status: %w", err)
 		}
+
+		registryCoordinator, err := contracts.NewRegistryCoordinator(avs.RegistryCoordinator, rpcClient)
+		if err != nil {
+			return fmt.Errorf("binding AVSDirectory contract: %w", err)
+		}
+		externalOperatorID, err := registryCoordinator.GetOperatorId(nil, operatorAddr)
+		if err != nil {
+			return fmt.Errorf("fetching external operatorID: %w", err)
+		}
+		quorumBitmap, err := registryCoordinator.GetCurrentQuorumBitmap(nil, externalOperatorID)
+		if err != nil {
+			return fmt.Errorf("fetching quorumBitmap: %w", err)
+		}
+		numQuorums, err := registryCoordinator.QuorumCount(nil)
+		if err != nil {
+			return fmt.Errorf("fetching QuorumCount: %w", err)
+		}
+
 		deprecatedDeets, err := avsManager.GetAvsInfo(nil, big.NewInt(operatorID), avs.RegistryCoordinator)
 		if err != nil {
 			return fmt.Errorf("fetching deprecated avsInfo: %w", err)
 		}
 		hasUploadedPubkey := deprecatedDeets.Params.PubkeyG1.X != nil && deprecatedDeets.Params.PubkeyG1.X.Cmp(big.NewInt(0)) != 0
-		//shares, amounts, err := delegationManager.GetDelegatableShares(&bind.CallOpts{}, operatorAddr)
-		/*
-			shares, err := delegationManager.GetOperatorShares(&bind.CallOpts{}, operatorAddr, []common.Address{cfg.BeaconEthStrategy, cfg.WethStrategy})
-			if err != nil {
-				return fmt.Errorf("fetching delegated shares: %w", err)
-			}
-		*/
-		/*
-			strats, amts, err := strategyManager.GetDeposits(&bind.CallOpts{}, operatorAddr)
-			if err != nil {
-				return fmt.Errorf("fetching deposits: %w", err)
-			}
-		*/
 
-		//		fmt.Printf("shares: %+v\n", shares)
-		//fmt.Printf("deposits: %+v - %+v\n", strats, amts)
-
+		fmt.Println("----------------------------------------------")
 		fmt.Printf("AVS: %s\n", avs.Name)
 		fmt.Printf("Registered: %v\n", status == 1)
-		fmt.Printf("Legacy pubkey registered: %v\n\n", hasUploadedPubkey)
-
+		fmt.Printf("Legacy pubkey registered: %v\n", hasUploadedPubkey)
+		fmt.Printf("Quorums: ")
+		for x := 0; x < int(numQuorums); x++ {
+			if quorumBitmap.Bit(x) != 0 {
+				greenText.Printf("%d ", x)
+			} else {
+				redText.Printf("%d ", x)
+			}
+		}
+		fmt.Println()
 	}
 
 	return nil
