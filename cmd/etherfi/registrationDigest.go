@@ -85,7 +85,7 @@ func registrationDigest(operatorID int64, registryCoordinator common.Address, sh
 
 	// TODO: better system
 	var serviceManagerAddress common.Address
-	if registryCoordinator == common.HexToAddress("0x35F4f28A8d3Ff20EEd10e087e8F96Ea2641E6AA2") {
+	if registryCoordinator == common.HexToAddress("0x35F4f28A8d3Ff20EEd10e087e8F96Ea2641E6AA2") { // lagrange registryCoordinator equivalent
 		serviceManagerAddress = common.HexToAddress("0x35F4f28A8d3Ff20EEd10e087e8F96Ea2641E6AA2")
 	} else {
 		// need to find associated service manager

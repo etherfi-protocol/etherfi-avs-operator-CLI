@@ -93,6 +93,7 @@ func main() {
 			updateWhitelistCmd,
 			operatorDetailsCmd,
 			updateEcdsaSignerCmd,
+			lagrangeCmd,
 		},
 	}
 
