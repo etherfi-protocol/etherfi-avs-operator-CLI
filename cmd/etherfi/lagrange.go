@@ -3,15 +3,13 @@ package main
 import (
 	"context"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"math/big"
-	"os"
 	"strings"
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/urfave/cli/v3"
 )
@@ -50,22 +48,22 @@ var lagrangeRegisterCmd = &cli.Command{
 		},
 		&cli.StringFlag{
 			Name:     "signature",
-			Usage:    "(Required) Registration digest signature",
+			Usage:    "Registration digest signature",
 			Required: true,
 		},
 		&cli.StringFlag{
 			Name:     "salt",
-			Usage:    "(Required) Salt used for ECDSA signature",
+			Usage:    "Salt used for ECDSA signature",
 			Required: true,
 		},
 		&cli.IntFlag{
 			Name:     "expiry",
-			Usage:    "(Required) Expiry used for ECDSA signature",
+			Usage:    "Expiry used for ECDSA signature",
 			Required: true,
 		},
 		&cli.BoolFlag{
-			Name:  "broadcast",
-			Usage: "broadcast signed tx to network",
+			Name:  "gnosis",
+			Usage: "output the transaction as gnosis compatible json",
 		},
 	},
 }
@@ -78,6 +76,7 @@ func handleLagrangeRegister(ctx context.Context, cli *cli.Command) error {
 	signAddress := common.HexToAddress(cli.String("sign-address"))
 	pubkeyHex := cli.String("bls-pubkey")
 	expiry := cli.Int("expiry")
+	outputGnosis := cli.Bool("gnosis")
 	signature, err := hex.DecodeString(strings.TrimPrefix(cli.String("signature"), "0x"))
 	if err != nil {
 		return fmt.Errorf("invalid signature: %w", err)
@@ -98,7 +97,7 @@ func handleLagrangeRegister(ctx context.Context, cli *cli.Command) error {
 		return fmt.Errorf("parsing pubkey: %w", err)
 	}
 
-	return lagrangeRegister(operatorID, signAddress, pubkeyBytes, signature, salt, expiry, rpcClient)
+	return lagrangeRegister(operatorID, signAddress, pubkeyBytes, signature, salt, expiry, rpcClient, outputGnosis)
 }
 
 func lagrangeRegister(
@@ -109,6 +108,7 @@ func lagrangeRegister(
 	salt []byte,
 	expiry int64,
 	rpcClient *ethclient.Client,
+	outputGnosis bool,
 ) error {
 
 	// load configuration
@@ -116,34 +116,10 @@ func lagrangeRegister(
 	if err != nil {
 		return fmt.Errorf("querying chainID from RPC: %w", err)
 	}
-	/*
-		cfg, err := configForChain(chainID.Int64())
-		if err != nil {
-			return err
-		}
-	*/
-
-	/*
-		// bind contracts
-		lagrangeService, err := contracts.NewLagrangeService(cfg.LagrangeService, rpcClient)
-		if err != nil {
-			return fmt.Errorf("binding LagrangeService contract: %w", err)
-		}
-	*/
-
-	// load key for signing tx
-	privateKey, err := crypto.HexToECDSA(os.Getenv("PRIVATE_KEY"))
+	cfg, err := configForChain(chainID.Int64())
 	if err != nil {
-		return fmt.Errorf("loading signing key: %w", err)
+		return err
 	}
-	transactor, err := bind.NewKeyedTransactorWithChainID(privateKey, chainID)
-	if err != nil {
-		return fmt.Errorf("creating signer from key: %w", err)
-	}
-	// toggle whether tx is broadcast to network
-	// TODO: FIX
-	//transactor.NoSend = !cli.Bool("broadcast")
-	transactor.NoSend = true
 
 	// convert to format expected by lagrange
 	if len(blsPubkey) != 64 {
@@ -163,31 +139,45 @@ func lagrangeRegister(
 	if err != nil {
 		return fmt.Errorf("fetching abi: %w", err)
 	}
-	registerSelector := lagrangeABI.Methods["register"].ID
-	fmt.Println("lagrangeMethod:", hex.EncodeToString(registerSelector))
 
+	// pack LagrangeService.register()
 	input, err := lagrangeABI.Pack("register", signAddress, blsPubkeys, sigParams)
 	if err != nil {
 		return fmt.Errorf("packing input: %w", err)
 	}
-	fmt.Println("register:", hex.EncodeToString(input))
-	fmt.Println()
+	fmt.Printf("subcall: 0x%s\n\n", hex.EncodeToString(input))
 
 	managerABI, err := contracts.AvsOperatorManagerMetaData.GetAbi()
 	if err != nil {
 		return fmt.Errorf("fetching abi: %w", err)
 	}
 
-	// pack forward call for manager
-	target := common.HexToAddress("0x35F4f28A8d3Ff20EEd10e087e8F96Ea2641E6AA2")
-	//selector := managerABI.Methods["adminForwardCall"].ID
-	encodedForwardData, err := managerABI.Pack("adminForwardCall", big.NewInt(operatorID), target, [4]byte(registerSelector), input[4:])
+	// pack AvsOperatorManager.adminForwardCall()
+	subcallTarget := cfg.LagrangeService
+	subcallSelector := [4]byte(input[:4])
+	subcallData := input[4:]
+	encodedForwardData, err := managerABI.Pack("adminForwardCall", big.NewInt(operatorID), subcallTarget, subcallSelector, subcallData)
 	if err != nil {
 		return fmt.Errorf("packing forwardCall: %w", err)
 	}
-	fmt.Println("adminForwardCall:", hex.EncodeToString(encodedForwardData))
+	fmt.Printf("adminForwardCall: 0x%s\n\n", hex.EncodeToString(encodedForwardData))
 
-	//	lagrangeService.Register(transactor, signAddress, blsPubkeys, sigParams)
+	if outputGnosis {
+		batch := GnosisBatch{
+			Version: "1.0",
+			ChainId: "1",
+			Meta:    GnosisMetadata{Name: "lagrange registration"},
+		}
+
+		batch.AddTransaction(SubTransaction{
+			Target: cfg.OperatorManagerAddress,
+			Value:  big.NewInt(0),
+			Data:   encodedForwardData,
+		})
+
+		buf, _ := json.MarshalIndent(batch, "", "    ")
+		fmt.Printf("gnosis:\n%s\n", string(buf))
+	}
 
 	return nil
 }
