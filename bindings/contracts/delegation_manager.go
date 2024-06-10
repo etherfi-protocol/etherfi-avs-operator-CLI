@@ -28,13 +28,6 @@ var (
 	_ = event.NewSubscription
 )
 
-// IDelegationManagerOperatorDetails is an auto generated low-level Go binding around an user-defined struct.
-type IDelegationManagerOperatorDetails struct {
-	EarningsReceiver         common.Address
-	DelegationApprover       common.Address
-	StakerOptOutWindowBlocks uint32
-}
-
 // IDelegationManagerQueuedWithdrawalParams is an auto generated low-level Go binding around an user-defined struct.
 type IDelegationManagerQueuedWithdrawalParams struct {
 	Strategies []common.Address

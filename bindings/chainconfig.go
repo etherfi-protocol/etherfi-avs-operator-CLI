@@ -16,6 +16,7 @@ type Config struct {
 	EigenDAServiceManager      common.Address
 	BrevisRegistryCoordinator  common.Address
 	BrevisServiceManager       common.Address
+	LagrangeService            common.Address
 }
 
 var Mainnet = Config{
@@ -31,6 +32,7 @@ var Mainnet = Config{
 	EigenDAServiceManager:      common.HexToAddress("0x870679E138bCdf293b7Ff14dD44b70FC97e12fc0"),
 	BrevisRegistryCoordinator:  common.HexToAddress("0x434621cfd8BcDbe8839a33c85aE2B2893a4d596C"),
 	BrevisServiceManager:       common.HexToAddress("0x9FC952BdCbB7Daca7d420fA55b942405B073A89d"),
+	LagrangeService:            common.HexToAddress("0x35F4f28A8d3Ff20EEd10e087e8F96Ea2641E6AA2"),
 }
 
 var Holesky = Config{

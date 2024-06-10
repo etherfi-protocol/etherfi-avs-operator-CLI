@@ -28,18 +28,6 @@ var (
 	_ = event.NewSubscription
 )
 
-// BN254G1Point is an auto generated low-level Go binding around an user-defined struct.
-type BN254G1Point struct {
-	X *big.Int
-	Y *big.Int
-}
-
-// BN254G2Point is an auto generated low-level Go binding around an user-defined struct.
-type BN254G2Point struct {
-	X [2]*big.Int
-	Y [2]*big.Int
-}
-
 // EtherFiAvsOperatorAvsInfo is an auto generated low-level Go binding around an user-defined struct.
 type EtherFiAvsOperatorAvsInfo struct {
 	IsWhitelisted bool
@@ -47,13 +35,6 @@ type EtherFiAvsOperatorAvsInfo struct {
 	Socket        string
 	Params        IBLSApkRegistryPubkeyRegistrationParams
 	IsRegistered  bool
-}
-
-// IBLSApkRegistryPubkeyRegistrationParams is an auto generated low-level Go binding around an user-defined struct.
-type IBLSApkRegistryPubkeyRegistrationParams struct {
-	PubkeyRegistrationSignature BN254G1Point
-	PubkeyG1                    BN254G1Point
-	PubkeyG2                    BN254G2Point
 }
 
 // IRegistryCoordinatorOperatorKickParam is an auto generated low-level Go binding around an user-defined struct.

@@ -71,7 +71,7 @@ func updateEcdsaSigner(rpcClient *ethclient.Client, operatorID int64, ecdsaSigne
 	}
 
 	// bind contracts
-	avsManager, err := contracts.NewEtherfiAVSOperatorsManager(cfg.OperatorManagerAddress, rpcClient)
+	avsManager, err := contracts.NewAvsOperatorManager(cfg.OperatorManagerAddress, rpcClient)
 	if err != nil {
 		return fmt.Errorf("binding OperatorManager contract: %w", err)
 	}

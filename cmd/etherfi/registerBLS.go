@@ -1,24 +1,16 @@
 package main
 
 import (
-	"bytes"
-	"context"
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"math/big"
 	"os"
 
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/types"
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/urfave/cli/v3"
 )
 
+/*
 // Needs a bunch of refactoring
 func registerBLS(ctx context.Context, cli *cli.Command) error {
 
@@ -54,7 +46,7 @@ func registerBLS(ctx context.Context, cli *cli.Command) error {
 	}
 
 	// bind rpc to contract abi
-	operatorContract, err := contracts.NewEtherfiAVSOperatorsManager(cfg.OperatorManagerAddress, rpcClient)
+	operatorContract, err := contracts.NewAvsOperatorManager(cfg.OperatorManagerAddress, rpcClient)
 	if err != nil {
 		return fmt.Errorf("binding contract: %w", err)
 	}
@@ -85,6 +77,7 @@ func registerBLS(ctx context.Context, cli *cli.Command) error {
 
 	return nil
 }
+*/
 
 func BLSJsonToRegistrationParams(filepath string) (*contracts.IBLSApkRegistryPubkeyRegistrationParams, error) {
 

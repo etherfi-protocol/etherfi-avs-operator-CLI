@@ -59,7 +59,7 @@ func operatorDetails(operatorID int64, rpcClient *ethclient.Client) error {
 	}
 
 	// bind contracts
-	avsManager, err := contracts.NewEtherfiAVSOperatorsManager(cfg.OperatorManagerAddress, rpcClient)
+	avsManager, err := contracts.NewAvsOperatorManager(cfg.OperatorManagerAddress, rpcClient)
 	if err != nil {
 		return fmt.Errorf("binding OperatorManager contract: %w", err)
 	}

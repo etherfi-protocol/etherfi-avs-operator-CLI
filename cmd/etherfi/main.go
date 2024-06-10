@@ -12,45 +12,47 @@ import (
 var rpcClient *ethclient.Client
 
 var (
-	registerBLSCmd = &cli.Command{
-		Name:   "register-bls",
-		Usage:  "register a bls key with the avsManager contract",
-		Action: registerBLS,
-		Flags: []cli.Flag{
-			&cli.StringFlag{
-				Name:     "bls-signature-file",
-				Usage:    "BLS signature json file",
-				Required: true,
+	/*
+		registerBLSCmd = &cli.Command{
+			Name:   "register-bls",
+			Usage:  "register a bls key with the avsManager contract",
+			Action: registerBLS,
+			Flags: []cli.Flag{
+				&cli.StringFlag{
+					Name:     "bls-signature-file",
+					Usage:    "BLS signature json file",
+					Required: true,
+				},
+				&cli.IntFlag{
+					Name:     "operator-id",
+					Usage:    "Operator ID",
+					Required: true,
+				},
+				&cli.StringFlag{
+					Name:     "registry-coordinator",
+					Usage:    "Registry Coordinator address",
+					Required: true,
+				},
+				&cli.IntSliceFlag{
+					Name:  "quorum-numbers",
+					Usage: "Quorum Numbers",
+				},
+				&cli.StringFlag{
+					Name:  "socket",
+					Usage: "Socket",
+				},
+				&cli.BoolFlag{
+					Name:  "broadcast",
+					Usage: "broadcast signed tx to network",
+				},
+				&cli.IntFlag{
+					Name:  "chain-id",
+					Usage: "Chain ID",
+					Value: 1, // default to mainnet
+				},
 			},
-			&cli.IntFlag{
-				Name:     "operator-id",
-				Usage:    "Operator ID",
-				Required: true,
-			},
-			&cli.StringFlag{
-				Name:     "registry-coordinator",
-				Usage:    "Registry Coordinator address",
-				Required: true,
-			},
-			&cli.IntSliceFlag{
-				Name:  "quorum-numbers",
-				Usage: "Quorum Numbers",
-			},
-			&cli.StringFlag{
-				Name:  "socket",
-				Usage: "Socket",
-			},
-			&cli.BoolFlag{
-				Name:  "broadcast",
-				Usage: "broadcast signed tx to network",
-			},
-			&cli.IntFlag{
-				Name:  "chain-id",
-				Usage: "Chain ID",
-				Value: 1, // default to mainnet
-			},
-		},
-	}
+		}
+	*/
 
 	// TODO: refactoring
 	createBlsCmd = &cli.Command{
@@ -87,10 +89,10 @@ func main() {
 	cmd := &cli.Command{
 		Commands: []*cli.Command{
 			createBlsCmd,
-			registerBLSCmd,
+			//		registerBLSCmd,
 			registrationDigestCmd,
 			registerOperatorCmd,
-			updateWhitelistCmd,
+			//updateWhitelistCmd,
 			operatorDetailsCmd,
 			updateEcdsaSignerCmd,
 			lagrangeCmd,

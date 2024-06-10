@@ -1,21 +1,12 @@
 package main
 
 import (
-	"context"
-	"encoding/hex"
 	"fmt"
-	"math/big"
-	"os"
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/urfave/cli/v3"
 )
 
+/*
 var updateWhitelistCmd = &cli.Command{
 	Name:   "update-whitelist",
 	Usage:  "(Ether.fi Admin) Update which AVS's, an operator is approved for",
@@ -62,7 +53,7 @@ func updateWhitelist(ctx context.Context, cli *cli.Command) error {
 	isWhitelisted := cli.Bool("is-whitelisted")
 
 	// Manually pack input to support gnosis signing
-	managerABI, err := contracts.EtherfiAVSOperatorsManagerMetaData.GetAbi()
+	managerABI, err := contracts.AvsOperatorManagerMetaData.GetAbi()
 	if err != nil {
 		return fmt.Errorf("retrieving abi: %w", err)
 	}
@@ -93,7 +84,7 @@ func updateWhitelist(ctx context.Context, cli *cli.Command) error {
 		}
 
 		// bind contract
-		operatorManagerContract, err := contracts.NewEtherfiAVSOperatorsManager(cfg.OperatorManagerAddress, rpcClient)
+		operatorManagerContract, err := contracts.NewAvsOperatorManager(cfg.OperatorManagerAddress, rpcClient)
 		if err != nil {
 			return fmt.Errorf("binding contract: %w", err)
 		}
@@ -103,18 +94,12 @@ func updateWhitelist(ctx context.Context, cli *cli.Command) error {
 		if err != nil {
 			return fmt.Errorf("updating whitelist tx: %w", err)
 		}
-		/*
-			nodeRunner := common.HexToAddress("0x81c6b7Bb50232d6a7467c035165A31C823B6DECd")
-			_, err = operatorManagerContract.UpdateAvsNodeRunner(transactor, operatorID, nodeRunner)
-			if err != nil {
-				return fmt.Errorf("updating whitelist tx: %w", err)
-			}
-		*/
 
 	}
 
 	return nil
 }
+*/
 
 // TODO: move somewhere else
 func configForChain(chainID int64) (*bindings.Config, error) {
