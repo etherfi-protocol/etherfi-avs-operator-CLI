@@ -22,6 +22,7 @@ const (
 	EIGEN_DA
 	BREVIS
 	LAGRANGE
+	EORACLE
 )
 
 func generateRegistrationDigest(operatorID int64, avs AVS, rpcClient *ethclient.Client) ([]byte, error) {
@@ -60,6 +61,8 @@ func generateRegistrationDigest(operatorID int64, avs AVS, rpcClient *ethclient.
 		serviceManagerAddress = cfg.BrevisServiceManager
 	case LAGRANGE:
 		serviceManagerAddress = cfg.LagrangeService
+	case EORACLE:
+		serviceManagerAddress = cfg.EOracleServiceManager
 	default:
 		panic("unknown avs")
 	}

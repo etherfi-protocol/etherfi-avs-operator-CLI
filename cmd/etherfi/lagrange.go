@@ -8,6 +8,7 @@ import (
 	"math/big"
 	"strings"
 
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
@@ -19,6 +20,7 @@ var lagrangeCmd = &cli.Command{
 	Usage: "various actions related to managing lagrange operators",
 	Commands: []*cli.Command{
 		lagrangeRegisterCmd,
+		lagrangeSubscribeCmd,
 	},
 }
 
@@ -165,7 +167,7 @@ func lagrangeRegister(
 	if outputGnosis {
 		batch := GnosisBatch{
 			Version: "1.0",
-			ChainId: "1",
+			ChainId: chainID.String(),
 			Meta:    GnosisMetadata{Name: "lagrange registration"},
 		}
 
@@ -178,6 +180,101 @@ func lagrangeRegister(
 		buf, _ := json.MarshalIndent(batch, "", "    ")
 		fmt.Printf("gnosis:\n%s\n", string(buf))
 	}
+
+	return nil
+}
+
+var lagrangeSubscribeCmd = &cli.Command{
+	Name:   "subscribe",
+	Action: handleLagrangeSubscribe,
+	Flags: []cli.Flag{
+		&cli.IntFlag{
+			Name:     "operator-id",
+			Usage:    "Operator ID",
+			Required: true,
+		},
+		&cli.IntFlag{
+			Name:     "rollup-chain-id",
+			Usage:    "chainID of rollup chain you are subscribing to",
+			Required: true,
+		},
+		&cli.StringFlag{
+			Name:     "rpc-url",
+			Usage:    "rpc url",
+			Required: true,
+		},
+		&cli.BoolFlag{
+			Name:  "gnosis",
+			Usage: "output the transaction as gnosis compatible json",
+		},
+	},
+}
+
+func handleLagrangeSubscribe(ctx context.Context, cli *cli.Command) error {
+	// parse cli params
+	operatorID := cli.Int("operator-id")
+	rollupChainID := cli.Int("rollup-chain-id")
+	rpcURL := cli.String("rpc-url")
+
+	// load configuration
+	rpcClient, err := ethclient.Dial(rpcURL)
+	if err != nil {
+		return fmt.Errorf("dialing rpc: %w", err)
+	}
+	chainID, err := rpcClient.ChainID(context.Background())
+	if err != nil {
+		return fmt.Errorf("querying chainID from RPC: %w", err)
+	}
+	cfg, err := configForChain(chainID.Int64())
+	if err != nil {
+		return err
+	}
+
+	return lagrangeSubscribe(operatorID, uint32(rollupChainID), cfg)
+}
+
+func lagrangeSubscribe(operatorID int64, rollupChainID uint32, cfg *bindings.Config) error {
+
+	lagrangeABI, err := contracts.LagrangeServiceMetaData.GetAbi()
+	if err != nil {
+		return fmt.Errorf("fetching abi: %w", err)
+	}
+	managerABI, err := contracts.AvsOperatorManagerMetaData.GetAbi()
+	if err != nil {
+		return fmt.Errorf("fetching abi: %w", err)
+	}
+
+	// pack LagrangeService.subscribe()
+	input, err := lagrangeABI.Pack("subscribe", rollupChainID)
+	if err != nil {
+		return fmt.Errorf("packing input: %w", err)
+	}
+	fmt.Printf("subcall: 0x%s\n\n", hex.EncodeToString(input))
+
+	// pack AvsOperatorManager.adminForwardCall()
+	subcallTarget := cfg.LagrangeService
+	subcallSelector := [4]byte(input[:4])
+	subcallData := input[4:]
+	encodedForwardData, err := managerABI.Pack("adminForwardCall", big.NewInt(operatorID), subcallTarget, subcallSelector, subcallData)
+	if err != nil {
+		return fmt.Errorf("packing forwardCall: %w", err)
+	}
+	fmt.Printf("adminForwardCall: 0x%s\n\n", hex.EncodeToString(encodedForwardData))
+
+	batch := GnosisBatch{
+		Version: "1.0",
+		ChainId: "1",
+		Meta:    GnosisMetadata{Name: "lagrange subscribe"},
+	}
+
+	batch.AddTransaction(SubTransaction{
+		Target: cfg.OperatorManagerAddress,
+		Value:  big.NewInt(0),
+		Data:   encodedForwardData,
+	})
+
+	buf, _ := json.MarshalIndent(batch, "", "    ")
+	fmt.Printf("gnosis:\n%s\n", string(buf))
 
 	return nil
 }
