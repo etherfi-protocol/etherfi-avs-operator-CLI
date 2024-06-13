@@ -1,15 +1,14 @@
 package eoracle
 
 import (
-	"context"
 	"fmt"
 	"math/big"
 	"strings"
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
-	"github.com/urfave/cli/v3"
 )
 
+/*
 var EOracleRegisterCmd = &cli.Command{
 	Name:   "register",
 	Action: handleEOracleRegister,
@@ -20,8 +19,13 @@ var EOracleRegisterCmd = &cli.Command{
 			Required: true,
 		},
 		&cli.StringFlag{
-			Name:     "bls-pubkey",
-			Usage:    "BN254 bls pubkey in hex format",
+			Name:     "bls-pubkey-g1",
+			Usage:    "e.g. E([303...,218...])",
+			Required: true,
+		},
+		&cli.StringFlag{
+			Name:     "bls-pubkey-g2",
+			Usage:    "e.g. E([303...+123...*u,218...+987...*u])",
 			Required: true,
 		},
 		&cli.StringFlag{
@@ -31,31 +35,49 @@ var EOracleRegisterCmd = &cli.Command{
 		},
 	},
 }
+*/
 
+/*
 func handleEOracleRegister(ctx context.Context, cli *cli.Command) error {
 
-	/*
-		// parse cli params
-		operatorID := cli.Int("operator-id")
-		rpcURL := cli.String("rpc-url")
-		signAddress := common.HexToAddress(cli.String("sign-address"))
-		pubkeyHex := cli.String("bls-pubkey")
+	// parse cli params
+	operatorID := cli.Int("operator-id")
+	rpcURL := cli.String("rpc-url")
+	signAddress := common.HexToAddress(cli.String("sign-address"))
+	g1Str := cli.String("bls-pubkey-g1")
+	g2Str := cli.String("bls-pubkey-g2")
 
-		// connect to RPC node
-		rpcClient, err := ethclient.Dial(rpcURL)
-		if err != nil {
-			return fmt.Errorf("dialing rpc: %w", err)
-		}
+	g1, err := parseEOracleG1Point(g1Str)
+	if err != nil {
+		return fmt.Errorf("parsing g1 point: %w", err)
+	}
+	g2, err := parseEOracleG2Point(g2Str)
+	if err != nil {
+		return fmt.Errorf("parsing g2 point: %w", err)
+	}
 
-		pubkeyBytes, err := hex.DecodeString(pubkeyHex)
-		if err != nil {
-			return fmt.Errorf("parsing pubkey: %w", err)
-		}
-	*/
+	// connect to RPC node
+	rpcClient, err := ethclient.Dial(rpcURL)
+	if err != nil {
+		return fmt.Errorf("dialing rpc: %w", err)
+	}
+
+	pubkeyBytes, err := hex.DecodeString(pubkeyHex)
+	if err != nil {
+		return fmt.Errorf("parsing pubkey: %w", err)
+	}
 
 	return nil
 	// return eoracleRegister(operatorID, signAddress, pubkeyBytes, signature, salt, expiry, rpcClient, outputGnosis)
 }
+*/
+
+/*
+func eoracleRegister(
+	operatorID int64,
+	g1 *contracts.BN254G1Point,
+	g2 *contracts.BN254G2Point,
+*/
 
 func parseEOracleG1Point(g1Str string) (*contracts.BN254G1Point, error) {
 	// E([3033487302225738788775015552649894032347580654423716360411568660579702112705,2187413669180197747690573834337371262619472523581965284255666855512773801492])

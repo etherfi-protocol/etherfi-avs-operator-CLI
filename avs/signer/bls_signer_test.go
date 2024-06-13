@@ -15,7 +15,7 @@ func TestNewAVSSigner(t *testing.T) {
 	blsKeyFile := "../../keystore/fixtures/fixture.bls.key.json"
 	blsKeyPassword := "fixture@test1234"
 
-	ks := keystore.NewKeystore()
+	ks := keystore.NewKeystoreV3()
 
 	blsKeyPair, err := ks.LoadBLS(blsKeyFile, blsKeyPassword)
 	assert.Nil(t, err)

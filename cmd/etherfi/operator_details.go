@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math/big"
 
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
@@ -53,7 +54,7 @@ func operatorDetails(operatorID int64, rpcClient *ethclient.Client) error {
 	if err != nil {
 		return fmt.Errorf("querying chainID from RPC: %w", err)
 	}
-	cfg, err := configForChain(chainID.Int64())
+	cfg, err := bindings.ConfigForChain(chainID.Int64())
 	if err != nil {
 		return err
 	}

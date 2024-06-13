@@ -118,7 +118,7 @@ func lagrangeRegister(
 	if err != nil {
 		return fmt.Errorf("querying chainID from RPC: %w", err)
 	}
-	cfg, err := configForChain(chainID.Int64())
+	cfg, err := bindings.ConfigForChain(chainID.Int64())
 	if err != nil {
 		return err
 	}
@@ -225,7 +225,7 @@ func handleLagrangeSubscribe(ctx context.Context, cli *cli.Command) error {
 	if err != nil {
 		return fmt.Errorf("querying chainID from RPC: %w", err)
 	}
-	cfg, err := configForChain(chainID.Int64())
+	cfg, err := bindings.ConfigForChain(chainID.Int64())
 	if err != nil {
 		return err
 	}

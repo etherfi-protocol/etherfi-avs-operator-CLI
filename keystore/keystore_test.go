@@ -17,7 +17,7 @@ func TestKeystore_Load(t *testing.T) {
 	privKey := "16590985200001101433457980282110542214238205519476686128549391575925906182766"
 	passwd := "fixture@test1234"
 
-	ks := NewKeystore()
+	ks := NewKeystoreV3()
 	blsKeyPair, err := ks.LoadBLS(blsKeyFile, passwd)
 
 	assert.Nil(t, err)
@@ -45,7 +45,7 @@ func TestKeystore_BLSSign(t *testing.T) {
 	blsKeyFile := "./fixtures/fixture.bls.key.json"
 	passwd := "fixture@test1234"
 
-	ks := NewKeystore()
+	ks := NewKeystoreV3()
 	blsKeyPair, err := ks.LoadBLS(blsKeyFile, passwd)
 
 	assert.Nil(t, err)

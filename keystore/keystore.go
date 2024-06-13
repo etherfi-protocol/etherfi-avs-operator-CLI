@@ -2,6 +2,7 @@ package keystore
 
 import (
 	"crypto/ecdsa"
+
 	"github.com/Layr-Labs/eigensdk-go/crypto/bls"
 	eigenecdsa "github.com/Layr-Labs/eigensdk-go/crypto/ecdsa"
 )
@@ -11,19 +12,19 @@ type Keystore interface {
 	LoadECDSA(keyfile, passwd string) (*ecdsa.PrivateKey, error)
 }
 
-type eigenlayerKeystore struct {
+type eigenlayerKeystoreV3 struct {
 }
 
-func (k *eigenlayerKeystore) LoadBLS(keyfile, passwd string) (*bls.KeyPair, error) {
+func (k *eigenlayerKeystoreV3) LoadBLS(keyfile, passwd string) (*bls.KeyPair, error) {
 	return bls.ReadPrivateKeyFromFile(keyfile, passwd)
 }
 
-func (k *eigenlayerKeystore) LoadECDSA(keyfile, passwd string) (*ecdsa.PrivateKey, error) {
+func (k *eigenlayerKeystoreV3) LoadECDSA(keyfile, passwd string) (*ecdsa.PrivateKey, error) {
 	return eigenecdsa.ReadKey(keyfile, passwd)
 }
 
-// NewKeystore returns a new instance of Keystore
-func NewKeystore() Keystore {
+// NewKeystoreV3 returns a new instance of Keystore
+func NewKeystoreV3() Keystore {
 	// TODO: define home directory
-	return &eigenlayerKeystore{}
+	return &eigenlayerKeystoreV3{}
 }

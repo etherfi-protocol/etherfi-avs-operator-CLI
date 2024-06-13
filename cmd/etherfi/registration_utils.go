@@ -8,6 +8,7 @@ import (
 	"math/big"
 	"time"
 
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -32,7 +33,7 @@ func generateRegistrationDigest(operatorID int64, avs AVS, rpcClient *ethclient.
 	if err != nil {
 		return nil, fmt.Errorf("querying chainID from RPC: %w", err)
 	}
-	cfg, err := configForChain(chainID.Int64())
+	cfg, err := bindings.ConfigForChain(chainID.Int64())
 	if err != nil {
 		return nil, err
 	}
@@ -89,7 +90,7 @@ func generateAndSignRegistrationDigest(operatorID int64, avs AVS, rpcClient *eth
 	if err != nil {
 		return nil, fmt.Errorf("querying chainID from RPC: %w", err)
 	}
-	cfg, err := configForChain(chainID.Int64())
+	cfg, err := bindings.ConfigForChain(chainID.Int64())
 	if err != nil {
 		return nil, err
 	}

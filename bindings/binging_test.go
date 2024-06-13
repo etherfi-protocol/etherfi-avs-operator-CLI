@@ -28,7 +28,7 @@ const (
 )
 
 func TestBinding(t *testing.T) {
-	ks := keystore.NewKeystore()
+	ks := keystore.NewKeystoreV3()
 	keyPair, err := ks.LoadBLS("../keystore/fixtures/fixture.bls.key.json", "fixture@test1234")
 
 	assert.Nil(t, err)

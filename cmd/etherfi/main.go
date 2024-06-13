@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/cmd/etherfi/eoracle"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/urfave/cli/v3"
 )
@@ -96,6 +97,7 @@ func main() {
 			operatorDetailsCmd,
 			updateEcdsaSignerCmd,
 			lagrangeCmd,
+			eoracle.EOracleCmd,
 		},
 	}
 

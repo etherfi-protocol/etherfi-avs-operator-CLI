@@ -13,7 +13,7 @@ import (
 
 // RegisterCoordinator is a wrapper around the RegistryCoordinator contract
 type RegistryCoordinator interface {
-	PubkeyRegistrationMessageHash(operatorAddress string) (*bn254.G1Affine, error)
+	PubkeyRegistrationMessageHash(operatorAddress common.Address) (*bn254.G1Affine, error)
 }
 
 type registryCoordinator struct {
@@ -21,12 +21,9 @@ type registryCoordinator struct {
 	contractRegistryCoordinator *regcoordinator.ContractRegistryCoordinator
 }
 
-func (r *registryCoordinator) PubkeyRegistrationMessageHash(operatorAddress string) (*bn254.G1Affine, error) {
-	logging.Info("RegistryCoordinator", "call NewEigenDAServiceManager")
-	logging.Info("RegistryCoordinator", "operator address", operatorAddress)
+func (r *registryCoordinator) PubkeyRegistrationMessageHash(operatorAddress common.Address) (*bn254.G1Affine, error) {
 
-	addr := common.HexToAddress(operatorAddress)
-	g1Point, err := r.contractRegistryCoordinator.PubkeyRegistrationMessageHash(nil, addr)
+	g1Point, err := r.contractRegistryCoordinator.PubkeyRegistrationMessageHash(nil, operatorAddress)
 	if err != nil {
 		logging.Error("RegistryCoordinator", err)
 		return nil, err
@@ -46,12 +43,9 @@ func (r *registryCoordinator) PubkeyRegistrationMessageHash(operatorAddress stri
 }
 
 // NewRegisterCoordinator creates a new RegisterCoordinator
-func NewRegistryCoordinator(contractAddr string, client *ethclient.Client) (RegistryCoordinator, error) {
-	logging.Info("RegistryCoordinator", "call NewEigenDAServiceManager")
-	logging.Info("RegistryCoordinator", "contract address", contractAddr)
+func NewRegistryCoordinator(contractAddr common.Address, client *ethclient.Client) (RegistryCoordinator, error) {
 
-	regCoordContract := common.HexToAddress(contractAddr)
-	coord, err := regcoordinator.NewContractRegistryCoordinator(regCoordContract, client)
+	coord, err := regcoordinator.NewContractRegistryCoordinator(contractAddr, client)
 	if err != nil {
 		logging.Error("RegistryCoordinator", err)
 		return nil, err

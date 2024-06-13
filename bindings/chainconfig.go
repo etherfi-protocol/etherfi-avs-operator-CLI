@@ -1,6 +1,10 @@
 package bindings
 
-import "github.com/ethereum/go-ethereum/common"
+import (
+	"fmt"
+
+	"github.com/ethereum/go-ethereum/common"
+)
 
 type Config struct {
 	// Eigenlayer core contracts
@@ -52,4 +56,18 @@ var Holesky = Config{
 	EigenDAServiceManager:      common.HexToAddress("0xD4A7E1Bd8015057293f0D0A557088c286942e84b"),
 	BrevisRegistryCoordinator:  common.HexToAddress("0x0dB4ceE042705d47Ef6C0818E82776359c3A80Ca"),
 	BrevisServiceManager:       common.HexToAddress("0x7A46219950d8a9bf2186549552DA35Bf6fb85b1F"),
+}
+
+func ConfigForChain(chainID int64) (*Config, error) {
+
+	var cfg Config
+	switch chainID {
+	case 1:
+		cfg = Mainnet
+	case 17000:
+		cfg = Holesky
+	default:
+		return nil, fmt.Errorf("unimplemented chain: %d", chainID)
+	}
+	return &cfg, nil
 }

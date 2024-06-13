@@ -1,11 +1,5 @@
 package main
 
-import (
-	"fmt"
-
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
-)
-
 /*
 var updateWhitelistCmd = &cli.Command{
 	Name:   "update-whitelist",
@@ -102,16 +96,3 @@ func updateWhitelist(ctx context.Context, cli *cli.Command) error {
 */
 
 // TODO: move somewhere else
-func configForChain(chainID int64) (*bindings.Config, error) {
-
-	var cfg bindings.Config
-	switch chainID {
-	case 1:
-		cfg = bindings.Mainnet
-	case 17000:
-		cfg = bindings.Holesky
-	default:
-		return nil, fmt.Errorf("unimplemented chain: %d", chainID)
-	}
-	return &cfg, nil
-}

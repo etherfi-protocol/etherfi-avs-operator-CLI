@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/urfave/cli/v3"
 
@@ -31,7 +32,7 @@ func createBLS(ctx context.Context, cli *cli.Command) error {
 	logging.Info("main", "servicemanager addr", serviceManagerAddr)
 
 	// TODO: Get password by prompt
-	ks := keystore.NewKeystore()
+	ks := keystore.NewKeystoreV3()
 	keyPair, err := ks.LoadBLS(blsKeyFile, blsKeyPassword)
 	if err != nil {
 		logging.Error("main", err)
@@ -52,7 +53,7 @@ func createBLS(ctx context.Context, cli *cli.Command) error {
 		return err
 	}
 
-	g1MsgToSign, err := coordinator.PubkeyRegistrationMessageHash(eigenlayerOperatorAddr)
+	g1MsgToSign, err := coordinator.PubkeyRegistrationMessageHash(common.HexToAddress(eigenlayerOperatorAddr))
 	if err != nil {
 		logging.Error("main", err)
 		return err

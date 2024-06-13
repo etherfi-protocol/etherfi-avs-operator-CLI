@@ -8,6 +8,7 @@ import (
 	"math/big"
 	"os"
 
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
@@ -65,7 +66,7 @@ func updateEcdsaSigner(rpcClient *ethclient.Client, operatorID int64, ecdsaSigne
 	if err != nil {
 		return fmt.Errorf("querying chainID from RPC: %w", err)
 	}
-	cfg, err := configForChain(chainID.Int64())
+	cfg, err := bindings.ConfigForChain(chainID.Int64())
 	if err != nil {
 		return err
 	}
