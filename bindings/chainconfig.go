@@ -1,12 +1,15 @@
 package bindings
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/ethclient"
 )
 
 type Config struct {
+
 	// Eigenlayer core contracts
 	AvsDirectoryAddress common.Address
 	DelegationManager   common.Address
@@ -70,4 +73,12 @@ func ConfigForChain(chainID int64) (*Config, error) {
 		return nil, fmt.Errorf("unimplemented chain: %d", chainID)
 	}
 	return &cfg, nil
+}
+
+func AutodetectConfig(rpcClient *ethclient.Client) (*Config, error) {
+	chainID, err := rpcClient.ChainID(context.Background())
+	if err != nil {
+		return nil, fmt.Errorf("querying chainID from RPC: %w", err)
+	}
+	return ConfigForChain(chainID.Int64())
 }

@@ -11,9 +11,15 @@ import (
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/keystore"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/types"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/urfave/cli/v3"
 )
+
+type RegistrationInput struct {
+	BLSPubkeyRegistrationParams *types.BLSPubkeyRegistrationParams
+	AliasAddress                common.Address
+}
 
 var EOraclePrepareRegistrationCmd = &cli.Command{
 	Name:   "prepare-registration",
@@ -35,6 +41,11 @@ var EOraclePrepareRegistrationCmd = &cli.Command{
 			Required: true,
 		},
 		&cli.StringFlag{
+			Name:     "alias-address",
+			Usage:    "address associated with alias ECDSA key",
+			Required: true,
+		},
+		&cli.StringFlag{
 			Name:     "rpc-url",
 			Usage:    "rpc url",
 			Required: true,
@@ -47,6 +58,7 @@ func handleEOraclePrepareRegistration(ctx context.Context, cli *cli.Command) err
 	operatorID := cli.Int("operator-id")
 	blsKeyFile := cli.String("bls-keystore")
 	blsKeyPassword := cli.String("bls-password")
+	aliasAddress := common.HexToAddress(cli.String("alias-address"))
 	rpcURL := cli.String("rpc-url")
 
 	// decrypt and load bls key from keystore
@@ -61,14 +73,11 @@ func handleEOraclePrepareRegistration(ctx context.Context, cli *cli.Command) err
 	if err != nil {
 		return fmt.Errorf("dialing RPC: %w", err)
 	}
-	chainID, err := rpcClient.ChainID(context.Background())
+	cfg, err := bindings.AutodetectConfig(rpcClient)
 	if err != nil {
-		return fmt.Errorf("querying chainID from RPC: %w", err)
+		return fmt.Errorf("loading config: %w", err)
 	}
-	cfg, err := bindings.ConfigForChain(chainID.Int64())
-	if err != nil {
-		return err
-	}
+
 	registryCoordinator, err := bindings.NewRegistryCoordinator(cfg.EOracleRegistryCoordinator, rpcClient)
 	if err != nil {
 		return err
@@ -94,15 +103,20 @@ func handleEOraclePrepareRegistration(ctx context.Context, cli *cli.Command) err
 	if err != nil {
 		return fmt.Errorf("signing pubkey registration hash: %w", err)
 	}
-	sig := new(types.AVSBLSSignature)
-	sig.Load(keyPair.GetPubKeyG1().G1Affine, keyPair.GetPubKeyG2().G2Affine, g1Sig)
+	signedParams := new(types.BLSPubkeyRegistrationParams)
+	signedParams.Load(keyPair.GetPubKeyG1().G1Affine, keyPair.GetPubKeyG2().G2Affine, g1Sig)
 
 	isValid, err := avsSigner.Verify(g1MsgToSign, g1Sig)
 	if !isValid || err != nil {
 		return fmt.Errorf("failed to verify g1 signature: %w", err)
 	}
 
-	out, err := json.MarshalIndent(sig, "", "    ")
+	registrationInput := RegistrationInput{
+		BLSPubkeyRegistrationParams: signedParams,
+		AliasAddress:                aliasAddress,
+	}
+
+	out, err := json.MarshalIndent(registrationInput, "", "    ")
 	if err != nil {
 		return err
 	}

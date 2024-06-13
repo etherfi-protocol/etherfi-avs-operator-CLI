@@ -65,7 +65,7 @@ func createBLS(ctx context.Context, cli *cli.Command) error {
 		return err
 	}
 
-	sig := new(types.AVSBLSSignature)
+	sig := new(types.BLSPubkeyRegistrationParams)
 	sig.Load(keyPair.GetPubKeyG1().G1Affine, keyPair.GetPubKeyG2().G2Affine, g1Sig)
 
 	logging.Info("main", "Verify Created Signature")

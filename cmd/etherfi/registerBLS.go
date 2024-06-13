@@ -86,7 +86,7 @@ func BLSJsonToRegistrationParams(filepath string) (*contracts.IBLSApkRegistryPub
 		return nil, fmt.Errorf("reading signature file: %w", err)
 	}
 
-	var input types.AVSBLSSignature
+	var input types.BLSPubkeyRegistrationParams
 	if err := json.Unmarshal(buf, &input); err != nil {
 		return nil, fmt.Errorf("unmarshalling signature file: %w", err)
 	}
