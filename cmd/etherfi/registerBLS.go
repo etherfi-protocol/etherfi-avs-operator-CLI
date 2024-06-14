@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"math/big"
 	"os"
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
@@ -91,29 +90,31 @@ func BLSJsonToRegistrationParams(filepath string) (*contracts.IBLSApkRegistryPub
 		return nil, fmt.Errorf("unmarshalling signature file: %w", err)
 	}
 
-	g1x, _ := big.NewInt(0).SetString(input.G1.X, 10)
-	g1y, _ := big.NewInt(0).SetString(input.G1.Y, 10)
+	/*
+		g1x, _ := big.NewInt(0).SetString(input.G1.X, 10)
+		g1y, _ := big.NewInt(0).SetString(input.G1.Y, 10)
 
-	g2x0, _ := big.NewInt(0).SetString(input.G2.X[0], 10)
-	g2x1, _ := big.NewInt(0).SetString(input.G2.X[1], 10)
-	g2y0, _ := big.NewInt(0).SetString(input.G2.Y[0], 10)
-	g2y1, _ := big.NewInt(0).SetString(input.G2.Y[1], 10)
+		g2x0, _ := big.NewInt(0).SetString(input.G2.X[0], 10)
+		g2x1, _ := big.NewInt(0).SetString(input.G2.X[1], 10)
+		g2y0, _ := big.NewInt(0).SetString(input.G2.Y[0], 10)
+		g2y1, _ := big.NewInt(0).SetString(input.G2.Y[1], 10)
 
-	sigX, _ := big.NewInt(0).SetString(input.Signature.X, 10)
-	sigY, _ := big.NewInt(0).SetString(input.Signature.Y, 10)
+		sigX, _ := big.NewInt(0).SetString(input.Signature.X, 10)
+		sigY, _ := big.NewInt(0).SetString(input.Signature.Y, 10)
+	*/
 
 	contractParams := contracts.IBLSApkRegistryPubkeyRegistrationParams{
 		PubkeyRegistrationSignature: contracts.BN254G1Point{
-			X: sigX,
-			Y: sigY,
+			X: input.Signature.X,
+			Y: input.Signature.Y,
 		},
 		PubkeyG1: contracts.BN254G1Point{
-			X: g1x,
-			Y: g1y,
+			X: input.G1.X,
+			Y: input.G1.Y,
 		},
 		PubkeyG2: contracts.BN254G2Point{
-			X: [2]*big.Int{g2x0, g2x1},
-			Y: [2]*big.Int{g2y0, g2y1},
+			X: input.G2.X,
+			Y: input.G2.Y,
 		},
 	}
 
