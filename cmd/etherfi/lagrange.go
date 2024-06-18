@@ -3,13 +3,13 @@ package main
 import (
 	"context"
 	"encoding/hex"
-	"encoding/json"
 	"fmt"
 	"math/big"
 	"strings"
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/gnosis"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/urfave/cli/v3"
@@ -165,20 +165,9 @@ func lagrangeRegister(
 	fmt.Printf("adminForwardCall: 0x%s\n\n", hex.EncodeToString(encodedForwardData))
 
 	if outputGnosis {
-		batch := GnosisBatch{
-			Version: "1.0",
-			ChainId: chainID.String(),
-			Meta:    GnosisMetadata{Name: "lagrange registration"},
-		}
 
-		batch.AddTransaction(SubTransaction{
-			Target: cfg.OperatorManagerAddress,
-			Value:  big.NewInt(0),
-			Data:   encodedForwardData,
-		})
-
-		buf, _ := json.MarshalIndent(batch, "", "    ")
-		fmt.Printf("gnosis:\n%s\n", string(buf))
+		batch := gnosis.NewSingleTxBatch(encodedForwardData, cfg.OperatorManagerAddress, fmt.Sprintf("lagrange-register-%d", operatorID))
+		fmt.Printf("gnosis:\n%s\n", batch.PrettyPrint())
 	}
 
 	return nil
@@ -261,20 +250,8 @@ func lagrangeSubscribe(operatorID int64, rollupChainID uint32, cfg *bindings.Con
 	}
 	fmt.Printf("adminForwardCall: 0x%s\n\n", hex.EncodeToString(encodedForwardData))
 
-	batch := GnosisBatch{
-		Version: "1.0",
-		ChainId: "1",
-		Meta:    GnosisMetadata{Name: "lagrange subscribe"},
-	}
-
-	batch.AddTransaction(SubTransaction{
-		Target: cfg.OperatorManagerAddress,
-		Value:  big.NewInt(0),
-		Data:   encodedForwardData,
-	})
-
-	buf, _ := json.MarshalIndent(batch, "", "    ")
-	fmt.Printf("gnosis:\n%s\n", string(buf))
+	batch := gnosis.NewSingleTxBatch(encodedForwardData, cfg.OperatorManagerAddress, fmt.Sprintf("lagrange-subscribe-%d", operatorID))
+	fmt.Printf("gnosis:\n%s\n", batch.PrettyPrint())
 
 	return nil
 }

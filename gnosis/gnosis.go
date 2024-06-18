@@ -1,4 +1,4 @@
-package main
+package gnosis
 
 import (
 	"encoding/hex"
@@ -39,16 +39,32 @@ func (s *SubTransaction) MarshalJSON() ([]byte, error) {
 	})
 }
 
-type GnosisOutput struct {
-	Version      string
-	ChainId      string
-	Transactions []SubTransaction
-}
-
 func (b *GnosisBatch) AddTransaction(tx SubTransaction) {
 	b.Transactions = append(b.Transactions, tx)
 }
 
 func (b *GnosisBatch) AddTransactions(txs []SubTransaction) {
 	b.Transactions = append(b.Transactions, txs...)
+}
+
+func (b *GnosisBatch) PrettyPrint() string {
+	buf, _ := json.MarshalIndent(b, "", "    ")
+	return string(buf)
+}
+
+func NewSingleTxBatch(data []byte, target common.Address, name string) *GnosisBatch {
+
+	batch := GnosisBatch{
+		Version: "1.0",
+		ChainId: "1",
+		Meta:    GnosisMetadata{Name: name},
+	}
+
+	batch.AddTransaction(SubTransaction{
+		Target: target,
+		Value:  big.NewInt(0),
+		Data:   data,
+	})
+
+	return &batch
 }

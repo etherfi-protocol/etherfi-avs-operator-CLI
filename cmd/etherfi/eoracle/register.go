@@ -12,6 +12,7 @@ import (
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/avs/signer"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/gnosis"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -128,6 +129,10 @@ func eoracleRegister(
 		return fmt.Errorf("wrapping call for admin: %w", err)
 	}
 	fmt.Printf("admincall: 0x%s\n\n", hex.EncodeToString(adminCall))
+
+	// output in gnosis compatible format
+	batch := gnosis.NewSingleTxBatch(adminCall, cfg.OperatorManagerAddress, fmt.Sprintf("eoracle-register-%d", operatorID))
+	fmt.Printf("gnosis:\n%s\n", batch.PrettyPrint())
 
 	return nil
 }
