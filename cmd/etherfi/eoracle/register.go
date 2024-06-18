@@ -24,11 +24,6 @@ var EOracleRegisterCmd = &cli.Command{
 	Name:   "register",
 	Action: handleEOracleRegister,
 	Flags: []cli.Flag{
-		&cli.IntFlag{
-			Name:     "operator-id",
-			Usage:    "Operator ID",
-			Required: true,
-		},
 		&cli.StringFlag{
 			Name:     "registration-input",
 			Usage:    "path to registration file created by prepare-registration command",
@@ -45,7 +40,6 @@ var EOracleRegisterCmd = &cli.Command{
 func handleEOracleRegister(ctx context.Context, cli *cli.Command) error {
 
 	// parse cli params
-	operatorID := cli.Int("operator-id")
 	rpcURL := cli.String("rpc-url")
 	inputFilepath := cli.String("registration-input")
 
@@ -59,16 +53,6 @@ func handleEOracleRegister(ctx context.Context, cli *cli.Command) error {
 		return fmt.Errorf("loading config: %w", err)
 	}
 
-	// generate and sign registration hash to be signed by admin ecdsa key
-	privateKey, err := crypto.HexToECDSA(os.Getenv("PRIVATE_KEY"))
-	if err != nil {
-		return fmt.Errorf("invalid private key: %w", err)
-	}
-	sigWithSaltAndExpiry, err := signer.GenerateAndSignRegistrationDigest(operatorID, signer.EORACLE, rpcClient, privateKey)
-	if err != nil {
-		return fmt.Errorf("signing registration digest: %w", err)
-	}
-
 	// read input file with required eOracle data
 	var input RegistrationInput
 	buf, err := os.ReadFile(inputFilepath)
@@ -79,10 +63,24 @@ func handleEOracleRegister(ctx context.Context, cli *cli.Command) error {
 		return fmt.Errorf("parsing registration input: %w", err)
 	}
 
+	if input.OperatorID == 0 {
+		return fmt.Errorf("invalid registration input")
+	}
+
+	// generate and sign registration hash to be signed by admin ecdsa key
+	privateKey, err := crypto.HexToECDSA(os.Getenv("PRIVATE_KEY"))
+	if err != nil {
+		return fmt.Errorf("invalid private key: %w", err)
+	}
+	sigWithSaltAndExpiry, err := signer.GenerateAndSignRegistrationDigest(input.OperatorID, signer.EORACLE, rpcClient, privateKey)
+	if err != nil {
+		return fmt.Errorf("signing registration digest: %w", err)
+	}
+
 	// TODO: quorums as parameter. Their CLI just sets it as quorum 0 for now
 	quorums := []byte{0}
 
-	return eoracleRegister(operatorID, input.BLSPubkeyRegistrationParams, sigWithSaltAndExpiry, input.AliasAddress, quorums, cfg)
+	return eoracleRegister(input.OperatorID, input.BLSPubkeyRegistrationParams, sigWithSaltAndExpiry, input.AliasAddress, quorums, cfg)
 }
 
 func eoracleRegister(

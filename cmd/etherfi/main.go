@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/cmd/etherfi/eigenda"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/cmd/etherfi/eoracle"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/urfave/cli/v3"
@@ -13,48 +14,6 @@ import (
 var rpcClient *ethclient.Client
 
 var (
-	/*
-		registerBLSCmd = &cli.Command{
-			Name:   "register-bls",
-			Usage:  "register a bls key with the avsManager contract",
-			Action: registerBLS,
-			Flags: []cli.Flag{
-				&cli.StringFlag{
-					Name:     "bls-signature-file",
-					Usage:    "BLS signature json file",
-					Required: true,
-				},
-				&cli.IntFlag{
-					Name:     "operator-id",
-					Usage:    "Operator ID",
-					Required: true,
-				},
-				&cli.StringFlag{
-					Name:     "registry-coordinator",
-					Usage:    "Registry Coordinator address",
-					Required: true,
-				},
-				&cli.IntSliceFlag{
-					Name:  "quorum-numbers",
-					Usage: "Quorum Numbers",
-				},
-				&cli.StringFlag{
-					Name:  "socket",
-					Usage: "Socket",
-				},
-				&cli.BoolFlag{
-					Name:  "broadcast",
-					Usage: "broadcast signed tx to network",
-				},
-				&cli.IntFlag{
-					Name:  "chain-id",
-					Usage: "Chain ID",
-					Value: 1, // default to mainnet
-				},
-			},
-		}
-	*/
-
 	// TODO: refactoring
 	createBlsCmd = &cli.Command{
 		Name:   "create-bls-signature",
@@ -98,6 +57,7 @@ func main() {
 			updateEcdsaSignerCmd,
 			lagrangeCmd,
 			eoracle.EOracleCmd,
+			eigenda.EigenDACmd,
 		},
 	}
 

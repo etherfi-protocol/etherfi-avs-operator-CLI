@@ -1,4 +1,4 @@
-package eoracle
+package eigenda
 
 import (
 	"context"
@@ -11,20 +11,20 @@ import (
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/keystore"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/types"
-	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/urfave/cli/v3"
 )
 
 type RegistrationInput struct {
 	OperatorID                  int64
+	Socket                      string
+	Quorums                     []int64
 	BLSPubkeyRegistrationParams *types.BLSPubkeyRegistrationParams
-	AliasAddress                common.Address
 }
 
-var EOraclePrepareRegistrationCmd = &cli.Command{
+var EigenDAPrepareRegistrationCmd = &cli.Command{
 	Name:   "prepare-registration",
-	Action: handleEOraclePrepareRegistration,
+	Action: handleEigenDAPrepareRegistration,
 	Flags: []cli.Flag{
 		&cli.IntFlag{
 			Name:     "operator-id",
@@ -41,9 +41,14 @@ var EOraclePrepareRegistrationCmd = &cli.Command{
 			Usage:    "password for encrypted keystore file",
 			Required: true,
 		},
+		&cli.IntSliceFlag{
+			Name:     "quorums",
+			Usage:    "which quorums to register for i.e. 0,1",
+			Required: true,
+		},
 		&cli.StringFlag{
-			Name:     "alias-address",
-			Usage:    "address associated with alias ECDSA key",
+			Name:     "socket",
+			Usage:    "eigenda socket",
 			Required: true,
 		},
 		&cli.StringFlag{
@@ -54,12 +59,13 @@ var EOraclePrepareRegistrationCmd = &cli.Command{
 	},
 }
 
-func handleEOraclePrepareRegistration(ctx context.Context, cli *cli.Command) error {
+func handleEigenDAPrepareRegistration(ctx context.Context, cli *cli.Command) error {
 	// parse cli input
 	operatorID := cli.Int("operator-id")
 	blsKeyFile := cli.String("bls-keystore")
 	blsKeyPassword := cli.String("bls-password")
-	aliasAddress := common.HexToAddress(cli.String("alias-address"))
+	quorums := cli.IntSlice("quorums")
+	socket := cli.String("socket")
 	rpcURL := cli.String("rpc-url")
 
 	// decrypt and load bls key from keystore
@@ -79,7 +85,7 @@ func handleEOraclePrepareRegistration(ctx context.Context, cli *cli.Command) err
 		return fmt.Errorf("loading config: %w", err)
 	}
 
-	registryCoordinator, err := bindings.NewRegistryCoordinator(cfg.EOracleRegistryCoordinator, rpcClient)
+	registryCoordinator, err := bindings.NewRegistryCoordinator(cfg.EigenDARegistryCoordinator, rpcClient)
 	if err != nil {
 		return err
 	}
@@ -113,8 +119,10 @@ func handleEOraclePrepareRegistration(ctx context.Context, cli *cli.Command) err
 	}
 
 	registrationInput := RegistrationInput{
+		OperatorID:                  operatorID,
+		Socket:                      socket,
+		Quorums:                     quorums,
 		BLSPubkeyRegistrationParams: signedParams,
-		AliasAddress:                aliasAddress,
 	}
 
 	out, err := json.MarshalIndent(registrationInput, "", "    ")
