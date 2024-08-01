@@ -113,6 +113,7 @@ func handleEOraclePrepareRegistration(ctx context.Context, cli *cli.Command) err
 	}
 
 	registrationInput := RegistrationInput{
+		OperatorID:                  operatorID,
 		BLSPubkeyRegistrationParams: signedParams,
 		AliasAddress:                aliasAddress,
 	}
