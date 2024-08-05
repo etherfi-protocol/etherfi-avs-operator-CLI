@@ -14,6 +14,9 @@ import (
 	"github.com/urfave/cli/v3"
 )
 
+// TODO(Dave): dynamically scan via events
+const TotalOperators = 12
+
 var operatorDetailsCmd = &cli.Command{
 	Name:   "operator-details",
 	Usage:  "Information about the current configuration of target operator",
@@ -23,7 +26,12 @@ var operatorDetailsCmd = &cli.Command{
 		&cli.IntFlag{
 			Name:     "operator-id",
 			Usage:    "Operator ID",
-			Required: true,
+			Required: false,
+		},
+		&cli.BoolFlag{
+			Name:     "all",
+			Usage:    "list details of all operators",
+			Required: false,
 		},
 		&cli.StringFlag{
 			Name:     "rpc-url",
@@ -36,12 +44,27 @@ var operatorDetailsCmd = &cli.Command{
 func handleOperatorDetails(ctx context.Context, cli *cli.Command) error {
 
 	operatorID := cli.Int("operator-id")
+	allOperators := cli.Bool("all")
 	rpcURL := cli.String("rpc-url")
+
+	if !allOperators && operatorID == 0 {
+		return fmt.Errorf("must provide --operator-id or --all flag")
+	}
 
 	// connect to RPC node
 	rpcClient, err := ethclient.Dial(rpcURL)
 	if err != nil {
 		return fmt.Errorf("dialing rpc: %w", err)
+	}
+
+	if allOperators {
+		for x := range TotalOperators {
+			operatorID := x + 1 // operator contracts started at index 1
+			if err != operatorDetails(int64(operatorID), rpcClient) {
+				return fmt.Errorf("fetching operator details: %w", err)
+			}
+		}
+		return nil
 	}
 
 	return operatorDetails(operatorID, rpcClient)
