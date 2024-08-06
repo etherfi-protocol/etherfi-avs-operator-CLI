@@ -25,6 +25,7 @@ const (
 	BREVIS
 	LAGRANGE
 	EORACLE
+	WITNESS_CHAIN
 )
 
 func GenerateRegistrationDigest(operatorID int64, salt [32]byte, expiry *big.Int, avs AVS, rpcClient *ethclient.Client) ([]byte, error) {
@@ -65,6 +66,8 @@ func GenerateRegistrationDigest(operatorID int64, salt [32]byte, expiry *big.Int
 		serviceManagerAddress = cfg.LagrangeService
 	case EORACLE:
 		serviceManagerAddress = cfg.EOracleServiceManager
+	case WITNESS_CHAIN:
+		serviceManagerAddress = cfg.WitnessChainWitnessHub
 	default:
 		panic("unknown avs")
 	}

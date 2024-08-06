@@ -7,12 +7,12 @@ import (
 	"fmt"
 	"math/big"
 	"os"
-	"time"
+	"strings"
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts/witnesschain"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/gnosis"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/urfave/cli/v3"
 )
@@ -21,29 +21,19 @@ var WitnessCmd = &cli.Command{
 	Name:  "witness-chain",
 	Usage: "various actions related to managing Witness-Chain operators",
 	Commands: []*cli.Command{
-		//EOracleRegisterCmd,
+		WitnessRegisterToAvsCmd,
 		WitnessPrepareRegistrationCmd,
+		WitnessRegisterWatchtowerCmd,
 	},
 }
 
-type RegistrationInput struct {
-	OperatorID          int64
-	WatchtowerAddress   common.Address
-	WatchtowerSignature string
-}
-
-var WitnessPrepareRegistrationCmd = &cli.Command{
-	Name:   "prepare-registration",
-	Action: handleWitnessPrepareRegistration,
+var WitnessRegisterWatchtowerCmd = &cli.Command{
+	Name:   "register-watchtower",
+	Action: handleRegisterWatchtower,
 	Flags: []cli.Flag{
-		&cli.IntFlag{
-			Name:     "operator-id",
-			Usage:    "Operator ID",
-			Required: true,
-		},
 		&cli.StringFlag{
-			Name:     "watchtower-address",
-			Usage:    "watchtower address",
+			Name:     "registration-input",
+			Usage:    "path to registration file created by prepare-registration command",
 			Required: true,
 		},
 		&cli.StringFlag{
@@ -54,72 +44,82 @@ var WitnessPrepareRegistrationCmd = &cli.Command{
 	},
 }
 
-func handleWitnessPrepareRegistration(ctx context.Context, cli *cli.Command) error {
+func handleRegisterWatchtower(ctx context.Context, cli *cli.Command) error {
 
-	// parse cli input
-	operatorID := cli.Int("operator-id")
-	watchtowerAddress := common.HexToAddress(cli.String("watchtower-address"))
+	// parse cli params
 	rpcURL := cli.String("rpc-url")
+	inputFilepath := cli.String("registration-input")
 
-	// load watchtower private key and sanity check against provided address
-	watchtowerPrivateKey, err := crypto.HexToECDSA(os.Getenv("WATCHTOWER_PRIVATE_KEY"))
-	if err != nil {
-		return fmt.Errorf("loading signing key: %w", err)
-	}
-	derivedWatchtowerAddress := crypto.PubkeyToAddress(watchtowerPrivateKey.PublicKey)
-	fmt.Println("derivedWatchtowerAddress:", derivedWatchtowerAddress)
-	if derivedWatchtowerAddress != watchtowerAddress {
-		return fmt.Errorf("provided watchtower-address does not match address derived from key")
-	}
-
-	// load configuration
+	// connect to RPC node
 	rpcClient, err := ethclient.Dial(rpcURL)
 	if err != nil {
-		return fmt.Errorf("dialing RPC: %w", err)
+		return fmt.Errorf("dialing rpc: %w", err)
 	}
 	cfg, err := bindings.AutodetectConfig(rpcClient)
 	if err != nil {
 		return fmt.Errorf("loading config: %w", err)
 	}
 
-	// look up operator contract associated with this id and configured ecdsaSigner
-	operatorManagerContract, err := contracts.NewAvsOperatorManager(cfg.OperatorManagerAddress, rpcClient)
+	// read input file with required witnesschain data
+	var input RegistrationInput
+	buf, err := os.ReadFile(inputFilepath)
 	if err != nil {
-		return fmt.Errorf("binding operatorManager: %w", err)
+		return fmt.Errorf("reading input file: %w", err)
 	}
-	operatorAddr, err := operatorManagerContract.AvsOperators(nil, big.NewInt(operatorID))
+	if err := json.Unmarshal(buf, &input); err != nil {
+		return fmt.Errorf("parsing registration input: %w", err)
+	}
+	if input.OperatorID == 0 {
+		return fmt.Errorf("invalid registration input")
+	}
+	if strings.HasPrefix(input.WatchtowerSignature, "0x") {
+		input.WatchtowerSignature = input.WatchtowerSignature[2:]
+	}
+	watchtowerSignature, err := hex.DecodeString(input.WatchtowerSignature)
 	if err != nil {
-		return fmt.Errorf("looking up operator address: %w", err)
+		return fmt.Errorf("invalid watchtower signature")
 	}
 
-	// compute the watchtower registration digest
-	operatorRegistry, err := contracts.NewWitnessChainOperatorRegistry(cfg.WitnessChainOperatorRegistry, rpcClient)
+	return witnessRegisterWatchtower(
+		input.OperatorID,
+		input.WatchtowerAddress,
+		watchtowerSignature,
+		input.WatchtowerSignatureExpiry,
+		cfg,
+		rpcClient,
+	)
+}
+
+func witnessRegisterWatchtower(
+	operatorID int64,
+	watchtowerAddress common.Address,
+	watchtowerSignature []byte,
+	watchtowerSignatureExpiry *big.Int,
+	cfg *bindings.Config,
+	rpcClient *ethclient.Client,
+) error {
+
+	witnessABI, err := witnesschain.WitnessChainOperatorRegistryMetaData.GetAbi()
 	if err != nil {
-		return fmt.Errorf("binding operatorRegistry: %w", err)
-	}
-	expiry := new(big.Int).SetInt64(time.Now().Add(24 * time.Hour * 10).Unix())
-	registrationDigest, err := operatorRegistry.CalculateWatchtowerRegistrationMessageHash(nil, operatorAddr, expiry)
-	if err != nil {
-		return fmt.Errorf("calculating watchtower registration digest: %w", err)
+		return fmt.Errorf("fetching abi: %w", err)
 	}
 
-	// sign the digest with the watchtower key
-	signed, err := crypto.Sign(registrationDigest[:], watchtowerPrivateKey)
+	// pack operatorRegistry.registerWatchtowerAsOperator()
+	input, err := witnessABI.Pack("registerWatchtowerAsOperator", watchtowerAddress, watchtowerSignatureExpiry, watchtowerSignature)
 	if err != nil {
-		return fmt.Errorf("signing digest: %w", err)
+		return fmt.Errorf("packing input: %w", err)
 	}
+	fmt.Printf("subcall: 0x%s\n\n", hex.EncodeToString(input))
 
-	registrationInput := RegistrationInput{
-		OperatorID:          operatorID,
-		WatchtowerAddress:   watchtowerAddress,
-		WatchtowerSignature: "0x" + hex.EncodeToString(signed),
-	}
-
-	out, err := json.MarshalIndent(registrationInput, "", "    ")
+	adminCall, err := bindings.PackForwardCallForAdmin(operatorID, input, cfg.WitnessChainOperatorRegistry)
 	if err != nil {
-		return err
+		return fmt.Errorf("wrapping call for admin: %w", err)
 	}
-	fmt.Println(string(out))
+	fmt.Printf("admincall: 0x%s\n\n", hex.EncodeToString(adminCall))
+
+	// output in gnosis compatible format
+	batch := gnosis.NewSingleTxBatch(adminCall, cfg.OperatorManagerAddress, fmt.Sprintf("witness-chain-register-watchtower-%d", operatorID))
+	fmt.Printf("gnosis:\n%s\n", batch.PrettyPrint())
 
 	return nil
 }
