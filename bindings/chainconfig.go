@@ -18,14 +18,16 @@ type Config struct {
 	BeaconEthStrategy   common.Address
 	WethStrategy        common.Address
 
-	OperatorManagerAddress     common.Address
-	EigenDARegistryCoordinator common.Address
-	EigenDAServiceManager      common.Address
-	EOracleRegistryCoordinator common.Address
-	EOracleServiceManager      common.Address
-	BrevisRegistryCoordinator  common.Address
-	BrevisServiceManager       common.Address
-	LagrangeService            common.Address
+	OperatorManagerAddress       common.Address
+	EigenDARegistryCoordinator   common.Address
+	EigenDAServiceManager        common.Address
+	EOracleRegistryCoordinator   common.Address
+	EOracleServiceManager        common.Address
+	BrevisRegistryCoordinator    common.Address
+	BrevisServiceManager         common.Address
+	LagrangeService              common.Address
+	WitnessChainOperatorRegistry common.Address
+	WitnessChainWitnessHub       common.Address
 }
 
 var Mainnet = Config{
@@ -36,14 +38,16 @@ var Mainnet = Config{
 	BeaconEthStrategy:   common.HexToAddress("0xbeaC0eeEeeeeEEeEeEEEEeeEEeEeeeEeeEEBEaC0"),
 	WethStrategy:        common.HexToAddress(""),
 
-	OperatorManagerAddress:     common.HexToAddress("0x2093Bbb221f1d8C7c932c32ee28Be6dEe4a37A6a"),
-	EigenDARegistryCoordinator: common.HexToAddress("0x0BAAc79acD45A023E19345c352d8a7a83C4e5656"),
-	EigenDAServiceManager:      common.HexToAddress("0x870679E138bCdf293b7Ff14dD44b70FC97e12fc0"),
-	EOracleRegistryCoordinator: common.HexToAddress("0x757E6f572AfD8E111bD913d35314B5472C051cA8"),
-	EOracleServiceManager:      common.HexToAddress("0x23221c5bB90C7c57ecc1E75513e2E4257673F0ef"),
-	BrevisRegistryCoordinator:  common.HexToAddress("0x434621cfd8BcDbe8839a33c85aE2B2893a4d596C"),
-	BrevisServiceManager:       common.HexToAddress("0x9FC952BdCbB7Daca7d420fA55b942405B073A89d"),
-	LagrangeService:            common.HexToAddress("0x35F4f28A8d3Ff20EEd10e087e8F96Ea2641E6AA2"),
+	OperatorManagerAddress:       common.HexToAddress("0x2093Bbb221f1d8C7c932c32ee28Be6dEe4a37A6a"),
+	EigenDARegistryCoordinator:   common.HexToAddress("0x0BAAc79acD45A023E19345c352d8a7a83C4e5656"),
+	EigenDAServiceManager:        common.HexToAddress("0x870679E138bCdf293b7Ff14dD44b70FC97e12fc0"),
+	EOracleRegistryCoordinator:   common.HexToAddress("0x757E6f572AfD8E111bD913d35314B5472C051cA8"),
+	EOracleServiceManager:        common.HexToAddress("0x23221c5bB90C7c57ecc1E75513e2E4257673F0ef"),
+	BrevisRegistryCoordinator:    common.HexToAddress("0x434621cfd8BcDbe8839a33c85aE2B2893a4d596C"),
+	BrevisServiceManager:         common.HexToAddress("0x9FC952BdCbB7Daca7d420fA55b942405B073A89d"),
+	LagrangeService:              common.HexToAddress("0x35F4f28A8d3Ff20EEd10e087e8F96Ea2641E6AA2"),
+	WitnessChainOperatorRegistry: common.HexToAddress("0xEf1a89841fd189ba28e780A977ca70eb1A5e985D"),
+	WitnessChainWitnessHub:       common.HexToAddress("0xD25c2c5802198CB8541987b73A8db4c9BCaE5cC7"),
 }
 
 var Holesky = Config{

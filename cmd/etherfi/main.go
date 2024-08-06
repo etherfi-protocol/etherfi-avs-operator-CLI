@@ -7,6 +7,7 @@ import (
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/cmd/etherfi/eigenda"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/cmd/etherfi/eoracle"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/cmd/etherfi/witness-chain"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/urfave/cli/v3"
 )
@@ -58,6 +59,7 @@ func main() {
 			lagrangeCmd,
 			eoracle.EOracleCmd,
 			eigenda.EigenDACmd,
+			witness.WitnessCmd,
 		},
 	}
 
