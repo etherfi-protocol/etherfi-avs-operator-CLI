@@ -6,3 +6,4 @@ go.work
 /etherfi
 .env
 /dist
+/avs-cli

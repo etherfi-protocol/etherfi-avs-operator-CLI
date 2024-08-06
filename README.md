@@ -7,13 +7,16 @@
 
 ## Build
 
-Simply run `make build` to build the binary. The binary will be placed in the `dist` directory.
+Simply run `make build` to build the binary.
 
 ```bash
-~$ make build
-~$ tree dist
-dist
-└── etherfi
+make build
+```
+
+## Run
+
+```bash
+./avs-cli
 ```
 
 # AVS Registration
