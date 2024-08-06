@@ -7,8 +7,6 @@
 
 ## Build
 
-Simply run `make build` to build the binary.
-
 ```bash
 make build
 ```
@@ -31,6 +29,7 @@ After ether.fi team register the information, delegted AVS operator should have 
 - `operatorAddress`: Eigenlayer operator address, which is managed by ether.fi team.
 
 ### Step 2: Follow the instructions for the specific AVS you are registering for
+* [Witness Chain](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI/blob/witness-chain/README.md#witness-chain)
 
 # Witness Chain
 
@@ -68,10 +67,15 @@ Supply a separate ECDSA key you control for the value of `operator_private_key`
 3. Register the operator contract with witness chain
 
            ./avs-cli witness-chain register --registration-input witness-input.json --rpc-url $RPC_URL
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
    
-4. Register the watchtower on L1
+5. Register the watchtower on L1
    
-           ./avs-cli witness-chain register-watchtower --registration-input witness-input.json --rpc-url $RPC_URL 
+           ./avs-cli witness-chain register-watchtower --registration-input witness-input.json --rpc-url $RPC_URL
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
+
 
 
 
