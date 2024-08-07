@@ -8,9 +8,19 @@ import (
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bin/avs-cli/eigenda"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bin/avs-cli/eoracle"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bin/avs-cli/witness-chain"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/urfave/cli/v3"
 )
+
+// global state accessible by all commands
+type cmdContext struct {
+	rpcClient *ethclient.Client
+
+	AVSDirectory               *contracts.AVSDirectory
+	EigenDARegistryCoordinator *contracts.RegistryCoordinator
+	//EigenDA
+}
 
 var rpcClient *ethclient.Client
 
@@ -46,8 +56,41 @@ var (
 	}
 )
 
+// type BeforeFunc func(context.Context, *Command) error
+func before(ctx context.Context, cmd *cli.Command) error {
+	// try to load RPC_URL from env or flags
+	rpcURL := os.Getenv("RPC_URL")
+	if rpcURL == "" {
+		rpcURL = cmd.String("rpc-url")
+	}
+
+	if rpcURL == "" {
+		return fmt.Errorf("must set env var $RPC_URL or use --rpc-url flag")
+	}
+
+	client, err := ethclient.Dial(os.Getenv("RPC_URL"))
+	if err != nil {
+		return fmt.Errorf("dialing RPC: %w", err)
+	}
+
+	// make globally accessible by all commands
+	rpcClient = client
+
+	return nil
+}
+
 func main() {
 	cmd := &cli.Command{
+		// global flags
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name: "rpc-url",
+			},
+		},
+
+		// operations we want to run for every single command
+		Before: before,
+
 		Commands: []*cli.Command{
 			createBlsCmd,
 			//		registerBLSCmd,

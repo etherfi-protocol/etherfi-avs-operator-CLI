@@ -105,7 +105,7 @@ func witnessRegister(
 	}
 
 	// look up operator contract associated with this id and configured ecdsaSigner
-	operatorManagerContract, err := contracts.NewAvsOperatorManager(cfg.OperatorManagerAddress, rpcClient)
+	operatorManagerContract, err := contracts.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
 	if err != nil {
 		return fmt.Errorf("binding operatorManager: %w", err)
 	}
@@ -130,14 +130,14 @@ func witnessRegister(
 	}
 	fmt.Printf("subcall: 0x%s\n\n", hex.EncodeToString(input))
 
-	adminCall, err := bindings.PackForwardCallForAdmin(operatorID, input, cfg.WitnessChainWitnessHub)
+	adminCall, err := bindings.PackForwardCallForAdmin(operatorID, input, cfg.WitnessChainWitnessHubAddress)
 	if err != nil {
 		return fmt.Errorf("wrapping call for admin: %w", err)
 	}
 	fmt.Printf("admincall: 0x%s\n\n", hex.EncodeToString(adminCall))
 
 	// output in gnosis compatible format
-	batch := gnosis.NewSingleTxBatch(adminCall, cfg.OperatorManagerAddress, fmt.Sprintf("witness-chain-register-watchtower-%d", operatorID))
+	batch := gnosis.NewSingleTxBatch(adminCall, cfg.AvsOperatorManagerAddress, fmt.Sprintf("witness-chain-register-watchtower-%d", operatorID))
 	fmt.Printf("gnosis:\n%s\n", batch.PrettyPrint())
 
 	return nil

@@ -11,7 +11,7 @@ import (
 )
 
 func OperatorAddressFromID(operatorID int64, cfg *bindings.Config, rpcClient *ethclient.Client) (common.Address, error) {
-	operatorManagerContract, err := contracts.NewAvsOperatorManager(cfg.OperatorManagerAddress, rpcClient)
+	operatorManagerContract, err := contracts.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
 	if err != nil {
 		return common.Address{}, fmt.Errorf("binding operatorManager: %w", err)
 	}

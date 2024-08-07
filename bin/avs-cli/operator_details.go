@@ -83,7 +83,7 @@ func operatorDetails(operatorID int64, rpcClient *ethclient.Client) error {
 	}
 
 	// bind contracts
-	avsManager, err := contracts.NewAvsOperatorManager(cfg.OperatorManagerAddress, rpcClient)
+	avsManager, err := contracts.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
 	if err != nil {
 		return fmt.Errorf("binding OperatorManager contract: %w", err)
 	}
@@ -91,7 +91,7 @@ func operatorDetails(operatorID int64, rpcClient *ethclient.Client) error {
 	if err != nil {
 		return fmt.Errorf("binding AVSDirectory contract: %w", err)
 	}
-	delegationManager, err := contracts.NewDelegationManager(cfg.DelegationManager, rpcClient)
+	delegationManager, err := contracts.NewDelegationManager(cfg.DelegationManagerAddress, rpcClient)
 	if err != nil {
 		return fmt.Errorf("binding delegationManager: %w", err)
 	}
@@ -116,7 +116,7 @@ func operatorDetails(operatorID int64, rpcClient *ethclient.Client) error {
 	if err != nil {
 		return fmt.Errorf("fetching avsNodeRunner: %w", err)
 	}
-	shares, err := delegationManager.GetOperatorShares(&bind.CallOpts{}, operatorAddr, []common.Address{cfg.BeaconEthStrategy})
+	shares, err := delegationManager.GetOperatorShares(&bind.CallOpts{}, operatorAddr, []common.Address{cfg.BeaconEthStrategyAddress})
 	if err != nil {
 		return fmt.Errorf("fetching delegated shares: %w", err)
 	}
@@ -137,8 +137,8 @@ func operatorDetails(operatorID int64, rpcClient *ethclient.Client) error {
 		RegistryCoordinator common.Address
 	}
 	activeAVS := []AVS{
-		{Name: "EigenDA", ServiceManager: cfg.EigenDAServiceManager, RegistryCoordinator: cfg.EigenDARegistryCoordinator},
-		{Name: "Brevis", ServiceManager: cfg.BrevisServiceManager, RegistryCoordinator: cfg.BrevisRegistryCoordinator},
+		{Name: "EigenDA", ServiceManager: cfg.EigenDAServiceManagerAddress, RegistryCoordinator: cfg.EigenDARegistryCoordinatorAddress},
+		{Name: "Brevis", ServiceManager: cfg.BrevisServiceManagerAddress, RegistryCoordinator: cfg.BrevisRegistryCoordinatorAddress},
 	}
 	for _, avs := range activeAVS {
 		status, err := avsDirectory.AvsOperatorStatus(nil, avs.ServiceManager, operatorAddr)

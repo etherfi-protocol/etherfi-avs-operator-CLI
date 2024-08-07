@@ -75,7 +75,7 @@ func registrationDigest(operatorID int64, registryCoordinator common.Address, sh
 	}
 
 	// bind rpc to contract abi
-	operatorManagerContract, err := contracts.NewAvsOperatorManager(cfg.OperatorManagerAddress, rpcClient)
+	operatorManagerContract, err := contracts.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
 	if err != nil {
 		return fmt.Errorf("binding operatorManager: %w", err)
 	}

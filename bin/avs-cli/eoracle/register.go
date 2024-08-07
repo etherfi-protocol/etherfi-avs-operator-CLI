@@ -122,14 +122,14 @@ func eoracleRegister(
 	}
 	fmt.Printf("subcall: 0x%s\n\n", hex.EncodeToString(input))
 
-	adminCall, err := bindings.PackForwardCallForAdmin(operatorID, input, cfg.EOracleRegistryCoordinator)
+	adminCall, err := bindings.PackForwardCallForAdmin(operatorID, input, cfg.EOracleRegistryCoordinatorAddress)
 	if err != nil {
 		return fmt.Errorf("wrapping call for admin: %w", err)
 	}
 	fmt.Printf("admincall: 0x%s\n\n", hex.EncodeToString(adminCall))
 
 	// output in gnosis compatible format
-	batch := gnosis.NewSingleTxBatch(adminCall, cfg.OperatorManagerAddress, fmt.Sprintf("eoracle-register-%d", operatorID))
+	batch := gnosis.NewSingleTxBatch(adminCall, cfg.AvsOperatorManagerAddress, fmt.Sprintf("eoracle-register-%d", operatorID))
 	fmt.Printf("gnosis:\n%s\n", batch.PrettyPrint())
 
 	return nil

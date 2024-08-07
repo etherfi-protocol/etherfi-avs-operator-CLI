@@ -155,7 +155,7 @@ func lagrangeRegister(
 	}
 
 	// pack AvsOperatorManager.adminForwardCall()
-	subcallTarget := cfg.LagrangeService
+	subcallTarget := cfg.LagrangeServiceAddress
 	subcallSelector := [4]byte(input[:4])
 	subcallData := input[4:]
 	encodedForwardData, err := managerABI.Pack("adminForwardCall", big.NewInt(operatorID), subcallTarget, subcallSelector, subcallData)
@@ -166,7 +166,7 @@ func lagrangeRegister(
 
 	if outputGnosis {
 
-		batch := gnosis.NewSingleTxBatch(encodedForwardData, cfg.OperatorManagerAddress, fmt.Sprintf("lagrange-register-%d", operatorID))
+		batch := gnosis.NewSingleTxBatch(encodedForwardData, cfg.AvsOperatorManagerAddress, fmt.Sprintf("lagrange-register-%d", operatorID))
 		fmt.Printf("gnosis:\n%s\n", batch.PrettyPrint())
 	}
 
@@ -241,7 +241,7 @@ func lagrangeSubscribe(operatorID int64, rollupChainID uint32, cfg *bindings.Con
 	fmt.Printf("subcall: 0x%s\n\n", hex.EncodeToString(input))
 
 	// pack AvsOperatorManager.adminForwardCall()
-	subcallTarget := cfg.LagrangeService
+	subcallTarget := cfg.LagrangeServiceAddress
 	subcallSelector := [4]byte(input[:4])
 	subcallData := input[4:]
 	encodedForwardData, err := managerABI.Pack("adminForwardCall", big.NewInt(operatorID), subcallTarget, subcallSelector, subcallData)
@@ -250,7 +250,7 @@ func lagrangeSubscribe(operatorID int64, rollupChainID uint32, cfg *bindings.Con
 	}
 	fmt.Printf("adminForwardCall: 0x%s\n\n", hex.EncodeToString(encodedForwardData))
 
-	batch := gnosis.NewSingleTxBatch(encodedForwardData, cfg.OperatorManagerAddress, fmt.Sprintf("lagrange-subscribe-%d", operatorID))
+	batch := gnosis.NewSingleTxBatch(encodedForwardData, cfg.AvsOperatorManagerAddress, fmt.Sprintf("lagrange-subscribe-%d", operatorID))
 	fmt.Printf("gnosis:\n%s\n", batch.PrettyPrint())
 
 	return nil

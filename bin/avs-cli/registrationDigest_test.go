@@ -21,7 +21,7 @@ func TestValidSignature(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	operatorManagerContract, err := contracts.NewEtherfiAVSOperatorsManager(bindings.Holesky.OperatorManagerAddress, rpcClient)
+	operatorManagerContract, err := contracts.NewEtherfiAVSOperatorsManager(bindings.Holesky.AvsOperatorManagerAddress, rpcClient)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -59,7 +59,7 @@ func TestCalculateDigest(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	operatorManagerContract, err := contracts.NewEtherfiAVSOperatorsManager(bindings.Holesky.OperatorManagerAddress, rpcClient)
+	operatorManagerContract, err := contracts.NewEtherfiAVSOperatorsManager(bindings.Holesky.AvsOperatorManagerAddress, rpcClient)
 	if err != nil {
 		t.Fatal(err)
 	}

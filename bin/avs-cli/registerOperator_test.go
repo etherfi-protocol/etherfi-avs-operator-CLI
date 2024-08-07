@@ -27,7 +27,7 @@ func TestSignerForOperatorID(t *testing.T) {
 	}
 
 	// bind rpc to contract abi
-	operatorManagerContract, err := contracts.NewEtherfiAVSOperatorsManager(bindings.Holesky.OperatorManagerAddress, rpcClient)
+	operatorManagerContract, err := contracts.NewEtherfiAVSOperatorsManager(bindings.Holesky.AvsOperatorManagerAddress, rpcClient)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -59,7 +59,7 @@ func TestSignerForOperatorID(t *testing.T) {
 	expiry := new(big.Int).SetInt64(time.Now().Add(24 * time.Hour * 365).Unix())
 	fmt.Printf("Expiry: %s\n", expiry)
 
-	hash, err := directoryContract.CalculateOperatorAVSRegistrationDigestHash(nil, operatorAddr, bindings.Holesky.EigenDARegistryCoordinator, [32]byte(salt), expiry)
+	hash, err := directoryContract.CalculateOperatorAVSRegistrationDigestHash(nil, operatorAddr, bindings.Holesky.EigenDARegistryCoordinatorAddress, [32]byte(salt), expiry)
 	if err != nil {
 		t.Fatal(err)
 	}

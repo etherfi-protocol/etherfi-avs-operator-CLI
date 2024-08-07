@@ -5,18 +5,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/urfave/cli/v3"
 )
-
-type cmdContext struct {
-	rpcClient *ethclient.Client
-
-	AVSDirectory               *contracts.AVSDirectory
-	EigenDARegistryCoordinator *contracts.RegistryCoordinator
-	//EigenDA
-}
 
 // playing with helper that will initialize all RPC and contract bindings before command runs
 func setupCommand(ctx context.Context, cmd *cli.Command) error {

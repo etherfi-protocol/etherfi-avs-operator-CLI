@@ -79,13 +79,13 @@ func handleEOraclePrepareRegistration(ctx context.Context, cli *cli.Command) err
 		return fmt.Errorf("loading config: %w", err)
 	}
 
-	registryCoordinator, err := bindings.NewRegistryCoordinator(cfg.EOracleRegistryCoordinator, rpcClient)
+	registryCoordinator, err := bindings.NewRegistryCoordinator(cfg.EOracleRegistryCoordinatorAddress, rpcClient)
 	if err != nil {
 		return err
 	}
 
 	// look up operator contract associated with this id and configured ecdsaSigner
-	operatorManagerContract, err := contracts.NewAvsOperatorManager(cfg.OperatorManagerAddress, rpcClient)
+	operatorManagerContract, err := contracts.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
 	if err != nil {
 		return fmt.Errorf("binding operatorManager: %w", err)
 	}

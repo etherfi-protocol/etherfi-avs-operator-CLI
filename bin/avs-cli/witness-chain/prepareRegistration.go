@@ -39,11 +39,6 @@ var WitnessPrepareRegistrationCmd = &cli.Command{
 			Usage:    "watchtower address",
 			Required: true,
 		},
-		&cli.StringFlag{
-			Name:     "rpc-url",
-			Usage:    "rpc url",
-			Required: true,
-		},
 	},
 }
 
@@ -76,7 +71,7 @@ func handleWitnessPrepareRegistration(ctx context.Context, cli *cli.Command) err
 	}
 
 	// look up operator contract associated with this id and configured ecdsaSigner
-	operatorManagerContract, err := contracts.NewAvsOperatorManager(cfg.OperatorManagerAddress, rpcClient)
+	operatorManagerContract, err := contracts.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
 	if err != nil {
 		return fmt.Errorf("binding operatorManager: %w", err)
 	}
@@ -86,7 +81,7 @@ func handleWitnessPrepareRegistration(ctx context.Context, cli *cli.Command) err
 	}
 
 	// compute the watchtower registration digest
-	operatorRegistry, err := witnesschain.NewWitnessChainOperatorRegistry(cfg.WitnessChainOperatorRegistry, rpcClient)
+	operatorRegistry, err := witnesschain.NewWitnessChainOperatorRegistry(cfg.WitnessChainOperatorRegistryAddress, rpcClient)
 	if err != nil {
 		return fmt.Errorf("binding operatorRegistry: %w", err)
 	}

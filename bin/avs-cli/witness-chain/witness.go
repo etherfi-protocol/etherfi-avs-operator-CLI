@@ -111,14 +111,14 @@ func witnessRegisterWatchtower(
 	}
 	fmt.Printf("subcall: 0x%s\n\n", hex.EncodeToString(input))
 
-	adminCall, err := bindings.PackForwardCallForAdmin(operatorID, input, cfg.WitnessChainOperatorRegistry)
+	adminCall, err := bindings.PackForwardCallForAdmin(operatorID, input, cfg.WitnessChainOperatorRegistryAddress)
 	if err != nil {
 		return fmt.Errorf("wrapping call for admin: %w", err)
 	}
 	fmt.Printf("admincall: 0x%s\n\n", hex.EncodeToString(adminCall))
 
 	// output in gnosis compatible format
-	batch := gnosis.NewSingleTxBatch(adminCall, cfg.OperatorManagerAddress, fmt.Sprintf("witness-chain-register-watchtower-%d", operatorID))
+	batch := gnosis.NewSingleTxBatch(adminCall, cfg.AvsOperatorManagerAddress, fmt.Sprintf("witness-chain-register-watchtower-%d", operatorID))
 	fmt.Printf("gnosis:\n%s\n", batch.PrettyPrint())
 
 	return nil

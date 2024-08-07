@@ -45,7 +45,7 @@ func GenerateRegistrationDigest(operatorID int64, salt [32]byte, expiry *big.Int
 	if err != nil {
 		return nil, fmt.Errorf("binding registryCoordinator: %w", err)
 	}
-	avsManager, err := contracts.NewAvsOperatorManager(cfg.OperatorManagerAddress, rpcClient)
+	avsManager, err := contracts.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
 	if err != nil {
 		return nil, fmt.Errorf("binding OperatorManager contract: %w", err)
 	}
@@ -59,15 +59,15 @@ func GenerateRegistrationDigest(operatorID int64, salt [32]byte, expiry *big.Int
 	var serviceManagerAddress common.Address
 	switch avs {
 	case EIGEN_DA:
-		serviceManagerAddress = cfg.EigenDAServiceManager
+		serviceManagerAddress = cfg.EigenDAServiceManagerAddress
 	case BREVIS:
-		serviceManagerAddress = cfg.BrevisServiceManager
+		serviceManagerAddress = cfg.BrevisServiceManagerAddress
 	case LAGRANGE:
-		serviceManagerAddress = cfg.LagrangeService
+		serviceManagerAddress = cfg.LagrangeServiceAddress
 	case EORACLE:
-		serviceManagerAddress = cfg.EOracleServiceManager
+		serviceManagerAddress = cfg.EOracleServiceManagerAddress
 	case WITNESS_CHAIN:
-		serviceManagerAddress = cfg.WitnessChainWitnessHub
+		serviceManagerAddress = cfg.WitnessChainWitnessHubAddress
 	default:
 		panic("unknown avs")
 	}
@@ -93,7 +93,7 @@ func GenerateAndSignRegistrationDigest(operatorID int64, avs AVS, rpcClient *eth
 	}
 
 	// look up operator contract associated with this id and configured ecdsaSigner
-	operatorManagerContract, err := contracts.NewAvsOperatorManager(cfg.OperatorManagerAddress, rpcClient)
+	operatorManagerContract, err := contracts.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
 	if err != nil {
 		return nil, fmt.Errorf("binding operatorManager: %w", err)
 	}
