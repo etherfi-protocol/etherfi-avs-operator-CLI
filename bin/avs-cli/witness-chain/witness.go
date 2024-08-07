@@ -21,8 +21,8 @@ var WitnessCmd = &cli.Command{
 	Usage:  "various actions related to managing Witness-Chain operators",
 	Before: prepareWitnessChainCmd,
 	Commands: []*cli.Command{
-		WitnessRegisterToAvsCmd,
 		WitnessPrepareRegistrationCmd,
+		WitnessRegisterToAvsCmd,
 		WitnessRegisterWatchtowerCmd,
 	},
 }

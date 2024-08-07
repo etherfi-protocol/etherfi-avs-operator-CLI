@@ -12,6 +12,7 @@ import (
 
 var WitnessRegisterWatchtowerCmd = &cli.Command{
 	Name:   "register-watchtower",
+	Usage:  "(Admin) Register a watchtower to target operator",
 	Action: handleRegisterWatchtower,
 	Flags: []cli.Flag{
 		&cli.StringFlag{

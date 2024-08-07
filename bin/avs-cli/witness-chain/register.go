@@ -12,7 +12,7 @@ import (
 
 var WitnessRegisterToAvsCmd = &cli.Command{
 	Name:   "register",
-	Usage:  "register target operator with avs",
+	Usage:  "(Admin) register target operator with avs",
 	Action: handleWitnessRegister,
 	Flags: []cli.Flag{
 		&cli.StringFlag{

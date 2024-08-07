@@ -20,6 +20,7 @@ type RegistrationInput struct {
 
 var WitnessPrepareRegistrationCmd = &cli.Command{
 	Name:   "prepare-registration",
+	Usage:  "(Node Operator) gather all inputs required to register for avs",
 	Action: handleWitnessPrepareRegistration,
 	Flags: []cli.Flag{
 		&cli.IntFlag{

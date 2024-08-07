@@ -114,6 +114,27 @@ Supply a separate ECDSA key you control for the value of `operator_private_key`
 
 ---
 
+# Adding a new AVS to the CLI
+
+### 1. Understand the complete registration flow for the AVS you are adding
+Ether.fi utilizes a contract based operator alongside EIP-1271 signing. Most AVS's do not support this
+out of the box. Please confirm that their contracts will be compatible with this scheme.
+Many AVS's also utilize different styles of keys/signatures and different numbers of them and even multiple chains.
+Figure out which actions need to be taken by the individual node operators and which need to be 
+done by an ether.fi admin with the EIP-1271 signing key.
+Please take the time to open a PR against https://github.com/etherfi-protocol/avs-smart-contracts/tree/witness-chain
+with a test walking through the entire registration flow. You can find an example here https://github.com/etherfi-protocol/avs-smart-contracts/blob/witness-chain/test/WitnessChain.t.sol
+
+### 2. Add a new command for you avs to `bin/avs-cli/main.go`
+Add your top level command to this file and then implement subcommands in their own package.
+For an example see https://github.com/etherfi-protocol/etherfi-avs-operator-CLI/tree/witness-chain/bin/avs-cli/witness-chain
+The CLI command should be a simple wrapper that forwards data to the package you implement
+in the following step
+
+### 3. Implement core logic in a new package `src/{my_avs}`
+Please also place any abi's and generated bindings in this package.
+For an example see https://github.com/etherfi-protocol/etherfi-avs-operator-CLI/blob/witness-chain/src/witnesschain/witnesschain.go
+
 ## Contracts
 - Code
   - https://github.com/etherfi-protocol/smart-contracts/blob/syko/feature/etherfi_avs_operator/src/EtherFiAvsOperatorsManager.sol
