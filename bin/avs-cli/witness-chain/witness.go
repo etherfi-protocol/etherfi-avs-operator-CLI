@@ -10,21 +10,79 @@ import (
 	"strings"
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts/witnesschain"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/gnosis"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/witnesschain"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/urfave/cli/v3"
 )
 
+var witnessAPI *witnesschain.WitnessChain
+var etherfiAPI *etherfi.API
+
 var WitnessCmd = &cli.Command{
-	Name:  "witness-chain",
-	Usage: "various actions related to managing Witness-Chain operators",
+	Name:   "witness-chain",
+	Usage:  "various actions related to managing Witness-Chain operators",
+	Before: prepareWitnessChainCmd,
 	Commands: []*cli.Command{
 		WitnessRegisterToAvsCmd,
 		WitnessPrepareRegistrationCmd,
 		WitnessRegisterWatchtowerCmd,
 	},
+}
+
+func prepareWitnessChainCmd(ctx context.Context, cmd *cli.Command) error {
+	// try to load RPC_URL from env or flags
+	rpcURL := os.Getenv("RPC_URL")
+	if rpcURL == "" {
+		rpcURL = cmd.String("rpc-url")
+	}
+
+	if rpcURL == "" {
+		return fmt.Errorf("must set env var $RPC_URL or use --rpc-url flag")
+	}
+
+	rpcClient, err := ethclient.Dial(rpcURL)
+	if err != nil {
+		return fmt.Errorf("dialing RPC: %w", err)
+	}
+
+	cfg, err := bindings.AutodetectConfig(rpcClient)
+	if err != nil {
+		return fmt.Errorf("loading config: %w", err)
+	}
+
+	witnessHub, err := witnesschain.NewWitnessChainWitnessHub(cfg.WitnessChainWitnessHubAddress, rpcClient)
+	if err != nil {
+		return err
+	}
+	operatorRegistry, err := witnesschain.NewWitnessChainOperatorRegistry(cfg.WitnessChainOperatorRegistryAddress, rpcClient)
+	if err != nil {
+		return err
+	}
+	avsOperatorManager, err := contracts.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
+	if err != nil {
+		return err
+	}
+
+	etherfiAPI = &etherfi.API{
+		Client:                    rpcClient,
+		AvsOperatorManagerAddress: cfg.AvsOperatorManagerAddress,
+		AvsOperatorManager:        avsOperatorManager,
+	}
+
+	// make globally accessible by all commands
+	witnessAPI = &witnesschain.WitnessChain{
+		Client:                  rpcClient,
+		OperatorRegistryAddress: cfg.WitnessChainOperatorRegistryAddress,
+		OperatorRegistry:        operatorRegistry,
+		WitnessHubAddress:       cfg.WitnessChainWitnessHubAddress,
+		WitnessHub:              witnessHub,
+	}
+
+	return nil
 }
 
 var WitnessRegisterWatchtowerCmd = &cli.Command{

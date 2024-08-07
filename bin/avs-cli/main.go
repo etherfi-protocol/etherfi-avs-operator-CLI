@@ -89,7 +89,7 @@ func main() {
 		},
 
 		// operations we want to run for every single command
-		Before: before,
+		//	Before: before,
 
 		Commands: []*cli.Command{
 			createBlsCmd,
