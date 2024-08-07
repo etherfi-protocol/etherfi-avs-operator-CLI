@@ -66,6 +66,9 @@ Supply a separate ECDSA key you control for the value of `operator_private_key`
 2. Recieve prepared registration json file from target node operator
 3. Register the operator contract with witness chain
 
+            // Expose the ECSDA signing key as an environment variable
+            export PRIVATE_KEY={ECSDSA_SIGNING_KEY}
+
            ./avs-cli witness-chain register --registration-input witness-input.json --rpc-url $RPC_URL
 
            // submit resulting output as a gnosis TX via AVS admin gnosis
@@ -76,8 +79,31 @@ Supply a separate ECDSA key you control for the value of `operator_private_key`
 
            // submit resulting output as a gnosis TX via AVS admin gnosis
 
+# EigenDA
 
+## Operators
 
+1. generate a new BLS keystore using the eigenlayer tooling https://docs.eigenlayer.xyz/eigenlayer/operator-guides/operator-installation#create-keys
+2. Determine which `quorums` and `socket` you wish to register for
+3. Sign digest establishing ownership of your newly generated BLS key
+
+           ./avs-cli eigenda prepare-registration
+
+4. Send the result of the previous command to the ether.fi team via `restaking@ether.fi`
+5. Wait for confirmation from the ether.fi team that your registration is complete
+6. Proceed to run the eigenda node software
+
+## Ether.fi Admin
+
+1. Recieve prepared registration json file from target node operator
+2. Register the operator contract with eigenda
+
+            // Expose the ECSDA signing key as an environment variable
+            export PRIVATE_KEY={ECSDSA_SIGNING_KEY}
+
+           ./avs-cli eigenda register --registration-input eigenda-input.json --rpc-url $RPC_URL
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis   
 
 ## Contracts
 - Code
