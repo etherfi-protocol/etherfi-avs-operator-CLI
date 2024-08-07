@@ -8,7 +8,6 @@ import (
 
 	eigenda "github.com/Layr-Labs/eigenda/contracts/bindings/RegistryCoordinator"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/witnesschain"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 )
@@ -54,9 +53,9 @@ type Config struct {
 
 	// Witnesschain
 	WitnessChainOperatorRegistryAddress common.Address
-	WitnessChainOperatorRegistry        *witnesschain.WitnessChainOperatorRegistry
-	WitnessChainWitnessHubAddress       common.Address
-	WitnessChainWitnessHub              *witnesschain.WitnessChainWitnessHub
+	//	WitnessChainOperatorRegistry        *witnesschain.WitnessChainOperatorRegistry
+	WitnessChainWitnessHubAddress common.Address
+	// WitnessChainWitnessHub              *witnesschain.WitnessChainWitnessHub
 }
 
 var Mainnet = Config{

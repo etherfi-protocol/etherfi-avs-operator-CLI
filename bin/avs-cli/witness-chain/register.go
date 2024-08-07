@@ -8,7 +8,6 @@ import (
 	"math/big"
 	"os"
 
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/avs/signer"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/gnosis"
@@ -29,29 +28,13 @@ var WitnessRegisterToAvsCmd = &cli.Command{
 			Usage:    "path to registration file created by prepare-registration command",
 			Required: true,
 		},
-		&cli.StringFlag{
-			Name:     "rpc-url",
-			Usage:    "rpc url",
-			Required: true,
-		},
 	},
 }
 
 func handleWitnessRegister(ctx context.Context, cli *cli.Command) error {
 
 	// parse cli params
-	rpcURL := cli.String("rpc-url")
 	inputFilepath := cli.String("registration-input")
-
-	// connect to RPC node
-	rpcClient, err := ethclient.Dial(rpcURL)
-	if err != nil {
-		return fmt.Errorf("dialing rpc: %w", err)
-	}
-	cfg, err := bindings.AutodetectConfig(rpcClient)
-	if err != nil {
-		return fmt.Errorf("loading config: %w", err)
-	}
 
 	// read input file with required witnesschain data
 	var input RegistrationInput
@@ -65,27 +48,28 @@ func handleWitnessRegister(ctx context.Context, cli *cli.Command) error {
 	if input.OperatorID == 0 {
 		return fmt.Errorf("invalid registration input")
 	}
-	/*
-		// TODO: only need these checks on watchtower registration path
-		if input.WatchtowerAddress == common.Address{} {
-			return fmt.Errorf("invalid registration input")
-		}
-		if input.Signature == "" {
-			return fmt.Errorf("invalid registration input")
-		}
-	*/
+
+	// look up operator contract associated with this id
+	operator, err := etherfiAPI.LookupOperatorByID(input.OperatorID)
+	if err != nil {
+		return fmt.Errorf("looking up operator address: %w", err)
+	}
 
 	// generate and sign registration hash with admin ecdsa key
-	privateKey, err := crypto.HexToECDSA(os.Getenv("PRIVATE_KEY"))
+	signingKey, err := crypto.HexToECDSA(os.Getenv("PRIVATE_KEY"))
 	if err != nil {
 		return fmt.Errorf("invalid private key: %w", err)
 	}
-	sigWithSaltAndExpiry, err := signer.GenerateAndSignRegistrationDigest(input.OperatorID, signer.WITNESS_CHAIN, rpcClient, privateKey)
-	if err != nil {
-		return fmt.Errorf("signing registration digest: %w", err)
-	}
+	return witnessAPI.RegisterOperator(operator, signingKey)
 
-	return witnessRegister(input.OperatorID, sigWithSaltAndExpiry, cfg, rpcClient)
+	/*
+		sigWithSaltAndExpiry, err := signer.GenerateAndSignRegistrationDigest(input.OperatorID, signer.WITNESS_CHAIN, rpcClient, privateKey)
+		if err != nil {
+			return fmt.Errorf("signing registration digest: %w", err)
+		}
+
+		return witnessRegister(input.OperatorID, sigWithSaltAndExpiry, cfg, rpcClient)
+	*/
 }
 
 func witnessRegister(
