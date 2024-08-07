@@ -48,9 +48,9 @@ In order to run the witnesschain node software you will need to register a watch
 
         // Expose the private key generated above as an environment variable
         export WATCHTOWER_PRIVATE_KEY={MY_PRIVATE_KEY}
-        
+
         // Sign 
-        ./avs-cli witness-chain prepare-registration --rpc-url $RPC_URL --operator-id {operator_id} --watchtower-address {address_of_generated_watchtower_key}
+        ./avs-cli witness-chain prepare-registration --rpc-url $RPC_URL --operator-id {operator_id}
 
 3. Send the json output of the above command to `restaking@ether.fi`
 4. Wait for confirmation from ether.fi team that L1 registration is complete
@@ -77,9 +77,9 @@ Supply a separate ECDSA key you control for the value of `operator_private_key`
            ./avs-cli witness-chain register --registration-input witness-input.json --rpc-url $RPC_URL
 
            // submit resulting output as a gnosis TX via AVS admin gnosis
-   
+
 5. Register the watchtower on L1
-   
+
            ./avs-cli witness-chain register-watchtower --registration-input witness-input.json --rpc-url $RPC_URL
 
            // submit resulting output as a gnosis TX via AVS admin gnosis

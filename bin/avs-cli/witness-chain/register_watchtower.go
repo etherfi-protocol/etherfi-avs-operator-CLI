@@ -6,14 +6,13 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/witnesschain"
 	"github.com/urfave/cli/v3"
 )
 
-var WitnessRegisterToAvsCmd = &cli.Command{
-	Name:   "register",
-	Usage:  "register target operator with avs",
-	Action: handleWitnessRegister,
+var WitnessRegisterWatchtowerCmd = &cli.Command{
+	Name:   "register-watchtower",
+	Action: handleRegisterWatchtower,
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:     "registration-input",
@@ -23,13 +22,13 @@ var WitnessRegisterToAvsCmd = &cli.Command{
 	},
 }
 
-func handleWitnessRegister(ctx context.Context, cli *cli.Command) error {
+func handleRegisterWatchtower(ctx context.Context, cli *cli.Command) error {
 
 	// parse cli params
 	inputFilepath := cli.String("registration-input")
 
 	// read input file with required witnesschain data
-	var input RegistrationInput
+	var input witnesschain.RegistrationInfo
 	buf, err := os.ReadFile(inputFilepath)
 	if err != nil {
 		return fmt.Errorf("reading input file: %w", err)
@@ -47,11 +46,5 @@ func handleWitnessRegister(ctx context.Context, cli *cli.Command) error {
 		return fmt.Errorf("looking up operator address: %w", err)
 	}
 
-	// generate and sign registration hash with admin ecdsa key
-	signingKey, err := crypto.HexToECDSA(os.Getenv("PRIVATE_KEY"))
-	if err != nil {
-		return fmt.Errorf("invalid private key: %w", err)
-	}
-
-	return witnessAPI.RegisterOperator(operator, signingKey)
+	return witnessAPI.RegisterWatchtower(operator, &input)
 }

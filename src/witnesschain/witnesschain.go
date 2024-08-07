@@ -5,9 +5,11 @@ import (
 	"encoding/hex"
 	"fmt"
 	"math/big"
+	"strings"
 	"time"
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/avs/signer"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/gnosis"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/utils"
@@ -27,6 +29,7 @@ type WitnessChain struct {
 	AvsOperatorManagerAddress common.Address
 }
 
+// Info that node operator must supply to the ether.fi admin for registration
 type RegistrationInfo struct {
 	OperatorID                int64
 	WatchtowerAddress         common.Address
@@ -95,9 +98,40 @@ func (wc *WitnessChain) RegisterOperator(operator *etherfi.Operator, signingKey 
 	}
 
 	// output in gnosis compatible format
-	batch := gnosis.NewSingleTxBatch(adminCall, wc.AvsOperatorManagerAddress, fmt.Sprintf("witness-chain-register-watchtower-%d", operator.ID))
-	//fmt.Printf("gnosis:\n%s\n", batch.PrettyPrint())
-	utils.ExportJSON("witness-chain-register-gnosis", operator.ID, batch)
+	batch := gnosis.NewSingleTxBatch(adminCall, wc.AvsOperatorManagerAddress, fmt.Sprintf("witness-chain-register-%d", operator.ID))
+	return utils.ExportJSON("witness-chain-register-gnosis", operator.ID, batch)
+}
 
-	return nil
+func (wc *WitnessChain) RegisterWatchtower(operator *etherfi.Operator, info *RegistrationInfo) error {
+
+	// parse watchtower signature
+	if strings.HasPrefix(info.WatchtowerSignature, "0x") {
+		info.WatchtowerSignature = info.WatchtowerSignature[2:]
+	}
+	watchtowerSignature, err := hex.DecodeString(info.WatchtowerSignature)
+	if err != nil {
+		return fmt.Errorf("invalid watchtower signature")
+	}
+
+	// manually pack tx data since we are submitting via gnosis instead of directly
+	witnessABI, err := WitnessChainOperatorRegistryMetaData.GetAbi()
+	if err != nil {
+		return fmt.Errorf("fetching abi: %w", err)
+	}
+
+	// pack operatorRegistry.registerWatchtowerAsOperator()
+	input, err := witnessABI.Pack("registerWatchtowerAsOperator", info.WatchtowerAddress, info.WatchtowerSignatureExpiry, watchtowerSignature)
+	if err != nil {
+		return fmt.Errorf("packing input: %w", err)
+	}
+
+	// wrap the inner call to be forwarded via AvsOperatorManager
+	adminCall, err := bindings.PackForwardCallForAdmin(operator.ID, input, wc.OperatorRegistryAddress)
+	if err != nil {
+		return fmt.Errorf("wrapping call for admin: %w", err)
+	}
+
+	// output in gnosis compatible format
+	batch := gnosis.NewSingleTxBatch(adminCall, wc.AvsOperatorManagerAddress, fmt.Sprintf("witness-chain-register-watchtower-%d", operator.ID))
+	return utils.ExportJSON("witness-chain-register-gnosis", operator.ID, batch)
 }
