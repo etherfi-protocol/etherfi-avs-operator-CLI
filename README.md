@@ -30,6 +30,8 @@ After ether.fi team register the information, delegted AVS operator should have 
 
 ### Step 2: Follow the instructions for the specific AVS you are registering for
 * [Witness Chain](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI/blob/witness-chain/README.md#witness-chain)
+* [EigenDA](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI/blob/witness-chain/README.md#eigenda)
+
 
 # Witness Chain
 
