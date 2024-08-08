@@ -9,7 +9,7 @@ import (
 	"os"
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -72,7 +72,7 @@ func updateEcdsaSigner(rpcClient *ethclient.Client, operatorID int64, ecdsaSigne
 	}
 
 	// bind contracts
-	avsManager, err := contracts.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
+	avsManager, err := etherfi.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
 	if err != nil {
 		return fmt.Errorf("binding OperatorManager contract: %w", err)
 	}

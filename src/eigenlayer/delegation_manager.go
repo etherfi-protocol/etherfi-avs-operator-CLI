@@ -1,7 +1,7 @@
 // Code generated - DO NOT EDIT.
 // This file is a generated binding and any manual changes will be lost.
 
-package contracts
+package eigenlayer
 
 import (
 	"errors"
@@ -26,7 +26,15 @@ var (
 	_ = common.Big1
 	_ = types.BloomLookup
 	_ = event.NewSubscription
+	_ = abi.ConvertType
 )
+
+// IDelegationManagerOperatorDetails is an auto generated low-level Go binding around an user-defined struct.
+type IDelegationManagerOperatorDetails struct {
+	EarningsReceiver         common.Address
+	DelegationApprover       common.Address
+	StakerOptOutWindowBlocks uint32
+}
 
 // IDelegationManagerQueuedWithdrawalParams is an auto generated low-level Go binding around an user-defined struct.
 type IDelegationManagerQueuedWithdrawalParams struct {
@@ -174,11 +182,11 @@ func NewDelegationManagerFilterer(address common.Address, filterer bind.Contract
 
 // bindDelegationManager binds a generic wrapper to an already deployed contract.
 func bindDelegationManager(address common.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
-	parsed, err := abi.JSON(strings.NewReader(DelegationManagerABI))
+	parsed, err := DelegationManagerMetaData.GetAbi()
 	if err != nil {
 		return nil, err
 	}
-	return bind.NewBoundContract(address, parsed, caller, transactor, filterer), nil
+	return bind.NewBoundContract(address, *parsed, caller, transactor, filterer), nil
 }
 
 // Call invokes the (constant) contract method with params as input values and

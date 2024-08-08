@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/eigenlayer"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/utils"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/types"
@@ -43,11 +43,11 @@ func GenerateRegistrationDigest(operatorID int64, salt [32]byte, expiry *big.Int
 	}
 
 	// bind contracts
-	avsDirectory, err := contracts.NewAVSDirectory(cfg.AvsDirectoryAddress, rpcClient)
+	avsDirectory, err := eigenlayer.NewAvsDirectory(cfg.AvsDirectoryAddress, rpcClient)
 	if err != nil {
 		return nil, fmt.Errorf("binding registryCoordinator: %w", err)
 	}
-	avsManager, err := contracts.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
+	avsManager, err := etherfi.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
 	if err != nil {
 		return nil, fmt.Errorf("binding OperatorManager contract: %w", err)
 	}

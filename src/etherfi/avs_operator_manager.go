@@ -1,7 +1,7 @@
 // Code generated - DO NOT EDIT.
 // This file is a generated binding and any manual changes will be lost.
 
-package contracts
+package etherfi
 
 import (
 	"errors"
@@ -28,41 +28,6 @@ var (
 	_ = event.NewSubscription
 	_ = abi.ConvertType
 )
-
-// AvsOperatorAvsInfo is an auto generated low-level Go binding around an user-defined struct.
-type AvsOperatorAvsInfo struct {
-	IsWhitelisted bool
-	QuorumNumbers []byte
-	Socket        string
-	Params        IBLSApkRegistryPubkeyRegistrationParams
-	IsRegistered  bool
-}
-
-// BN254G1Point is an auto generated low-level Go binding around an user-defined struct.
-type BN254G1Point struct {
-	X *big.Int
-	Y *big.Int
-}
-
-// BN254G2Point is an auto generated low-level Go binding around an user-defined struct.
-type BN254G2Point struct {
-	X [2]*big.Int
-	Y [2]*big.Int
-}
-
-// IBLSApkRegistryPubkeyRegistrationParams is an auto generated low-level Go binding around an user-defined struct.
-type IBLSApkRegistryPubkeyRegistrationParams struct {
-	PubkeyRegistrationSignature BN254G1Point
-	PubkeyG1                    BN254G1Point
-	PubkeyG2                    BN254G2Point
-}
-
-// IDelegationManagerOperatorDetails is an auto generated low-level Go binding around an user-defined struct.
-type IDelegationManagerOperatorDetails struct {
-	EarningsReceiver         common.Address
-	DelegationApprover       common.Address
-	StakerOptOutWindowBlocks uint32
-}
 
 // AvsOperatorManagerMetaData contains all meta data concerning the AvsOperatorManager contract.
 var AvsOperatorManagerMetaData = &bind.MetaData{

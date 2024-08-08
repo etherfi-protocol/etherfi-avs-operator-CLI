@@ -8,8 +8,9 @@ import (
 	"strings"
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/gnosis"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/lagrange"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/urfave/cli/v3"
@@ -131,13 +132,13 @@ func lagrangeRegister(
 	blsPubkeys[0][0] = big.NewInt(0).SetBytes(blsPubkey[:32])
 	blsPubkeys[0][1] = big.NewInt(0).SetBytes(blsPubkey[32:64])
 
-	sigParams := contracts.ISignatureUtilsSignatureWithSaltAndExpiry{
+	sigParams := lagrange.ISignatureUtilsSignatureWithSaltAndExpiry{
 		Signature: registrationSignature,
 		Salt:      [32]byte(salt),
 		Expiry:    big.NewInt(int64(expiry)),
 	}
 
-	lagrangeABI, err := contracts.LagrangeServiceMetaData.GetAbi()
+	lagrangeABI, err := lagrange.LagrangeServiceMetaData.GetAbi()
 	if err != nil {
 		return fmt.Errorf("fetching abi: %w", err)
 	}
@@ -149,7 +150,7 @@ func lagrangeRegister(
 	}
 	fmt.Printf("subcall: 0x%s\n\n", hex.EncodeToString(input))
 
-	managerABI, err := contracts.AvsOperatorManagerMetaData.GetAbi()
+	managerABI, err := etherfi.AvsOperatorManagerMetaData.GetAbi()
 	if err != nil {
 		return fmt.Errorf("fetching abi: %w", err)
 	}
@@ -224,11 +225,11 @@ func handleLagrangeSubscribe(ctx context.Context, cli *cli.Command) error {
 
 func lagrangeSubscribe(operatorID int64, rollupChainID uint32, cfg *bindings.Config) error {
 
-	lagrangeABI, err := contracts.LagrangeServiceMetaData.GetAbi()
+	lagrangeABI, err := lagrange.LagrangeServiceMetaData.GetAbi()
 	if err != nil {
 		return fmt.Errorf("fetching abi: %w", err)
 	}
-	managerABI, err := contracts.AvsOperatorManagerMetaData.GetAbi()
+	managerABI, err := etherfi.AvsOperatorManagerMetaData.GetAbi()
 	if err != nil {
 		return fmt.Errorf("fetching abi: %w", err)
 	}

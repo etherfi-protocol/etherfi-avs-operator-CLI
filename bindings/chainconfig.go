@@ -4,24 +4,17 @@ import (
 	"context"
 	"fmt"
 
-	// need to alias because eigenlayer has a package name that doesn't match the filepath
-
-	eigenda "github.com/Layr-Labs/eigenda/contracts/bindings/RegistryCoordinator"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
-// Relevant contracts to each AVS + bindings to ABI where needed
+// Relevant contracts to each AVS
 type Config struct {
 
 	// Eigenlayer core contracts
 	AvsDirectoryAddress      common.Address
-	AvsDirectory             *contracts.AVSDirectory
 	DelegationManagerAddress common.Address
-	DelegationManager        *contracts.DelegationManager
 	StrategyManagerAddress   common.Address
-	StrategyManager          *contracts.StrategyManager
 	EigenpodManagerAddress   common.Address
 
 	// strategies (how eigenlayer tracks different LRT's + beacon eth)
@@ -30,32 +23,25 @@ type Config struct {
 
 	// Etherfi AVS contracts
 	AvsOperatorManagerAddress common.Address
-	AvsOperatorManager        *contracts.AvsOperatorManager
 
 	// EigenDA
 	EigenDARegistryCoordinatorAddress common.Address
-	EigenDARegistryCoordinator        *eigenda.ContractRegistryCoordinator
 	EigenDAServiceManagerAddress      common.Address
 
 	// EOracle
 	EOracleRegistryCoordinatorAddress common.Address
-	//	EOracleRegistryCoordinator        *contracts.EOracleRegistryCoordinator
-	EOracleServiceManagerAddress common.Address
+	EOracleServiceManagerAddress      common.Address
 
 	// Brevis
 	BrevisRegistryCoordinatorAddress common.Address
-	BrevisRegistryCoordinator        *contracts.RegistryCoordinator
 	BrevisServiceManagerAddress      common.Address
 
 	// Lagrange
 	LagrangeServiceAddress common.Address
-	LagrangeService        *contracts.LagrangeService
 
 	// Witnesschain
 	WitnessChainOperatorRegistryAddress common.Address
-	//	WitnessChainOperatorRegistry        *witnesschain.WitnessChainOperatorRegistry
-	WitnessChainWitnessHubAddress common.Address
-	// WitnessChainWitnessHub              *witnesschain.WitnessChainWitnessHub
+	WitnessChainWitnessHubAddress       common.Address
 }
 
 var Mainnet = Config{

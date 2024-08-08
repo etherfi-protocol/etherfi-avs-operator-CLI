@@ -15,9 +15,7 @@ func main() {
 	cmd := &cli.Command{
 
 		Commands: []*cli.Command{
-			//		registerBLSCmd,
 			//registrationDigestCmd,
-			registerOperatorCmd,
 			//updateWhitelistCmd,
 			operatorDetailsCmd,
 			updateEcdsaSignerCmd,

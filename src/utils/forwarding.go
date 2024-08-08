@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/ethereum/go-ethereum/common"
 )
 
 // PackForwardCallForAdmin encloses the provided calldata in a call to AvsOperatorManager.adminForwardCall()
 func PackForwardCallForAdmin(operatorID int64, input []byte, innerTarget common.Address) ([]byte, error) {
 
-	managerABI, err := contracts.AvsOperatorManagerMetaData.GetAbi()
+	managerABI, err := etherfi.AvsOperatorManagerMetaData.GetAbi()
 	if err != nil {
 		return nil, fmt.Errorf("fetching abi: %w", err)
 	}
@@ -31,7 +31,7 @@ func PackForwardCallForAdmin(operatorID int64, input []byte, innerTarget common.
 // PackCallForOperator encloses the provided calldata in a call to AvsOperatorManager.forwardOperatorCall()
 func PackCallForOperator(operatorID int64, input []byte, innerTarget common.Address) ([]byte, error) {
 
-	managerABI, err := contracts.AvsOperatorManagerMetaData.GetAbi()
+	managerABI, err := etherfi.AvsOperatorManagerMetaData.GetAbi()
 	if err != nil {
 		return nil, fmt.Errorf("fetching abi: %w", err)
 	}

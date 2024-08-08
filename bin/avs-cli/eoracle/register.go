@@ -8,7 +8,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/eoracle"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/urfave/cli/v3"
@@ -63,7 +62,7 @@ func handleEOracleRegister(ctx context.Context, cli *cli.Command) error {
 }
 
 // helper to parse the string format output of the eOracle cli
-func parseEOracleG1Point(g1Str string) (*contracts.BN254G1Point, error) {
+func parseEOracleG1Point(g1Str string) (*eoracle.BN254G1Point, error) {
 	// E([3033487302225738788775015552649894032347580654423716360411568660579702112705,2187413669180197747690573834337371262619472523581965284255666855512773801492])
 	trimmed := strings.Trim(g1Str, "E([])")
 	arr := strings.Split(trimmed, ",")
@@ -80,14 +79,14 @@ func parseEOracleG1Point(g1Str string) (*contracts.BN254G1Point, error) {
 		return nil, fmt.Errorf("invalid a1 for G1 point")
 	}
 
-	return &contracts.BN254G1Point{
+	return &eoracle.BN254G1Point{
 		X: x,
 		Y: y,
 	}, nil
 }
 
 // helper to parse the string format output of the eOracle cli
-func parseEOracleG2Point(g2Str string) (*contracts.BN254G2Point, error) {
+func parseEOracleG2Point(g2Str string) (*eoracle.BN254G2Point, error) {
 	// E([19315800099032002908983964818159634958299588208342896291709704755313327796065+1179626283257211881751865173779937098418653714448541503945687956982725670988*u,21798117894530687048377190724608441104430993460154237236704829347245529201922+4867520522353599842689725945491968901103451548555484878124286336346270391416*u])
 	trimmed := removeAll(g2Str, "E([])*u")
 	fmt.Println("trimmed:", trimmed)
@@ -118,7 +117,7 @@ func parseEOracleG2Point(g2Str string) (*contracts.BN254G2Point, error) {
 	}
 
 	// TODO: Do we need to flip the a0 and a1 points
-	return &contracts.BN254G2Point{
+	return &eoracle.BN254G2Point{
 		X: [2]*big.Int{xA0, xA1},
 		Y: [2]*big.Int{yA0, yA1},
 	}, nil

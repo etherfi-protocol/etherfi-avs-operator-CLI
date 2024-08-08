@@ -1,7 +1,7 @@
 // Code generated - DO NOT EDIT.
 // This file is a generated binding and any manual changes will be lost.
 
-package contracts
+package eigenlayer
 
 import (
 	"errors"
@@ -26,6 +26,7 @@ var (
 	_ = common.Big1
 	_ = types.BloomLookup
 	_ = event.NewSubscription
+	_ = abi.ConvertType
 )
 
 // ISignatureUtilsSignatureWithSaltAndExpiry is an auto generated low-level Go binding around an user-defined struct.
@@ -35,163 +36,163 @@ type ISignatureUtilsSignatureWithSaltAndExpiry struct {
 	Expiry    *big.Int
 }
 
-// AVSDirectoryMetaData contains all meta data concerning the AVSDirectory contract.
-var AVSDirectoryMetaData = &bind.MetaData{
+// AvsDirectoryMetaData contains all meta data concerning the AvsDirectory contract.
+var AvsDirectoryMetaData = &bind.MetaData{
 	ABI: "[{\"inputs\":[{\"internalType\":\"contractIDelegationManager\",\"name\":\"_delegation\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"avs\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"metadataURI\",\"type\":\"string\"}],\"name\":\"AVSMetadataURIUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"version\",\"type\":\"uint8\"}],\"name\":\"Initialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"avs\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"enumIAVSDirectory.OperatorAVSRegistrationStatus\",\"name\":\"status\",\"type\":\"uint8\"}],\"name\":\"OperatorAVSRegistrationStatusUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newPausedStatus\",\"type\":\"uint256\"}],\"name\":\"Paused\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"contractIPauserRegistry\",\"name\":\"pauserRegistry\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"contractIPauserRegistry\",\"name\":\"newPauserRegistry\",\"type\":\"address\"}],\"name\":\"PauserRegistrySet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newPausedStatus\",\"type\":\"uint256\"}],\"name\":\"Unpaused\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"DOMAIN_TYPEHASH\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"OPERATOR_AVS_REGISTRATION_TYPEHASH\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"avsOperatorStatus\",\"outputs\":[{\"internalType\":\"enumIAVSDirectory.OperatorAVSRegistrationStatus\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"avs\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"expiry\",\"type\":\"uint256\"}],\"name\":\"calculateOperatorAVSRegistrationDigestHash\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"}],\"name\":\"cancelSalt\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"delegation\",\"outputs\":[{\"internalType\":\"contractIDelegationManager\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"}],\"name\":\"deregisterOperatorFromAVS\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"domainSeparator\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"initialOwner\",\"type\":\"address\"},{\"internalType\":\"contractIPauserRegistry\",\"name\":\"_pauserRegistry\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"initialPausedStatus\",\"type\":\"uint256\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"name\":\"operatorSaltIsSpent\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"newPausedStatus\",\"type\":\"uint256\"}],\"name\":\"pause\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pauseAll\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint8\",\"name\":\"index\",\"type\":\"uint8\"}],\"name\":\"paused\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"paused\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pauserRegistry\",\"outputs\":[{\"internalType\":\"contractIPauserRegistry\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"expiry\",\"type\":\"uint256\"}],\"internalType\":\"structISignatureUtils.SignatureWithSaltAndExpiry\",\"name\":\"operatorSignature\",\"type\":\"tuple\"}],\"name\":\"registerOperatorToAVS\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"contractIPauserRegistry\",\"name\":\"newPauserRegistry\",\"type\":\"address\"}],\"name\":\"setPauserRegistry\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"newPausedStatus\",\"type\":\"uint256\"}],\"name\":\"unpause\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"metadataURI\",\"type\":\"string\"}],\"name\":\"updateAVSMetadataURI\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
 }
 
-// AVSDirectoryABI is the input ABI used to generate the binding from.
-// Deprecated: Use AVSDirectoryMetaData.ABI instead.
-var AVSDirectoryABI = AVSDirectoryMetaData.ABI
+// AvsDirectoryABI is the input ABI used to generate the binding from.
+// Deprecated: Use AvsDirectoryMetaData.ABI instead.
+var AvsDirectoryABI = AvsDirectoryMetaData.ABI
 
-// AVSDirectory is an auto generated Go binding around an Ethereum contract.
-type AVSDirectory struct {
-	AVSDirectoryCaller     // Read-only binding to the contract
-	AVSDirectoryTransactor // Write-only binding to the contract
-	AVSDirectoryFilterer   // Log filterer for contract events
+// AvsDirectory is an auto generated Go binding around an Ethereum contract.
+type AvsDirectory struct {
+	AvsDirectoryCaller     // Read-only binding to the contract
+	AvsDirectoryTransactor // Write-only binding to the contract
+	AvsDirectoryFilterer   // Log filterer for contract events
 }
 
-// AVSDirectoryCaller is an auto generated read-only Go binding around an Ethereum contract.
-type AVSDirectoryCaller struct {
+// AvsDirectoryCaller is an auto generated read-only Go binding around an Ethereum contract.
+type AvsDirectoryCaller struct {
 	contract *bind.BoundContract // Generic contract wrapper for the low level calls
 }
 
-// AVSDirectoryTransactor is an auto generated write-only Go binding around an Ethereum contract.
-type AVSDirectoryTransactor struct {
+// AvsDirectoryTransactor is an auto generated write-only Go binding around an Ethereum contract.
+type AvsDirectoryTransactor struct {
 	contract *bind.BoundContract // Generic contract wrapper for the low level calls
 }
 
-// AVSDirectoryFilterer is an auto generated log filtering Go binding around an Ethereum contract events.
-type AVSDirectoryFilterer struct {
+// AvsDirectoryFilterer is an auto generated log filtering Go binding around an Ethereum contract events.
+type AvsDirectoryFilterer struct {
 	contract *bind.BoundContract // Generic contract wrapper for the low level calls
 }
 
-// AVSDirectorySession is an auto generated Go binding around an Ethereum contract,
+// AvsDirectorySession is an auto generated Go binding around an Ethereum contract,
 // with pre-set call and transact options.
-type AVSDirectorySession struct {
-	Contract     *AVSDirectory     // Generic contract binding to set the session for
+type AvsDirectorySession struct {
+	Contract     *AvsDirectory     // Generic contract binding to set the session for
 	CallOpts     bind.CallOpts     // Call options to use throughout this session
 	TransactOpts bind.TransactOpts // Transaction auth options to use throughout this session
 }
 
-// AVSDirectoryCallerSession is an auto generated read-only Go binding around an Ethereum contract,
+// AvsDirectoryCallerSession is an auto generated read-only Go binding around an Ethereum contract,
 // with pre-set call options.
-type AVSDirectoryCallerSession struct {
-	Contract *AVSDirectoryCaller // Generic contract caller binding to set the session for
+type AvsDirectoryCallerSession struct {
+	Contract *AvsDirectoryCaller // Generic contract caller binding to set the session for
 	CallOpts bind.CallOpts       // Call options to use throughout this session
 }
 
-// AVSDirectoryTransactorSession is an auto generated write-only Go binding around an Ethereum contract,
+// AvsDirectoryTransactorSession is an auto generated write-only Go binding around an Ethereum contract,
 // with pre-set transact options.
-type AVSDirectoryTransactorSession struct {
-	Contract     *AVSDirectoryTransactor // Generic contract transactor binding to set the session for
+type AvsDirectoryTransactorSession struct {
+	Contract     *AvsDirectoryTransactor // Generic contract transactor binding to set the session for
 	TransactOpts bind.TransactOpts       // Transaction auth options to use throughout this session
 }
 
-// AVSDirectoryRaw is an auto generated low-level Go binding around an Ethereum contract.
-type AVSDirectoryRaw struct {
-	Contract *AVSDirectory // Generic contract binding to access the raw methods on
+// AvsDirectoryRaw is an auto generated low-level Go binding around an Ethereum contract.
+type AvsDirectoryRaw struct {
+	Contract *AvsDirectory // Generic contract binding to access the raw methods on
 }
 
-// AVSDirectoryCallerRaw is an auto generated low-level read-only Go binding around an Ethereum contract.
-type AVSDirectoryCallerRaw struct {
-	Contract *AVSDirectoryCaller // Generic read-only contract binding to access the raw methods on
+// AvsDirectoryCallerRaw is an auto generated low-level read-only Go binding around an Ethereum contract.
+type AvsDirectoryCallerRaw struct {
+	Contract *AvsDirectoryCaller // Generic read-only contract binding to access the raw methods on
 }
 
-// AVSDirectoryTransactorRaw is an auto generated low-level write-only Go binding around an Ethereum contract.
-type AVSDirectoryTransactorRaw struct {
-	Contract *AVSDirectoryTransactor // Generic write-only contract binding to access the raw methods on
+// AvsDirectoryTransactorRaw is an auto generated low-level write-only Go binding around an Ethereum contract.
+type AvsDirectoryTransactorRaw struct {
+	Contract *AvsDirectoryTransactor // Generic write-only contract binding to access the raw methods on
 }
 
-// NewAVSDirectory creates a new instance of AVSDirectory, bound to a specific deployed contract.
-func NewAVSDirectory(address common.Address, backend bind.ContractBackend) (*AVSDirectory, error) {
-	contract, err := bindAVSDirectory(address, backend, backend, backend)
+// NewAvsDirectory creates a new instance of AvsDirectory, bound to a specific deployed contract.
+func NewAvsDirectory(address common.Address, backend bind.ContractBackend) (*AvsDirectory, error) {
+	contract, err := bindAvsDirectory(address, backend, backend, backend)
 	if err != nil {
 		return nil, err
 	}
-	return &AVSDirectory{AVSDirectoryCaller: AVSDirectoryCaller{contract: contract}, AVSDirectoryTransactor: AVSDirectoryTransactor{contract: contract}, AVSDirectoryFilterer: AVSDirectoryFilterer{contract: contract}}, nil
+	return &AvsDirectory{AvsDirectoryCaller: AvsDirectoryCaller{contract: contract}, AvsDirectoryTransactor: AvsDirectoryTransactor{contract: contract}, AvsDirectoryFilterer: AvsDirectoryFilterer{contract: contract}}, nil
 }
 
-// NewAVSDirectoryCaller creates a new read-only instance of AVSDirectory, bound to a specific deployed contract.
-func NewAVSDirectoryCaller(address common.Address, caller bind.ContractCaller) (*AVSDirectoryCaller, error) {
-	contract, err := bindAVSDirectory(address, caller, nil, nil)
+// NewAvsDirectoryCaller creates a new read-only instance of AvsDirectory, bound to a specific deployed contract.
+func NewAvsDirectoryCaller(address common.Address, caller bind.ContractCaller) (*AvsDirectoryCaller, error) {
+	contract, err := bindAvsDirectory(address, caller, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	return &AVSDirectoryCaller{contract: contract}, nil
+	return &AvsDirectoryCaller{contract: contract}, nil
 }
 
-// NewAVSDirectoryTransactor creates a new write-only instance of AVSDirectory, bound to a specific deployed contract.
-func NewAVSDirectoryTransactor(address common.Address, transactor bind.ContractTransactor) (*AVSDirectoryTransactor, error) {
-	contract, err := bindAVSDirectory(address, nil, transactor, nil)
+// NewAvsDirectoryTransactor creates a new write-only instance of AvsDirectory, bound to a specific deployed contract.
+func NewAvsDirectoryTransactor(address common.Address, transactor bind.ContractTransactor) (*AvsDirectoryTransactor, error) {
+	contract, err := bindAvsDirectory(address, nil, transactor, nil)
 	if err != nil {
 		return nil, err
 	}
-	return &AVSDirectoryTransactor{contract: contract}, nil
+	return &AvsDirectoryTransactor{contract: contract}, nil
 }
 
-// NewAVSDirectoryFilterer creates a new log filterer instance of AVSDirectory, bound to a specific deployed contract.
-func NewAVSDirectoryFilterer(address common.Address, filterer bind.ContractFilterer) (*AVSDirectoryFilterer, error) {
-	contract, err := bindAVSDirectory(address, nil, nil, filterer)
+// NewAvsDirectoryFilterer creates a new log filterer instance of AvsDirectory, bound to a specific deployed contract.
+func NewAvsDirectoryFilterer(address common.Address, filterer bind.ContractFilterer) (*AvsDirectoryFilterer, error) {
+	contract, err := bindAvsDirectory(address, nil, nil, filterer)
 	if err != nil {
 		return nil, err
 	}
-	return &AVSDirectoryFilterer{contract: contract}, nil
+	return &AvsDirectoryFilterer{contract: contract}, nil
 }
 
-// bindAVSDirectory binds a generic wrapper to an already deployed contract.
-func bindAVSDirectory(address common.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
-	parsed, err := abi.JSON(strings.NewReader(AVSDirectoryABI))
+// bindAvsDirectory binds a generic wrapper to an already deployed contract.
+func bindAvsDirectory(address common.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
+	parsed, err := AvsDirectoryMetaData.GetAbi()
 	if err != nil {
 		return nil, err
 	}
-	return bind.NewBoundContract(address, parsed, caller, transactor, filterer), nil
+	return bind.NewBoundContract(address, *parsed, caller, transactor, filterer), nil
 }
 
 // Call invokes the (constant) contract method with params as input values and
 // sets the output to result. The result type might be a single field for simple
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
-func (_AVSDirectory *AVSDirectoryRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
-	return _AVSDirectory.Contract.AVSDirectoryCaller.contract.Call(opts, result, method, params...)
+func (_AvsDirectory *AvsDirectoryRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
+	return _AvsDirectory.Contract.AvsDirectoryCaller.contract.Call(opts, result, method, params...)
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
-func (_AVSDirectory *AVSDirectoryRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _AVSDirectory.Contract.AVSDirectoryTransactor.contract.Transfer(opts)
+func (_AvsDirectory *AvsDirectoryRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _AvsDirectory.Contract.AvsDirectoryTransactor.contract.Transfer(opts)
 }
 
 // Transact invokes the (paid) contract method with params as input values.
-func (_AVSDirectory *AVSDirectoryRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _AVSDirectory.Contract.AVSDirectoryTransactor.contract.Transact(opts, method, params...)
+func (_AvsDirectory *AvsDirectoryRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
+	return _AvsDirectory.Contract.AvsDirectoryTransactor.contract.Transact(opts, method, params...)
 }
 
 // Call invokes the (constant) contract method with params as input values and
 // sets the output to result. The result type might be a single field for simple
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
-func (_AVSDirectory *AVSDirectoryCallerRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
-	return _AVSDirectory.Contract.contract.Call(opts, result, method, params...)
+func (_AvsDirectory *AvsDirectoryCallerRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
+	return _AvsDirectory.Contract.contract.Call(opts, result, method, params...)
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
-func (_AVSDirectory *AVSDirectoryTransactorRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _AVSDirectory.Contract.contract.Transfer(opts)
+func (_AvsDirectory *AvsDirectoryTransactorRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _AvsDirectory.Contract.contract.Transfer(opts)
 }
 
 // Transact invokes the (paid) contract method with params as input values.
-func (_AVSDirectory *AVSDirectoryTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _AVSDirectory.Contract.contract.Transact(opts, method, params...)
+func (_AvsDirectory *AvsDirectoryTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
+	return _AvsDirectory.Contract.contract.Transact(opts, method, params...)
 }
 
 // DOMAINTYPEHASH is a free data retrieval call binding the contract method 0x20606b70.
 //
 // Solidity: function DOMAIN_TYPEHASH() view returns(bytes32)
-func (_AVSDirectory *AVSDirectoryCaller) DOMAINTYPEHASH(opts *bind.CallOpts) ([32]byte, error) {
+func (_AvsDirectory *AvsDirectoryCaller) DOMAINTYPEHASH(opts *bind.CallOpts) ([32]byte, error) {
 	var out []interface{}
-	err := _AVSDirectory.contract.Call(opts, &out, "DOMAIN_TYPEHASH")
+	err := _AvsDirectory.contract.Call(opts, &out, "DOMAIN_TYPEHASH")
 
 	if err != nil {
 		return *new([32]byte), err
@@ -206,23 +207,23 @@ func (_AVSDirectory *AVSDirectoryCaller) DOMAINTYPEHASH(opts *bind.CallOpts) ([3
 // DOMAINTYPEHASH is a free data retrieval call binding the contract method 0x20606b70.
 //
 // Solidity: function DOMAIN_TYPEHASH() view returns(bytes32)
-func (_AVSDirectory *AVSDirectorySession) DOMAINTYPEHASH() ([32]byte, error) {
-	return _AVSDirectory.Contract.DOMAINTYPEHASH(&_AVSDirectory.CallOpts)
+func (_AvsDirectory *AvsDirectorySession) DOMAINTYPEHASH() ([32]byte, error) {
+	return _AvsDirectory.Contract.DOMAINTYPEHASH(&_AvsDirectory.CallOpts)
 }
 
 // DOMAINTYPEHASH is a free data retrieval call binding the contract method 0x20606b70.
 //
 // Solidity: function DOMAIN_TYPEHASH() view returns(bytes32)
-func (_AVSDirectory *AVSDirectoryCallerSession) DOMAINTYPEHASH() ([32]byte, error) {
-	return _AVSDirectory.Contract.DOMAINTYPEHASH(&_AVSDirectory.CallOpts)
+func (_AvsDirectory *AvsDirectoryCallerSession) DOMAINTYPEHASH() ([32]byte, error) {
+	return _AvsDirectory.Contract.DOMAINTYPEHASH(&_AvsDirectory.CallOpts)
 }
 
 // OPERATORAVSREGISTRATIONTYPEHASH is a free data retrieval call binding the contract method 0xd79aceab.
 //
 // Solidity: function OPERATOR_AVS_REGISTRATION_TYPEHASH() view returns(bytes32)
-func (_AVSDirectory *AVSDirectoryCaller) OPERATORAVSREGISTRATIONTYPEHASH(opts *bind.CallOpts) ([32]byte, error) {
+func (_AvsDirectory *AvsDirectoryCaller) OPERATORAVSREGISTRATIONTYPEHASH(opts *bind.CallOpts) ([32]byte, error) {
 	var out []interface{}
-	err := _AVSDirectory.contract.Call(opts, &out, "OPERATOR_AVS_REGISTRATION_TYPEHASH")
+	err := _AvsDirectory.contract.Call(opts, &out, "OPERATOR_AVS_REGISTRATION_TYPEHASH")
 
 	if err != nil {
 		return *new([32]byte), err
@@ -237,23 +238,23 @@ func (_AVSDirectory *AVSDirectoryCaller) OPERATORAVSREGISTRATIONTYPEHASH(opts *b
 // OPERATORAVSREGISTRATIONTYPEHASH is a free data retrieval call binding the contract method 0xd79aceab.
 //
 // Solidity: function OPERATOR_AVS_REGISTRATION_TYPEHASH() view returns(bytes32)
-func (_AVSDirectory *AVSDirectorySession) OPERATORAVSREGISTRATIONTYPEHASH() ([32]byte, error) {
-	return _AVSDirectory.Contract.OPERATORAVSREGISTRATIONTYPEHASH(&_AVSDirectory.CallOpts)
+func (_AvsDirectory *AvsDirectorySession) OPERATORAVSREGISTRATIONTYPEHASH() ([32]byte, error) {
+	return _AvsDirectory.Contract.OPERATORAVSREGISTRATIONTYPEHASH(&_AvsDirectory.CallOpts)
 }
 
 // OPERATORAVSREGISTRATIONTYPEHASH is a free data retrieval call binding the contract method 0xd79aceab.
 //
 // Solidity: function OPERATOR_AVS_REGISTRATION_TYPEHASH() view returns(bytes32)
-func (_AVSDirectory *AVSDirectoryCallerSession) OPERATORAVSREGISTRATIONTYPEHASH() ([32]byte, error) {
-	return _AVSDirectory.Contract.OPERATORAVSREGISTRATIONTYPEHASH(&_AVSDirectory.CallOpts)
+func (_AvsDirectory *AvsDirectoryCallerSession) OPERATORAVSREGISTRATIONTYPEHASH() ([32]byte, error) {
+	return _AvsDirectory.Contract.OPERATORAVSREGISTRATIONTYPEHASH(&_AvsDirectory.CallOpts)
 }
 
 // AvsOperatorStatus is a free data retrieval call binding the contract method 0x49075da3.
 //
 // Solidity: function avsOperatorStatus(address , address ) view returns(uint8)
-func (_AVSDirectory *AVSDirectoryCaller) AvsOperatorStatus(opts *bind.CallOpts, arg0 common.Address, arg1 common.Address) (uint8, error) {
+func (_AvsDirectory *AvsDirectoryCaller) AvsOperatorStatus(opts *bind.CallOpts, arg0 common.Address, arg1 common.Address) (uint8, error) {
 	var out []interface{}
-	err := _AVSDirectory.contract.Call(opts, &out, "avsOperatorStatus", arg0, arg1)
+	err := _AvsDirectory.contract.Call(opts, &out, "avsOperatorStatus", arg0, arg1)
 
 	if err != nil {
 		return *new(uint8), err
@@ -268,23 +269,23 @@ func (_AVSDirectory *AVSDirectoryCaller) AvsOperatorStatus(opts *bind.CallOpts, 
 // AvsOperatorStatus is a free data retrieval call binding the contract method 0x49075da3.
 //
 // Solidity: function avsOperatorStatus(address , address ) view returns(uint8)
-func (_AVSDirectory *AVSDirectorySession) AvsOperatorStatus(arg0 common.Address, arg1 common.Address) (uint8, error) {
-	return _AVSDirectory.Contract.AvsOperatorStatus(&_AVSDirectory.CallOpts, arg0, arg1)
+func (_AvsDirectory *AvsDirectorySession) AvsOperatorStatus(arg0 common.Address, arg1 common.Address) (uint8, error) {
+	return _AvsDirectory.Contract.AvsOperatorStatus(&_AvsDirectory.CallOpts, arg0, arg1)
 }
 
 // AvsOperatorStatus is a free data retrieval call binding the contract method 0x49075da3.
 //
 // Solidity: function avsOperatorStatus(address , address ) view returns(uint8)
-func (_AVSDirectory *AVSDirectoryCallerSession) AvsOperatorStatus(arg0 common.Address, arg1 common.Address) (uint8, error) {
-	return _AVSDirectory.Contract.AvsOperatorStatus(&_AVSDirectory.CallOpts, arg0, arg1)
+func (_AvsDirectory *AvsDirectoryCallerSession) AvsOperatorStatus(arg0 common.Address, arg1 common.Address) (uint8, error) {
+	return _AvsDirectory.Contract.AvsOperatorStatus(&_AvsDirectory.CallOpts, arg0, arg1)
 }
 
 // CalculateOperatorAVSRegistrationDigestHash is a free data retrieval call binding the contract method 0xa1060c88.
 //
 // Solidity: function calculateOperatorAVSRegistrationDigestHash(address operator, address avs, bytes32 salt, uint256 expiry) view returns(bytes32)
-func (_AVSDirectory *AVSDirectoryCaller) CalculateOperatorAVSRegistrationDigestHash(opts *bind.CallOpts, operator common.Address, avs common.Address, salt [32]byte, expiry *big.Int) ([32]byte, error) {
+func (_AvsDirectory *AvsDirectoryCaller) CalculateOperatorAVSRegistrationDigestHash(opts *bind.CallOpts, operator common.Address, avs common.Address, salt [32]byte, expiry *big.Int) ([32]byte, error) {
 	var out []interface{}
-	err := _AVSDirectory.contract.Call(opts, &out, "calculateOperatorAVSRegistrationDigestHash", operator, avs, salt, expiry)
+	err := _AvsDirectory.contract.Call(opts, &out, "calculateOperatorAVSRegistrationDigestHash", operator, avs, salt, expiry)
 
 	if err != nil {
 		return *new([32]byte), err
@@ -299,23 +300,23 @@ func (_AVSDirectory *AVSDirectoryCaller) CalculateOperatorAVSRegistrationDigestH
 // CalculateOperatorAVSRegistrationDigestHash is a free data retrieval call binding the contract method 0xa1060c88.
 //
 // Solidity: function calculateOperatorAVSRegistrationDigestHash(address operator, address avs, bytes32 salt, uint256 expiry) view returns(bytes32)
-func (_AVSDirectory *AVSDirectorySession) CalculateOperatorAVSRegistrationDigestHash(operator common.Address, avs common.Address, salt [32]byte, expiry *big.Int) ([32]byte, error) {
-	return _AVSDirectory.Contract.CalculateOperatorAVSRegistrationDigestHash(&_AVSDirectory.CallOpts, operator, avs, salt, expiry)
+func (_AvsDirectory *AvsDirectorySession) CalculateOperatorAVSRegistrationDigestHash(operator common.Address, avs common.Address, salt [32]byte, expiry *big.Int) ([32]byte, error) {
+	return _AvsDirectory.Contract.CalculateOperatorAVSRegistrationDigestHash(&_AvsDirectory.CallOpts, operator, avs, salt, expiry)
 }
 
 // CalculateOperatorAVSRegistrationDigestHash is a free data retrieval call binding the contract method 0xa1060c88.
 //
 // Solidity: function calculateOperatorAVSRegistrationDigestHash(address operator, address avs, bytes32 salt, uint256 expiry) view returns(bytes32)
-func (_AVSDirectory *AVSDirectoryCallerSession) CalculateOperatorAVSRegistrationDigestHash(operator common.Address, avs common.Address, salt [32]byte, expiry *big.Int) ([32]byte, error) {
-	return _AVSDirectory.Contract.CalculateOperatorAVSRegistrationDigestHash(&_AVSDirectory.CallOpts, operator, avs, salt, expiry)
+func (_AvsDirectory *AvsDirectoryCallerSession) CalculateOperatorAVSRegistrationDigestHash(operator common.Address, avs common.Address, salt [32]byte, expiry *big.Int) ([32]byte, error) {
+	return _AvsDirectory.Contract.CalculateOperatorAVSRegistrationDigestHash(&_AvsDirectory.CallOpts, operator, avs, salt, expiry)
 }
 
 // Delegation is a free data retrieval call binding the contract method 0xdf5cf723.
 //
 // Solidity: function delegation() view returns(address)
-func (_AVSDirectory *AVSDirectoryCaller) Delegation(opts *bind.CallOpts) (common.Address, error) {
+func (_AvsDirectory *AvsDirectoryCaller) Delegation(opts *bind.CallOpts) (common.Address, error) {
 	var out []interface{}
-	err := _AVSDirectory.contract.Call(opts, &out, "delegation")
+	err := _AvsDirectory.contract.Call(opts, &out, "delegation")
 
 	if err != nil {
 		return *new(common.Address), err
@@ -330,23 +331,23 @@ func (_AVSDirectory *AVSDirectoryCaller) Delegation(opts *bind.CallOpts) (common
 // Delegation is a free data retrieval call binding the contract method 0xdf5cf723.
 //
 // Solidity: function delegation() view returns(address)
-func (_AVSDirectory *AVSDirectorySession) Delegation() (common.Address, error) {
-	return _AVSDirectory.Contract.Delegation(&_AVSDirectory.CallOpts)
+func (_AvsDirectory *AvsDirectorySession) Delegation() (common.Address, error) {
+	return _AvsDirectory.Contract.Delegation(&_AvsDirectory.CallOpts)
 }
 
 // Delegation is a free data retrieval call binding the contract method 0xdf5cf723.
 //
 // Solidity: function delegation() view returns(address)
-func (_AVSDirectory *AVSDirectoryCallerSession) Delegation() (common.Address, error) {
-	return _AVSDirectory.Contract.Delegation(&_AVSDirectory.CallOpts)
+func (_AvsDirectory *AvsDirectoryCallerSession) Delegation() (common.Address, error) {
+	return _AvsDirectory.Contract.Delegation(&_AvsDirectory.CallOpts)
 }
 
 // DomainSeparator is a free data retrieval call binding the contract method 0xf698da25.
 //
 // Solidity: function domainSeparator() view returns(bytes32)
-func (_AVSDirectory *AVSDirectoryCaller) DomainSeparator(opts *bind.CallOpts) ([32]byte, error) {
+func (_AvsDirectory *AvsDirectoryCaller) DomainSeparator(opts *bind.CallOpts) ([32]byte, error) {
 	var out []interface{}
-	err := _AVSDirectory.contract.Call(opts, &out, "domainSeparator")
+	err := _AvsDirectory.contract.Call(opts, &out, "domainSeparator")
 
 	if err != nil {
 		return *new([32]byte), err
@@ -361,23 +362,23 @@ func (_AVSDirectory *AVSDirectoryCaller) DomainSeparator(opts *bind.CallOpts) ([
 // DomainSeparator is a free data retrieval call binding the contract method 0xf698da25.
 //
 // Solidity: function domainSeparator() view returns(bytes32)
-func (_AVSDirectory *AVSDirectorySession) DomainSeparator() ([32]byte, error) {
-	return _AVSDirectory.Contract.DomainSeparator(&_AVSDirectory.CallOpts)
+func (_AvsDirectory *AvsDirectorySession) DomainSeparator() ([32]byte, error) {
+	return _AvsDirectory.Contract.DomainSeparator(&_AvsDirectory.CallOpts)
 }
 
 // DomainSeparator is a free data retrieval call binding the contract method 0xf698da25.
 //
 // Solidity: function domainSeparator() view returns(bytes32)
-func (_AVSDirectory *AVSDirectoryCallerSession) DomainSeparator() ([32]byte, error) {
-	return _AVSDirectory.Contract.DomainSeparator(&_AVSDirectory.CallOpts)
+func (_AvsDirectory *AvsDirectoryCallerSession) DomainSeparator() ([32]byte, error) {
+	return _AvsDirectory.Contract.DomainSeparator(&_AvsDirectory.CallOpts)
 }
 
 // OperatorSaltIsSpent is a free data retrieval call binding the contract method 0x374823b5.
 //
 // Solidity: function operatorSaltIsSpent(address , bytes32 ) view returns(bool)
-func (_AVSDirectory *AVSDirectoryCaller) OperatorSaltIsSpent(opts *bind.CallOpts, arg0 common.Address, arg1 [32]byte) (bool, error) {
+func (_AvsDirectory *AvsDirectoryCaller) OperatorSaltIsSpent(opts *bind.CallOpts, arg0 common.Address, arg1 [32]byte) (bool, error) {
 	var out []interface{}
-	err := _AVSDirectory.contract.Call(opts, &out, "operatorSaltIsSpent", arg0, arg1)
+	err := _AvsDirectory.contract.Call(opts, &out, "operatorSaltIsSpent", arg0, arg1)
 
 	if err != nil {
 		return *new(bool), err
@@ -392,23 +393,23 @@ func (_AVSDirectory *AVSDirectoryCaller) OperatorSaltIsSpent(opts *bind.CallOpts
 // OperatorSaltIsSpent is a free data retrieval call binding the contract method 0x374823b5.
 //
 // Solidity: function operatorSaltIsSpent(address , bytes32 ) view returns(bool)
-func (_AVSDirectory *AVSDirectorySession) OperatorSaltIsSpent(arg0 common.Address, arg1 [32]byte) (bool, error) {
-	return _AVSDirectory.Contract.OperatorSaltIsSpent(&_AVSDirectory.CallOpts, arg0, arg1)
+func (_AvsDirectory *AvsDirectorySession) OperatorSaltIsSpent(arg0 common.Address, arg1 [32]byte) (bool, error) {
+	return _AvsDirectory.Contract.OperatorSaltIsSpent(&_AvsDirectory.CallOpts, arg0, arg1)
 }
 
 // OperatorSaltIsSpent is a free data retrieval call binding the contract method 0x374823b5.
 //
 // Solidity: function operatorSaltIsSpent(address , bytes32 ) view returns(bool)
-func (_AVSDirectory *AVSDirectoryCallerSession) OperatorSaltIsSpent(arg0 common.Address, arg1 [32]byte) (bool, error) {
-	return _AVSDirectory.Contract.OperatorSaltIsSpent(&_AVSDirectory.CallOpts, arg0, arg1)
+func (_AvsDirectory *AvsDirectoryCallerSession) OperatorSaltIsSpent(arg0 common.Address, arg1 [32]byte) (bool, error) {
+	return _AvsDirectory.Contract.OperatorSaltIsSpent(&_AvsDirectory.CallOpts, arg0, arg1)
 }
 
 // Owner is a free data retrieval call binding the contract method 0x8da5cb5b.
 //
 // Solidity: function owner() view returns(address)
-func (_AVSDirectory *AVSDirectoryCaller) Owner(opts *bind.CallOpts) (common.Address, error) {
+func (_AvsDirectory *AvsDirectoryCaller) Owner(opts *bind.CallOpts) (common.Address, error) {
 	var out []interface{}
-	err := _AVSDirectory.contract.Call(opts, &out, "owner")
+	err := _AvsDirectory.contract.Call(opts, &out, "owner")
 
 	if err != nil {
 		return *new(common.Address), err
@@ -423,23 +424,23 @@ func (_AVSDirectory *AVSDirectoryCaller) Owner(opts *bind.CallOpts) (common.Addr
 // Owner is a free data retrieval call binding the contract method 0x8da5cb5b.
 //
 // Solidity: function owner() view returns(address)
-func (_AVSDirectory *AVSDirectorySession) Owner() (common.Address, error) {
-	return _AVSDirectory.Contract.Owner(&_AVSDirectory.CallOpts)
+func (_AvsDirectory *AvsDirectorySession) Owner() (common.Address, error) {
+	return _AvsDirectory.Contract.Owner(&_AvsDirectory.CallOpts)
 }
 
 // Owner is a free data retrieval call binding the contract method 0x8da5cb5b.
 //
 // Solidity: function owner() view returns(address)
-func (_AVSDirectory *AVSDirectoryCallerSession) Owner() (common.Address, error) {
-	return _AVSDirectory.Contract.Owner(&_AVSDirectory.CallOpts)
+func (_AvsDirectory *AvsDirectoryCallerSession) Owner() (common.Address, error) {
+	return _AvsDirectory.Contract.Owner(&_AvsDirectory.CallOpts)
 }
 
 // Paused is a free data retrieval call binding the contract method 0x5ac86ab7.
 //
 // Solidity: function paused(uint8 index) view returns(bool)
-func (_AVSDirectory *AVSDirectoryCaller) Paused(opts *bind.CallOpts, index uint8) (bool, error) {
+func (_AvsDirectory *AvsDirectoryCaller) Paused(opts *bind.CallOpts, index uint8) (bool, error) {
 	var out []interface{}
-	err := _AVSDirectory.contract.Call(opts, &out, "paused", index)
+	err := _AvsDirectory.contract.Call(opts, &out, "paused", index)
 
 	if err != nil {
 		return *new(bool), err
@@ -454,23 +455,23 @@ func (_AVSDirectory *AVSDirectoryCaller) Paused(opts *bind.CallOpts, index uint8
 // Paused is a free data retrieval call binding the contract method 0x5ac86ab7.
 //
 // Solidity: function paused(uint8 index) view returns(bool)
-func (_AVSDirectory *AVSDirectorySession) Paused(index uint8) (bool, error) {
-	return _AVSDirectory.Contract.Paused(&_AVSDirectory.CallOpts, index)
+func (_AvsDirectory *AvsDirectorySession) Paused(index uint8) (bool, error) {
+	return _AvsDirectory.Contract.Paused(&_AvsDirectory.CallOpts, index)
 }
 
 // Paused is a free data retrieval call binding the contract method 0x5ac86ab7.
 //
 // Solidity: function paused(uint8 index) view returns(bool)
-func (_AVSDirectory *AVSDirectoryCallerSession) Paused(index uint8) (bool, error) {
-	return _AVSDirectory.Contract.Paused(&_AVSDirectory.CallOpts, index)
+func (_AvsDirectory *AvsDirectoryCallerSession) Paused(index uint8) (bool, error) {
+	return _AvsDirectory.Contract.Paused(&_AvsDirectory.CallOpts, index)
 }
 
 // Paused0 is a free data retrieval call binding the contract method 0x5c975abb.
 //
 // Solidity: function paused() view returns(uint256)
-func (_AVSDirectory *AVSDirectoryCaller) Paused0(opts *bind.CallOpts) (*big.Int, error) {
+func (_AvsDirectory *AvsDirectoryCaller) Paused0(opts *bind.CallOpts) (*big.Int, error) {
 	var out []interface{}
-	err := _AVSDirectory.contract.Call(opts, &out, "paused0")
+	err := _AvsDirectory.contract.Call(opts, &out, "paused0")
 
 	if err != nil {
 		return *new(*big.Int), err
@@ -485,23 +486,23 @@ func (_AVSDirectory *AVSDirectoryCaller) Paused0(opts *bind.CallOpts) (*big.Int,
 // Paused0 is a free data retrieval call binding the contract method 0x5c975abb.
 //
 // Solidity: function paused() view returns(uint256)
-func (_AVSDirectory *AVSDirectorySession) Paused0() (*big.Int, error) {
-	return _AVSDirectory.Contract.Paused0(&_AVSDirectory.CallOpts)
+func (_AvsDirectory *AvsDirectorySession) Paused0() (*big.Int, error) {
+	return _AvsDirectory.Contract.Paused0(&_AvsDirectory.CallOpts)
 }
 
 // Paused0 is a free data retrieval call binding the contract method 0x5c975abb.
 //
 // Solidity: function paused() view returns(uint256)
-func (_AVSDirectory *AVSDirectoryCallerSession) Paused0() (*big.Int, error) {
-	return _AVSDirectory.Contract.Paused0(&_AVSDirectory.CallOpts)
+func (_AvsDirectory *AvsDirectoryCallerSession) Paused0() (*big.Int, error) {
+	return _AvsDirectory.Contract.Paused0(&_AvsDirectory.CallOpts)
 }
 
 // PauserRegistry is a free data retrieval call binding the contract method 0x886f1195.
 //
 // Solidity: function pauserRegistry() view returns(address)
-func (_AVSDirectory *AVSDirectoryCaller) PauserRegistry(opts *bind.CallOpts) (common.Address, error) {
+func (_AvsDirectory *AvsDirectoryCaller) PauserRegistry(opts *bind.CallOpts) (common.Address, error) {
 	var out []interface{}
-	err := _AVSDirectory.contract.Call(opts, &out, "pauserRegistry")
+	err := _AvsDirectory.contract.Call(opts, &out, "pauserRegistry")
 
 	if err != nil {
 		return *new(common.Address), err
@@ -516,251 +517,251 @@ func (_AVSDirectory *AVSDirectoryCaller) PauserRegistry(opts *bind.CallOpts) (co
 // PauserRegistry is a free data retrieval call binding the contract method 0x886f1195.
 //
 // Solidity: function pauserRegistry() view returns(address)
-func (_AVSDirectory *AVSDirectorySession) PauserRegistry() (common.Address, error) {
-	return _AVSDirectory.Contract.PauserRegistry(&_AVSDirectory.CallOpts)
+func (_AvsDirectory *AvsDirectorySession) PauserRegistry() (common.Address, error) {
+	return _AvsDirectory.Contract.PauserRegistry(&_AvsDirectory.CallOpts)
 }
 
 // PauserRegistry is a free data retrieval call binding the contract method 0x886f1195.
 //
 // Solidity: function pauserRegistry() view returns(address)
-func (_AVSDirectory *AVSDirectoryCallerSession) PauserRegistry() (common.Address, error) {
-	return _AVSDirectory.Contract.PauserRegistry(&_AVSDirectory.CallOpts)
+func (_AvsDirectory *AvsDirectoryCallerSession) PauserRegistry() (common.Address, error) {
+	return _AvsDirectory.Contract.PauserRegistry(&_AvsDirectory.CallOpts)
 }
 
 // CancelSalt is a paid mutator transaction binding the contract method 0xec76f442.
 //
 // Solidity: function cancelSalt(bytes32 salt) returns()
-func (_AVSDirectory *AVSDirectoryTransactor) CancelSalt(opts *bind.TransactOpts, salt [32]byte) (*types.Transaction, error) {
-	return _AVSDirectory.contract.Transact(opts, "cancelSalt", salt)
+func (_AvsDirectory *AvsDirectoryTransactor) CancelSalt(opts *bind.TransactOpts, salt [32]byte) (*types.Transaction, error) {
+	return _AvsDirectory.contract.Transact(opts, "cancelSalt", salt)
 }
 
 // CancelSalt is a paid mutator transaction binding the contract method 0xec76f442.
 //
 // Solidity: function cancelSalt(bytes32 salt) returns()
-func (_AVSDirectory *AVSDirectorySession) CancelSalt(salt [32]byte) (*types.Transaction, error) {
-	return _AVSDirectory.Contract.CancelSalt(&_AVSDirectory.TransactOpts, salt)
+func (_AvsDirectory *AvsDirectorySession) CancelSalt(salt [32]byte) (*types.Transaction, error) {
+	return _AvsDirectory.Contract.CancelSalt(&_AvsDirectory.TransactOpts, salt)
 }
 
 // CancelSalt is a paid mutator transaction binding the contract method 0xec76f442.
 //
 // Solidity: function cancelSalt(bytes32 salt) returns()
-func (_AVSDirectory *AVSDirectoryTransactorSession) CancelSalt(salt [32]byte) (*types.Transaction, error) {
-	return _AVSDirectory.Contract.CancelSalt(&_AVSDirectory.TransactOpts, salt)
+func (_AvsDirectory *AvsDirectoryTransactorSession) CancelSalt(salt [32]byte) (*types.Transaction, error) {
+	return _AvsDirectory.Contract.CancelSalt(&_AvsDirectory.TransactOpts, salt)
 }
 
 // DeregisterOperatorFromAVS is a paid mutator transaction binding the contract method 0xa364f4da.
 //
 // Solidity: function deregisterOperatorFromAVS(address operator) returns()
-func (_AVSDirectory *AVSDirectoryTransactor) DeregisterOperatorFromAVS(opts *bind.TransactOpts, operator common.Address) (*types.Transaction, error) {
-	return _AVSDirectory.contract.Transact(opts, "deregisterOperatorFromAVS", operator)
+func (_AvsDirectory *AvsDirectoryTransactor) DeregisterOperatorFromAVS(opts *bind.TransactOpts, operator common.Address) (*types.Transaction, error) {
+	return _AvsDirectory.contract.Transact(opts, "deregisterOperatorFromAVS", operator)
 }
 
 // DeregisterOperatorFromAVS is a paid mutator transaction binding the contract method 0xa364f4da.
 //
 // Solidity: function deregisterOperatorFromAVS(address operator) returns()
-func (_AVSDirectory *AVSDirectorySession) DeregisterOperatorFromAVS(operator common.Address) (*types.Transaction, error) {
-	return _AVSDirectory.Contract.DeregisterOperatorFromAVS(&_AVSDirectory.TransactOpts, operator)
+func (_AvsDirectory *AvsDirectorySession) DeregisterOperatorFromAVS(operator common.Address) (*types.Transaction, error) {
+	return _AvsDirectory.Contract.DeregisterOperatorFromAVS(&_AvsDirectory.TransactOpts, operator)
 }
 
 // DeregisterOperatorFromAVS is a paid mutator transaction binding the contract method 0xa364f4da.
 //
 // Solidity: function deregisterOperatorFromAVS(address operator) returns()
-func (_AVSDirectory *AVSDirectoryTransactorSession) DeregisterOperatorFromAVS(operator common.Address) (*types.Transaction, error) {
-	return _AVSDirectory.Contract.DeregisterOperatorFromAVS(&_AVSDirectory.TransactOpts, operator)
+func (_AvsDirectory *AvsDirectoryTransactorSession) DeregisterOperatorFromAVS(operator common.Address) (*types.Transaction, error) {
+	return _AvsDirectory.Contract.DeregisterOperatorFromAVS(&_AvsDirectory.TransactOpts, operator)
 }
 
 // Initialize is a paid mutator transaction binding the contract method 0x1794bb3c.
 //
 // Solidity: function initialize(address initialOwner, address _pauserRegistry, uint256 initialPausedStatus) returns()
-func (_AVSDirectory *AVSDirectoryTransactor) Initialize(opts *bind.TransactOpts, initialOwner common.Address, _pauserRegistry common.Address, initialPausedStatus *big.Int) (*types.Transaction, error) {
-	return _AVSDirectory.contract.Transact(opts, "initialize", initialOwner, _pauserRegistry, initialPausedStatus)
+func (_AvsDirectory *AvsDirectoryTransactor) Initialize(opts *bind.TransactOpts, initialOwner common.Address, _pauserRegistry common.Address, initialPausedStatus *big.Int) (*types.Transaction, error) {
+	return _AvsDirectory.contract.Transact(opts, "initialize", initialOwner, _pauserRegistry, initialPausedStatus)
 }
 
 // Initialize is a paid mutator transaction binding the contract method 0x1794bb3c.
 //
 // Solidity: function initialize(address initialOwner, address _pauserRegistry, uint256 initialPausedStatus) returns()
-func (_AVSDirectory *AVSDirectorySession) Initialize(initialOwner common.Address, _pauserRegistry common.Address, initialPausedStatus *big.Int) (*types.Transaction, error) {
-	return _AVSDirectory.Contract.Initialize(&_AVSDirectory.TransactOpts, initialOwner, _pauserRegistry, initialPausedStatus)
+func (_AvsDirectory *AvsDirectorySession) Initialize(initialOwner common.Address, _pauserRegistry common.Address, initialPausedStatus *big.Int) (*types.Transaction, error) {
+	return _AvsDirectory.Contract.Initialize(&_AvsDirectory.TransactOpts, initialOwner, _pauserRegistry, initialPausedStatus)
 }
 
 // Initialize is a paid mutator transaction binding the contract method 0x1794bb3c.
 //
 // Solidity: function initialize(address initialOwner, address _pauserRegistry, uint256 initialPausedStatus) returns()
-func (_AVSDirectory *AVSDirectoryTransactorSession) Initialize(initialOwner common.Address, _pauserRegistry common.Address, initialPausedStatus *big.Int) (*types.Transaction, error) {
-	return _AVSDirectory.Contract.Initialize(&_AVSDirectory.TransactOpts, initialOwner, _pauserRegistry, initialPausedStatus)
+func (_AvsDirectory *AvsDirectoryTransactorSession) Initialize(initialOwner common.Address, _pauserRegistry common.Address, initialPausedStatus *big.Int) (*types.Transaction, error) {
+	return _AvsDirectory.Contract.Initialize(&_AvsDirectory.TransactOpts, initialOwner, _pauserRegistry, initialPausedStatus)
 }
 
 // Pause is a paid mutator transaction binding the contract method 0x136439dd.
 //
 // Solidity: function pause(uint256 newPausedStatus) returns()
-func (_AVSDirectory *AVSDirectoryTransactor) Pause(opts *bind.TransactOpts, newPausedStatus *big.Int) (*types.Transaction, error) {
-	return _AVSDirectory.contract.Transact(opts, "pause", newPausedStatus)
+func (_AvsDirectory *AvsDirectoryTransactor) Pause(opts *bind.TransactOpts, newPausedStatus *big.Int) (*types.Transaction, error) {
+	return _AvsDirectory.contract.Transact(opts, "pause", newPausedStatus)
 }
 
 // Pause is a paid mutator transaction binding the contract method 0x136439dd.
 //
 // Solidity: function pause(uint256 newPausedStatus) returns()
-func (_AVSDirectory *AVSDirectorySession) Pause(newPausedStatus *big.Int) (*types.Transaction, error) {
-	return _AVSDirectory.Contract.Pause(&_AVSDirectory.TransactOpts, newPausedStatus)
+func (_AvsDirectory *AvsDirectorySession) Pause(newPausedStatus *big.Int) (*types.Transaction, error) {
+	return _AvsDirectory.Contract.Pause(&_AvsDirectory.TransactOpts, newPausedStatus)
 }
 
 // Pause is a paid mutator transaction binding the contract method 0x136439dd.
 //
 // Solidity: function pause(uint256 newPausedStatus) returns()
-func (_AVSDirectory *AVSDirectoryTransactorSession) Pause(newPausedStatus *big.Int) (*types.Transaction, error) {
-	return _AVSDirectory.Contract.Pause(&_AVSDirectory.TransactOpts, newPausedStatus)
+func (_AvsDirectory *AvsDirectoryTransactorSession) Pause(newPausedStatus *big.Int) (*types.Transaction, error) {
+	return _AvsDirectory.Contract.Pause(&_AvsDirectory.TransactOpts, newPausedStatus)
 }
 
 // PauseAll is a paid mutator transaction binding the contract method 0x595c6a67.
 //
 // Solidity: function pauseAll() returns()
-func (_AVSDirectory *AVSDirectoryTransactor) PauseAll(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _AVSDirectory.contract.Transact(opts, "pauseAll")
+func (_AvsDirectory *AvsDirectoryTransactor) PauseAll(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _AvsDirectory.contract.Transact(opts, "pauseAll")
 }
 
 // PauseAll is a paid mutator transaction binding the contract method 0x595c6a67.
 //
 // Solidity: function pauseAll() returns()
-func (_AVSDirectory *AVSDirectorySession) PauseAll() (*types.Transaction, error) {
-	return _AVSDirectory.Contract.PauseAll(&_AVSDirectory.TransactOpts)
+func (_AvsDirectory *AvsDirectorySession) PauseAll() (*types.Transaction, error) {
+	return _AvsDirectory.Contract.PauseAll(&_AvsDirectory.TransactOpts)
 }
 
 // PauseAll is a paid mutator transaction binding the contract method 0x595c6a67.
 //
 // Solidity: function pauseAll() returns()
-func (_AVSDirectory *AVSDirectoryTransactorSession) PauseAll() (*types.Transaction, error) {
-	return _AVSDirectory.Contract.PauseAll(&_AVSDirectory.TransactOpts)
+func (_AvsDirectory *AvsDirectoryTransactorSession) PauseAll() (*types.Transaction, error) {
+	return _AvsDirectory.Contract.PauseAll(&_AvsDirectory.TransactOpts)
 }
 
 // RegisterOperatorToAVS is a paid mutator transaction binding the contract method 0x9926ee7d.
 //
 // Solidity: function registerOperatorToAVS(address operator, (bytes,bytes32,uint256) operatorSignature) returns()
-func (_AVSDirectory *AVSDirectoryTransactor) RegisterOperatorToAVS(opts *bind.TransactOpts, operator common.Address, operatorSignature ISignatureUtilsSignatureWithSaltAndExpiry) (*types.Transaction, error) {
-	return _AVSDirectory.contract.Transact(opts, "registerOperatorToAVS", operator, operatorSignature)
+func (_AvsDirectory *AvsDirectoryTransactor) RegisterOperatorToAVS(opts *bind.TransactOpts, operator common.Address, operatorSignature ISignatureUtilsSignatureWithSaltAndExpiry) (*types.Transaction, error) {
+	return _AvsDirectory.contract.Transact(opts, "registerOperatorToAVS", operator, operatorSignature)
 }
 
 // RegisterOperatorToAVS is a paid mutator transaction binding the contract method 0x9926ee7d.
 //
 // Solidity: function registerOperatorToAVS(address operator, (bytes,bytes32,uint256) operatorSignature) returns()
-func (_AVSDirectory *AVSDirectorySession) RegisterOperatorToAVS(operator common.Address, operatorSignature ISignatureUtilsSignatureWithSaltAndExpiry) (*types.Transaction, error) {
-	return _AVSDirectory.Contract.RegisterOperatorToAVS(&_AVSDirectory.TransactOpts, operator, operatorSignature)
+func (_AvsDirectory *AvsDirectorySession) RegisterOperatorToAVS(operator common.Address, operatorSignature ISignatureUtilsSignatureWithSaltAndExpiry) (*types.Transaction, error) {
+	return _AvsDirectory.Contract.RegisterOperatorToAVS(&_AvsDirectory.TransactOpts, operator, operatorSignature)
 }
 
 // RegisterOperatorToAVS is a paid mutator transaction binding the contract method 0x9926ee7d.
 //
 // Solidity: function registerOperatorToAVS(address operator, (bytes,bytes32,uint256) operatorSignature) returns()
-func (_AVSDirectory *AVSDirectoryTransactorSession) RegisterOperatorToAVS(operator common.Address, operatorSignature ISignatureUtilsSignatureWithSaltAndExpiry) (*types.Transaction, error) {
-	return _AVSDirectory.Contract.RegisterOperatorToAVS(&_AVSDirectory.TransactOpts, operator, operatorSignature)
+func (_AvsDirectory *AvsDirectoryTransactorSession) RegisterOperatorToAVS(operator common.Address, operatorSignature ISignatureUtilsSignatureWithSaltAndExpiry) (*types.Transaction, error) {
+	return _AvsDirectory.Contract.RegisterOperatorToAVS(&_AvsDirectory.TransactOpts, operator, operatorSignature)
 }
 
 // RenounceOwnership is a paid mutator transaction binding the contract method 0x715018a6.
 //
 // Solidity: function renounceOwnership() returns()
-func (_AVSDirectory *AVSDirectoryTransactor) RenounceOwnership(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _AVSDirectory.contract.Transact(opts, "renounceOwnership")
+func (_AvsDirectory *AvsDirectoryTransactor) RenounceOwnership(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _AvsDirectory.contract.Transact(opts, "renounceOwnership")
 }
 
 // RenounceOwnership is a paid mutator transaction binding the contract method 0x715018a6.
 //
 // Solidity: function renounceOwnership() returns()
-func (_AVSDirectory *AVSDirectorySession) RenounceOwnership() (*types.Transaction, error) {
-	return _AVSDirectory.Contract.RenounceOwnership(&_AVSDirectory.TransactOpts)
+func (_AvsDirectory *AvsDirectorySession) RenounceOwnership() (*types.Transaction, error) {
+	return _AvsDirectory.Contract.RenounceOwnership(&_AvsDirectory.TransactOpts)
 }
 
 // RenounceOwnership is a paid mutator transaction binding the contract method 0x715018a6.
 //
 // Solidity: function renounceOwnership() returns()
-func (_AVSDirectory *AVSDirectoryTransactorSession) RenounceOwnership() (*types.Transaction, error) {
-	return _AVSDirectory.Contract.RenounceOwnership(&_AVSDirectory.TransactOpts)
+func (_AvsDirectory *AvsDirectoryTransactorSession) RenounceOwnership() (*types.Transaction, error) {
+	return _AvsDirectory.Contract.RenounceOwnership(&_AvsDirectory.TransactOpts)
 }
 
 // SetPauserRegistry is a paid mutator transaction binding the contract method 0x10d67a2f.
 //
 // Solidity: function setPauserRegistry(address newPauserRegistry) returns()
-func (_AVSDirectory *AVSDirectoryTransactor) SetPauserRegistry(opts *bind.TransactOpts, newPauserRegistry common.Address) (*types.Transaction, error) {
-	return _AVSDirectory.contract.Transact(opts, "setPauserRegistry", newPauserRegistry)
+func (_AvsDirectory *AvsDirectoryTransactor) SetPauserRegistry(opts *bind.TransactOpts, newPauserRegistry common.Address) (*types.Transaction, error) {
+	return _AvsDirectory.contract.Transact(opts, "setPauserRegistry", newPauserRegistry)
 }
 
 // SetPauserRegistry is a paid mutator transaction binding the contract method 0x10d67a2f.
 //
 // Solidity: function setPauserRegistry(address newPauserRegistry) returns()
-func (_AVSDirectory *AVSDirectorySession) SetPauserRegistry(newPauserRegistry common.Address) (*types.Transaction, error) {
-	return _AVSDirectory.Contract.SetPauserRegistry(&_AVSDirectory.TransactOpts, newPauserRegistry)
+func (_AvsDirectory *AvsDirectorySession) SetPauserRegistry(newPauserRegistry common.Address) (*types.Transaction, error) {
+	return _AvsDirectory.Contract.SetPauserRegistry(&_AvsDirectory.TransactOpts, newPauserRegistry)
 }
 
 // SetPauserRegistry is a paid mutator transaction binding the contract method 0x10d67a2f.
 //
 // Solidity: function setPauserRegistry(address newPauserRegistry) returns()
-func (_AVSDirectory *AVSDirectoryTransactorSession) SetPauserRegistry(newPauserRegistry common.Address) (*types.Transaction, error) {
-	return _AVSDirectory.Contract.SetPauserRegistry(&_AVSDirectory.TransactOpts, newPauserRegistry)
+func (_AvsDirectory *AvsDirectoryTransactorSession) SetPauserRegistry(newPauserRegistry common.Address) (*types.Transaction, error) {
+	return _AvsDirectory.Contract.SetPauserRegistry(&_AvsDirectory.TransactOpts, newPauserRegistry)
 }
 
 // TransferOwnership is a paid mutator transaction binding the contract method 0xf2fde38b.
 //
 // Solidity: function transferOwnership(address newOwner) returns()
-func (_AVSDirectory *AVSDirectoryTransactor) TransferOwnership(opts *bind.TransactOpts, newOwner common.Address) (*types.Transaction, error) {
-	return _AVSDirectory.contract.Transact(opts, "transferOwnership", newOwner)
+func (_AvsDirectory *AvsDirectoryTransactor) TransferOwnership(opts *bind.TransactOpts, newOwner common.Address) (*types.Transaction, error) {
+	return _AvsDirectory.contract.Transact(opts, "transferOwnership", newOwner)
 }
 
 // TransferOwnership is a paid mutator transaction binding the contract method 0xf2fde38b.
 //
 // Solidity: function transferOwnership(address newOwner) returns()
-func (_AVSDirectory *AVSDirectorySession) TransferOwnership(newOwner common.Address) (*types.Transaction, error) {
-	return _AVSDirectory.Contract.TransferOwnership(&_AVSDirectory.TransactOpts, newOwner)
+func (_AvsDirectory *AvsDirectorySession) TransferOwnership(newOwner common.Address) (*types.Transaction, error) {
+	return _AvsDirectory.Contract.TransferOwnership(&_AvsDirectory.TransactOpts, newOwner)
 }
 
 // TransferOwnership is a paid mutator transaction binding the contract method 0xf2fde38b.
 //
 // Solidity: function transferOwnership(address newOwner) returns()
-func (_AVSDirectory *AVSDirectoryTransactorSession) TransferOwnership(newOwner common.Address) (*types.Transaction, error) {
-	return _AVSDirectory.Contract.TransferOwnership(&_AVSDirectory.TransactOpts, newOwner)
+func (_AvsDirectory *AvsDirectoryTransactorSession) TransferOwnership(newOwner common.Address) (*types.Transaction, error) {
+	return _AvsDirectory.Contract.TransferOwnership(&_AvsDirectory.TransactOpts, newOwner)
 }
 
 // Unpause is a paid mutator transaction binding the contract method 0xfabc1cbc.
 //
 // Solidity: function unpause(uint256 newPausedStatus) returns()
-func (_AVSDirectory *AVSDirectoryTransactor) Unpause(opts *bind.TransactOpts, newPausedStatus *big.Int) (*types.Transaction, error) {
-	return _AVSDirectory.contract.Transact(opts, "unpause", newPausedStatus)
+func (_AvsDirectory *AvsDirectoryTransactor) Unpause(opts *bind.TransactOpts, newPausedStatus *big.Int) (*types.Transaction, error) {
+	return _AvsDirectory.contract.Transact(opts, "unpause", newPausedStatus)
 }
 
 // Unpause is a paid mutator transaction binding the contract method 0xfabc1cbc.
 //
 // Solidity: function unpause(uint256 newPausedStatus) returns()
-func (_AVSDirectory *AVSDirectorySession) Unpause(newPausedStatus *big.Int) (*types.Transaction, error) {
-	return _AVSDirectory.Contract.Unpause(&_AVSDirectory.TransactOpts, newPausedStatus)
+func (_AvsDirectory *AvsDirectorySession) Unpause(newPausedStatus *big.Int) (*types.Transaction, error) {
+	return _AvsDirectory.Contract.Unpause(&_AvsDirectory.TransactOpts, newPausedStatus)
 }
 
 // Unpause is a paid mutator transaction binding the contract method 0xfabc1cbc.
 //
 // Solidity: function unpause(uint256 newPausedStatus) returns()
-func (_AVSDirectory *AVSDirectoryTransactorSession) Unpause(newPausedStatus *big.Int) (*types.Transaction, error) {
-	return _AVSDirectory.Contract.Unpause(&_AVSDirectory.TransactOpts, newPausedStatus)
+func (_AvsDirectory *AvsDirectoryTransactorSession) Unpause(newPausedStatus *big.Int) (*types.Transaction, error) {
+	return _AvsDirectory.Contract.Unpause(&_AvsDirectory.TransactOpts, newPausedStatus)
 }
 
 // UpdateAVSMetadataURI is a paid mutator transaction binding the contract method 0xa98fb355.
 //
 // Solidity: function updateAVSMetadataURI(string metadataURI) returns()
-func (_AVSDirectory *AVSDirectoryTransactor) UpdateAVSMetadataURI(opts *bind.TransactOpts, metadataURI string) (*types.Transaction, error) {
-	return _AVSDirectory.contract.Transact(opts, "updateAVSMetadataURI", metadataURI)
+func (_AvsDirectory *AvsDirectoryTransactor) UpdateAVSMetadataURI(opts *bind.TransactOpts, metadataURI string) (*types.Transaction, error) {
+	return _AvsDirectory.contract.Transact(opts, "updateAVSMetadataURI", metadataURI)
 }
 
 // UpdateAVSMetadataURI is a paid mutator transaction binding the contract method 0xa98fb355.
 //
 // Solidity: function updateAVSMetadataURI(string metadataURI) returns()
-func (_AVSDirectory *AVSDirectorySession) UpdateAVSMetadataURI(metadataURI string) (*types.Transaction, error) {
-	return _AVSDirectory.Contract.UpdateAVSMetadataURI(&_AVSDirectory.TransactOpts, metadataURI)
+func (_AvsDirectory *AvsDirectorySession) UpdateAVSMetadataURI(metadataURI string) (*types.Transaction, error) {
+	return _AvsDirectory.Contract.UpdateAVSMetadataURI(&_AvsDirectory.TransactOpts, metadataURI)
 }
 
 // UpdateAVSMetadataURI is a paid mutator transaction binding the contract method 0xa98fb355.
 //
 // Solidity: function updateAVSMetadataURI(string metadataURI) returns()
-func (_AVSDirectory *AVSDirectoryTransactorSession) UpdateAVSMetadataURI(metadataURI string) (*types.Transaction, error) {
-	return _AVSDirectory.Contract.UpdateAVSMetadataURI(&_AVSDirectory.TransactOpts, metadataURI)
+func (_AvsDirectory *AvsDirectoryTransactorSession) UpdateAVSMetadataURI(metadataURI string) (*types.Transaction, error) {
+	return _AvsDirectory.Contract.UpdateAVSMetadataURI(&_AvsDirectory.TransactOpts, metadataURI)
 }
 
-// AVSDirectoryAVSMetadataURIUpdatedIterator is returned from FilterAVSMetadataURIUpdated and is used to iterate over the raw logs and unpacked data for AVSMetadataURIUpdated events raised by the AVSDirectory contract.
-type AVSDirectoryAVSMetadataURIUpdatedIterator struct {
-	Event *AVSDirectoryAVSMetadataURIUpdated // Event containing the contract specifics and raw log
+// AvsDirectoryAVSMetadataURIUpdatedIterator is returned from FilterAVSMetadataURIUpdated and is used to iterate over the raw logs and unpacked data for AVSMetadataURIUpdated events raised by the AvsDirectory contract.
+type AvsDirectoryAVSMetadataURIUpdatedIterator struct {
+	Event *AvsDirectoryAVSMetadataURIUpdated // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -774,7 +775,7 @@ type AVSDirectoryAVSMetadataURIUpdatedIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *AVSDirectoryAVSMetadataURIUpdatedIterator) Next() bool {
+func (it *AvsDirectoryAVSMetadataURIUpdatedIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -783,7 +784,7 @@ func (it *AVSDirectoryAVSMetadataURIUpdatedIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(AVSDirectoryAVSMetadataURIUpdated)
+			it.Event = new(AvsDirectoryAVSMetadataURIUpdated)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -798,7 +799,7 @@ func (it *AVSDirectoryAVSMetadataURIUpdatedIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(AVSDirectoryAVSMetadataURIUpdated)
+		it.Event = new(AvsDirectoryAVSMetadataURIUpdated)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -814,19 +815,19 @@ func (it *AVSDirectoryAVSMetadataURIUpdatedIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *AVSDirectoryAVSMetadataURIUpdatedIterator) Error() error {
+func (it *AvsDirectoryAVSMetadataURIUpdatedIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *AVSDirectoryAVSMetadataURIUpdatedIterator) Close() error {
+func (it *AvsDirectoryAVSMetadataURIUpdatedIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// AVSDirectoryAVSMetadataURIUpdated represents a AVSMetadataURIUpdated event raised by the AVSDirectory contract.
-type AVSDirectoryAVSMetadataURIUpdated struct {
+// AvsDirectoryAVSMetadataURIUpdated represents a AVSMetadataURIUpdated event raised by the AvsDirectory contract.
+type AvsDirectoryAVSMetadataURIUpdated struct {
 	Avs         common.Address
 	MetadataURI string
 	Raw         types.Log // Blockchain specific contextual infos
@@ -835,31 +836,31 @@ type AVSDirectoryAVSMetadataURIUpdated struct {
 // FilterAVSMetadataURIUpdated is a free log retrieval operation binding the contract event 0xa89c1dc243d8908a96dd84944bcc97d6bc6ac00dd78e20621576be6a3c943713.
 //
 // Solidity: event AVSMetadataURIUpdated(address indexed avs, string metadataURI)
-func (_AVSDirectory *AVSDirectoryFilterer) FilterAVSMetadataURIUpdated(opts *bind.FilterOpts, avs []common.Address) (*AVSDirectoryAVSMetadataURIUpdatedIterator, error) {
+func (_AvsDirectory *AvsDirectoryFilterer) FilterAVSMetadataURIUpdated(opts *bind.FilterOpts, avs []common.Address) (*AvsDirectoryAVSMetadataURIUpdatedIterator, error) {
 
 	var avsRule []interface{}
 	for _, avsItem := range avs {
 		avsRule = append(avsRule, avsItem)
 	}
 
-	logs, sub, err := _AVSDirectory.contract.FilterLogs(opts, "AVSMetadataURIUpdated", avsRule)
+	logs, sub, err := _AvsDirectory.contract.FilterLogs(opts, "AVSMetadataURIUpdated", avsRule)
 	if err != nil {
 		return nil, err
 	}
-	return &AVSDirectoryAVSMetadataURIUpdatedIterator{contract: _AVSDirectory.contract, event: "AVSMetadataURIUpdated", logs: logs, sub: sub}, nil
+	return &AvsDirectoryAVSMetadataURIUpdatedIterator{contract: _AvsDirectory.contract, event: "AVSMetadataURIUpdated", logs: logs, sub: sub}, nil
 }
 
 // WatchAVSMetadataURIUpdated is a free log subscription operation binding the contract event 0xa89c1dc243d8908a96dd84944bcc97d6bc6ac00dd78e20621576be6a3c943713.
 //
 // Solidity: event AVSMetadataURIUpdated(address indexed avs, string metadataURI)
-func (_AVSDirectory *AVSDirectoryFilterer) WatchAVSMetadataURIUpdated(opts *bind.WatchOpts, sink chan<- *AVSDirectoryAVSMetadataURIUpdated, avs []common.Address) (event.Subscription, error) {
+func (_AvsDirectory *AvsDirectoryFilterer) WatchAVSMetadataURIUpdated(opts *bind.WatchOpts, sink chan<- *AvsDirectoryAVSMetadataURIUpdated, avs []common.Address) (event.Subscription, error) {
 
 	var avsRule []interface{}
 	for _, avsItem := range avs {
 		avsRule = append(avsRule, avsItem)
 	}
 
-	logs, sub, err := _AVSDirectory.contract.WatchLogs(opts, "AVSMetadataURIUpdated", avsRule)
+	logs, sub, err := _AvsDirectory.contract.WatchLogs(opts, "AVSMetadataURIUpdated", avsRule)
 	if err != nil {
 		return nil, err
 	}
@@ -869,8 +870,8 @@ func (_AVSDirectory *AVSDirectoryFilterer) WatchAVSMetadataURIUpdated(opts *bind
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(AVSDirectoryAVSMetadataURIUpdated)
-				if err := _AVSDirectory.contract.UnpackLog(event, "AVSMetadataURIUpdated", log); err != nil {
+				event := new(AvsDirectoryAVSMetadataURIUpdated)
+				if err := _AvsDirectory.contract.UnpackLog(event, "AVSMetadataURIUpdated", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -894,18 +895,18 @@ func (_AVSDirectory *AVSDirectoryFilterer) WatchAVSMetadataURIUpdated(opts *bind
 // ParseAVSMetadataURIUpdated is a log parse operation binding the contract event 0xa89c1dc243d8908a96dd84944bcc97d6bc6ac00dd78e20621576be6a3c943713.
 //
 // Solidity: event AVSMetadataURIUpdated(address indexed avs, string metadataURI)
-func (_AVSDirectory *AVSDirectoryFilterer) ParseAVSMetadataURIUpdated(log types.Log) (*AVSDirectoryAVSMetadataURIUpdated, error) {
-	event := new(AVSDirectoryAVSMetadataURIUpdated)
-	if err := _AVSDirectory.contract.UnpackLog(event, "AVSMetadataURIUpdated", log); err != nil {
+func (_AvsDirectory *AvsDirectoryFilterer) ParseAVSMetadataURIUpdated(log types.Log) (*AvsDirectoryAVSMetadataURIUpdated, error) {
+	event := new(AvsDirectoryAVSMetadataURIUpdated)
+	if err := _AvsDirectory.contract.UnpackLog(event, "AVSMetadataURIUpdated", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
 	return event, nil
 }
 
-// AVSDirectoryInitializedIterator is returned from FilterInitialized and is used to iterate over the raw logs and unpacked data for Initialized events raised by the AVSDirectory contract.
-type AVSDirectoryInitializedIterator struct {
-	Event *AVSDirectoryInitialized // Event containing the contract specifics and raw log
+// AvsDirectoryInitializedIterator is returned from FilterInitialized and is used to iterate over the raw logs and unpacked data for Initialized events raised by the AvsDirectory contract.
+type AvsDirectoryInitializedIterator struct {
+	Event *AvsDirectoryInitialized // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -919,7 +920,7 @@ type AVSDirectoryInitializedIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *AVSDirectoryInitializedIterator) Next() bool {
+func (it *AvsDirectoryInitializedIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -928,7 +929,7 @@ func (it *AVSDirectoryInitializedIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(AVSDirectoryInitialized)
+			it.Event = new(AvsDirectoryInitialized)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -943,7 +944,7 @@ func (it *AVSDirectoryInitializedIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(AVSDirectoryInitialized)
+		it.Event = new(AvsDirectoryInitialized)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -959,19 +960,19 @@ func (it *AVSDirectoryInitializedIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *AVSDirectoryInitializedIterator) Error() error {
+func (it *AvsDirectoryInitializedIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *AVSDirectoryInitializedIterator) Close() error {
+func (it *AvsDirectoryInitializedIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// AVSDirectoryInitialized represents a Initialized event raised by the AVSDirectory contract.
-type AVSDirectoryInitialized struct {
+// AvsDirectoryInitialized represents a Initialized event raised by the AvsDirectory contract.
+type AvsDirectoryInitialized struct {
 	Version uint8
 	Raw     types.Log // Blockchain specific contextual infos
 }
@@ -979,21 +980,21 @@ type AVSDirectoryInitialized struct {
 // FilterInitialized is a free log retrieval operation binding the contract event 0x7f26b83ff96e1f2b6a682f133852f6798a09c465da95921460cefb3847402498.
 //
 // Solidity: event Initialized(uint8 version)
-func (_AVSDirectory *AVSDirectoryFilterer) FilterInitialized(opts *bind.FilterOpts) (*AVSDirectoryInitializedIterator, error) {
+func (_AvsDirectory *AvsDirectoryFilterer) FilterInitialized(opts *bind.FilterOpts) (*AvsDirectoryInitializedIterator, error) {
 
-	logs, sub, err := _AVSDirectory.contract.FilterLogs(opts, "Initialized")
+	logs, sub, err := _AvsDirectory.contract.FilterLogs(opts, "Initialized")
 	if err != nil {
 		return nil, err
 	}
-	return &AVSDirectoryInitializedIterator{contract: _AVSDirectory.contract, event: "Initialized", logs: logs, sub: sub}, nil
+	return &AvsDirectoryInitializedIterator{contract: _AvsDirectory.contract, event: "Initialized", logs: logs, sub: sub}, nil
 }
 
 // WatchInitialized is a free log subscription operation binding the contract event 0x7f26b83ff96e1f2b6a682f133852f6798a09c465da95921460cefb3847402498.
 //
 // Solidity: event Initialized(uint8 version)
-func (_AVSDirectory *AVSDirectoryFilterer) WatchInitialized(opts *bind.WatchOpts, sink chan<- *AVSDirectoryInitialized) (event.Subscription, error) {
+func (_AvsDirectory *AvsDirectoryFilterer) WatchInitialized(opts *bind.WatchOpts, sink chan<- *AvsDirectoryInitialized) (event.Subscription, error) {
 
-	logs, sub, err := _AVSDirectory.contract.WatchLogs(opts, "Initialized")
+	logs, sub, err := _AvsDirectory.contract.WatchLogs(opts, "Initialized")
 	if err != nil {
 		return nil, err
 	}
@@ -1003,8 +1004,8 @@ func (_AVSDirectory *AVSDirectoryFilterer) WatchInitialized(opts *bind.WatchOpts
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(AVSDirectoryInitialized)
-				if err := _AVSDirectory.contract.UnpackLog(event, "Initialized", log); err != nil {
+				event := new(AvsDirectoryInitialized)
+				if err := _AvsDirectory.contract.UnpackLog(event, "Initialized", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -1028,18 +1029,18 @@ func (_AVSDirectory *AVSDirectoryFilterer) WatchInitialized(opts *bind.WatchOpts
 // ParseInitialized is a log parse operation binding the contract event 0x7f26b83ff96e1f2b6a682f133852f6798a09c465da95921460cefb3847402498.
 //
 // Solidity: event Initialized(uint8 version)
-func (_AVSDirectory *AVSDirectoryFilterer) ParseInitialized(log types.Log) (*AVSDirectoryInitialized, error) {
-	event := new(AVSDirectoryInitialized)
-	if err := _AVSDirectory.contract.UnpackLog(event, "Initialized", log); err != nil {
+func (_AvsDirectory *AvsDirectoryFilterer) ParseInitialized(log types.Log) (*AvsDirectoryInitialized, error) {
+	event := new(AvsDirectoryInitialized)
+	if err := _AvsDirectory.contract.UnpackLog(event, "Initialized", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
 	return event, nil
 }
 
-// AVSDirectoryOperatorAVSRegistrationStatusUpdatedIterator is returned from FilterOperatorAVSRegistrationStatusUpdated and is used to iterate over the raw logs and unpacked data for OperatorAVSRegistrationStatusUpdated events raised by the AVSDirectory contract.
-type AVSDirectoryOperatorAVSRegistrationStatusUpdatedIterator struct {
-	Event *AVSDirectoryOperatorAVSRegistrationStatusUpdated // Event containing the contract specifics and raw log
+// AvsDirectoryOperatorAVSRegistrationStatusUpdatedIterator is returned from FilterOperatorAVSRegistrationStatusUpdated and is used to iterate over the raw logs and unpacked data for OperatorAVSRegistrationStatusUpdated events raised by the AvsDirectory contract.
+type AvsDirectoryOperatorAVSRegistrationStatusUpdatedIterator struct {
+	Event *AvsDirectoryOperatorAVSRegistrationStatusUpdated // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -1053,7 +1054,7 @@ type AVSDirectoryOperatorAVSRegistrationStatusUpdatedIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *AVSDirectoryOperatorAVSRegistrationStatusUpdatedIterator) Next() bool {
+func (it *AvsDirectoryOperatorAVSRegistrationStatusUpdatedIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -1062,7 +1063,7 @@ func (it *AVSDirectoryOperatorAVSRegistrationStatusUpdatedIterator) Next() bool 
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(AVSDirectoryOperatorAVSRegistrationStatusUpdated)
+			it.Event = new(AvsDirectoryOperatorAVSRegistrationStatusUpdated)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -1077,7 +1078,7 @@ func (it *AVSDirectoryOperatorAVSRegistrationStatusUpdatedIterator) Next() bool 
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(AVSDirectoryOperatorAVSRegistrationStatusUpdated)
+		it.Event = new(AvsDirectoryOperatorAVSRegistrationStatusUpdated)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -1093,19 +1094,19 @@ func (it *AVSDirectoryOperatorAVSRegistrationStatusUpdatedIterator) Next() bool 
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *AVSDirectoryOperatorAVSRegistrationStatusUpdatedIterator) Error() error {
+func (it *AvsDirectoryOperatorAVSRegistrationStatusUpdatedIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *AVSDirectoryOperatorAVSRegistrationStatusUpdatedIterator) Close() error {
+func (it *AvsDirectoryOperatorAVSRegistrationStatusUpdatedIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// AVSDirectoryOperatorAVSRegistrationStatusUpdated represents a OperatorAVSRegistrationStatusUpdated event raised by the AVSDirectory contract.
-type AVSDirectoryOperatorAVSRegistrationStatusUpdated struct {
+// AvsDirectoryOperatorAVSRegistrationStatusUpdated represents a OperatorAVSRegistrationStatusUpdated event raised by the AvsDirectory contract.
+type AvsDirectoryOperatorAVSRegistrationStatusUpdated struct {
 	Operator common.Address
 	Avs      common.Address
 	Status   uint8
@@ -1115,7 +1116,7 @@ type AVSDirectoryOperatorAVSRegistrationStatusUpdated struct {
 // FilterOperatorAVSRegistrationStatusUpdated is a free log retrieval operation binding the contract event 0xf0952b1c65271d819d39983d2abb044b9cace59bcc4d4dd389f586ebdcb15b41.
 //
 // Solidity: event OperatorAVSRegistrationStatusUpdated(address indexed operator, address indexed avs, uint8 status)
-func (_AVSDirectory *AVSDirectoryFilterer) FilterOperatorAVSRegistrationStatusUpdated(opts *bind.FilterOpts, operator []common.Address, avs []common.Address) (*AVSDirectoryOperatorAVSRegistrationStatusUpdatedIterator, error) {
+func (_AvsDirectory *AvsDirectoryFilterer) FilterOperatorAVSRegistrationStatusUpdated(opts *bind.FilterOpts, operator []common.Address, avs []common.Address) (*AvsDirectoryOperatorAVSRegistrationStatusUpdatedIterator, error) {
 
 	var operatorRule []interface{}
 	for _, operatorItem := range operator {
@@ -1126,17 +1127,17 @@ func (_AVSDirectory *AVSDirectoryFilterer) FilterOperatorAVSRegistrationStatusUp
 		avsRule = append(avsRule, avsItem)
 	}
 
-	logs, sub, err := _AVSDirectory.contract.FilterLogs(opts, "OperatorAVSRegistrationStatusUpdated", operatorRule, avsRule)
+	logs, sub, err := _AvsDirectory.contract.FilterLogs(opts, "OperatorAVSRegistrationStatusUpdated", operatorRule, avsRule)
 	if err != nil {
 		return nil, err
 	}
-	return &AVSDirectoryOperatorAVSRegistrationStatusUpdatedIterator{contract: _AVSDirectory.contract, event: "OperatorAVSRegistrationStatusUpdated", logs: logs, sub: sub}, nil
+	return &AvsDirectoryOperatorAVSRegistrationStatusUpdatedIterator{contract: _AvsDirectory.contract, event: "OperatorAVSRegistrationStatusUpdated", logs: logs, sub: sub}, nil
 }
 
 // WatchOperatorAVSRegistrationStatusUpdated is a free log subscription operation binding the contract event 0xf0952b1c65271d819d39983d2abb044b9cace59bcc4d4dd389f586ebdcb15b41.
 //
 // Solidity: event OperatorAVSRegistrationStatusUpdated(address indexed operator, address indexed avs, uint8 status)
-func (_AVSDirectory *AVSDirectoryFilterer) WatchOperatorAVSRegistrationStatusUpdated(opts *bind.WatchOpts, sink chan<- *AVSDirectoryOperatorAVSRegistrationStatusUpdated, operator []common.Address, avs []common.Address) (event.Subscription, error) {
+func (_AvsDirectory *AvsDirectoryFilterer) WatchOperatorAVSRegistrationStatusUpdated(opts *bind.WatchOpts, sink chan<- *AvsDirectoryOperatorAVSRegistrationStatusUpdated, operator []common.Address, avs []common.Address) (event.Subscription, error) {
 
 	var operatorRule []interface{}
 	for _, operatorItem := range operator {
@@ -1147,7 +1148,7 @@ func (_AVSDirectory *AVSDirectoryFilterer) WatchOperatorAVSRegistrationStatusUpd
 		avsRule = append(avsRule, avsItem)
 	}
 
-	logs, sub, err := _AVSDirectory.contract.WatchLogs(opts, "OperatorAVSRegistrationStatusUpdated", operatorRule, avsRule)
+	logs, sub, err := _AvsDirectory.contract.WatchLogs(opts, "OperatorAVSRegistrationStatusUpdated", operatorRule, avsRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1157,8 +1158,8 @@ func (_AVSDirectory *AVSDirectoryFilterer) WatchOperatorAVSRegistrationStatusUpd
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(AVSDirectoryOperatorAVSRegistrationStatusUpdated)
-				if err := _AVSDirectory.contract.UnpackLog(event, "OperatorAVSRegistrationStatusUpdated", log); err != nil {
+				event := new(AvsDirectoryOperatorAVSRegistrationStatusUpdated)
+				if err := _AvsDirectory.contract.UnpackLog(event, "OperatorAVSRegistrationStatusUpdated", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -1182,18 +1183,18 @@ func (_AVSDirectory *AVSDirectoryFilterer) WatchOperatorAVSRegistrationStatusUpd
 // ParseOperatorAVSRegistrationStatusUpdated is a log parse operation binding the contract event 0xf0952b1c65271d819d39983d2abb044b9cace59bcc4d4dd389f586ebdcb15b41.
 //
 // Solidity: event OperatorAVSRegistrationStatusUpdated(address indexed operator, address indexed avs, uint8 status)
-func (_AVSDirectory *AVSDirectoryFilterer) ParseOperatorAVSRegistrationStatusUpdated(log types.Log) (*AVSDirectoryOperatorAVSRegistrationStatusUpdated, error) {
-	event := new(AVSDirectoryOperatorAVSRegistrationStatusUpdated)
-	if err := _AVSDirectory.contract.UnpackLog(event, "OperatorAVSRegistrationStatusUpdated", log); err != nil {
+func (_AvsDirectory *AvsDirectoryFilterer) ParseOperatorAVSRegistrationStatusUpdated(log types.Log) (*AvsDirectoryOperatorAVSRegistrationStatusUpdated, error) {
+	event := new(AvsDirectoryOperatorAVSRegistrationStatusUpdated)
+	if err := _AvsDirectory.contract.UnpackLog(event, "OperatorAVSRegistrationStatusUpdated", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
 	return event, nil
 }
 
-// AVSDirectoryOwnershipTransferredIterator is returned from FilterOwnershipTransferred and is used to iterate over the raw logs and unpacked data for OwnershipTransferred events raised by the AVSDirectory contract.
-type AVSDirectoryOwnershipTransferredIterator struct {
-	Event *AVSDirectoryOwnershipTransferred // Event containing the contract specifics and raw log
+// AvsDirectoryOwnershipTransferredIterator is returned from FilterOwnershipTransferred and is used to iterate over the raw logs and unpacked data for OwnershipTransferred events raised by the AvsDirectory contract.
+type AvsDirectoryOwnershipTransferredIterator struct {
+	Event *AvsDirectoryOwnershipTransferred // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -1207,7 +1208,7 @@ type AVSDirectoryOwnershipTransferredIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *AVSDirectoryOwnershipTransferredIterator) Next() bool {
+func (it *AvsDirectoryOwnershipTransferredIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -1216,7 +1217,7 @@ func (it *AVSDirectoryOwnershipTransferredIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(AVSDirectoryOwnershipTransferred)
+			it.Event = new(AvsDirectoryOwnershipTransferred)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -1231,7 +1232,7 @@ func (it *AVSDirectoryOwnershipTransferredIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(AVSDirectoryOwnershipTransferred)
+		it.Event = new(AvsDirectoryOwnershipTransferred)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -1247,19 +1248,19 @@ func (it *AVSDirectoryOwnershipTransferredIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *AVSDirectoryOwnershipTransferredIterator) Error() error {
+func (it *AvsDirectoryOwnershipTransferredIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *AVSDirectoryOwnershipTransferredIterator) Close() error {
+func (it *AvsDirectoryOwnershipTransferredIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// AVSDirectoryOwnershipTransferred represents a OwnershipTransferred event raised by the AVSDirectory contract.
-type AVSDirectoryOwnershipTransferred struct {
+// AvsDirectoryOwnershipTransferred represents a OwnershipTransferred event raised by the AvsDirectory contract.
+type AvsDirectoryOwnershipTransferred struct {
 	PreviousOwner common.Address
 	NewOwner      common.Address
 	Raw           types.Log // Blockchain specific contextual infos
@@ -1268,7 +1269,7 @@ type AVSDirectoryOwnershipTransferred struct {
 // FilterOwnershipTransferred is a free log retrieval operation binding the contract event 0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0.
 //
 // Solidity: event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)
-func (_AVSDirectory *AVSDirectoryFilterer) FilterOwnershipTransferred(opts *bind.FilterOpts, previousOwner []common.Address, newOwner []common.Address) (*AVSDirectoryOwnershipTransferredIterator, error) {
+func (_AvsDirectory *AvsDirectoryFilterer) FilterOwnershipTransferred(opts *bind.FilterOpts, previousOwner []common.Address, newOwner []common.Address) (*AvsDirectoryOwnershipTransferredIterator, error) {
 
 	var previousOwnerRule []interface{}
 	for _, previousOwnerItem := range previousOwner {
@@ -1279,17 +1280,17 @@ func (_AVSDirectory *AVSDirectoryFilterer) FilterOwnershipTransferred(opts *bind
 		newOwnerRule = append(newOwnerRule, newOwnerItem)
 	}
 
-	logs, sub, err := _AVSDirectory.contract.FilterLogs(opts, "OwnershipTransferred", previousOwnerRule, newOwnerRule)
+	logs, sub, err := _AvsDirectory.contract.FilterLogs(opts, "OwnershipTransferred", previousOwnerRule, newOwnerRule)
 	if err != nil {
 		return nil, err
 	}
-	return &AVSDirectoryOwnershipTransferredIterator{contract: _AVSDirectory.contract, event: "OwnershipTransferred", logs: logs, sub: sub}, nil
+	return &AvsDirectoryOwnershipTransferredIterator{contract: _AvsDirectory.contract, event: "OwnershipTransferred", logs: logs, sub: sub}, nil
 }
 
 // WatchOwnershipTransferred is a free log subscription operation binding the contract event 0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0.
 //
 // Solidity: event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)
-func (_AVSDirectory *AVSDirectoryFilterer) WatchOwnershipTransferred(opts *bind.WatchOpts, sink chan<- *AVSDirectoryOwnershipTransferred, previousOwner []common.Address, newOwner []common.Address) (event.Subscription, error) {
+func (_AvsDirectory *AvsDirectoryFilterer) WatchOwnershipTransferred(opts *bind.WatchOpts, sink chan<- *AvsDirectoryOwnershipTransferred, previousOwner []common.Address, newOwner []common.Address) (event.Subscription, error) {
 
 	var previousOwnerRule []interface{}
 	for _, previousOwnerItem := range previousOwner {
@@ -1300,7 +1301,7 @@ func (_AVSDirectory *AVSDirectoryFilterer) WatchOwnershipTransferred(opts *bind.
 		newOwnerRule = append(newOwnerRule, newOwnerItem)
 	}
 
-	logs, sub, err := _AVSDirectory.contract.WatchLogs(opts, "OwnershipTransferred", previousOwnerRule, newOwnerRule)
+	logs, sub, err := _AvsDirectory.contract.WatchLogs(opts, "OwnershipTransferred", previousOwnerRule, newOwnerRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1310,8 +1311,8 @@ func (_AVSDirectory *AVSDirectoryFilterer) WatchOwnershipTransferred(opts *bind.
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(AVSDirectoryOwnershipTransferred)
-				if err := _AVSDirectory.contract.UnpackLog(event, "OwnershipTransferred", log); err != nil {
+				event := new(AvsDirectoryOwnershipTransferred)
+				if err := _AvsDirectory.contract.UnpackLog(event, "OwnershipTransferred", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -1335,18 +1336,18 @@ func (_AVSDirectory *AVSDirectoryFilterer) WatchOwnershipTransferred(opts *bind.
 // ParseOwnershipTransferred is a log parse operation binding the contract event 0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0.
 //
 // Solidity: event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)
-func (_AVSDirectory *AVSDirectoryFilterer) ParseOwnershipTransferred(log types.Log) (*AVSDirectoryOwnershipTransferred, error) {
-	event := new(AVSDirectoryOwnershipTransferred)
-	if err := _AVSDirectory.contract.UnpackLog(event, "OwnershipTransferred", log); err != nil {
+func (_AvsDirectory *AvsDirectoryFilterer) ParseOwnershipTransferred(log types.Log) (*AvsDirectoryOwnershipTransferred, error) {
+	event := new(AvsDirectoryOwnershipTransferred)
+	if err := _AvsDirectory.contract.UnpackLog(event, "OwnershipTransferred", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
 	return event, nil
 }
 
-// AVSDirectoryPausedIterator is returned from FilterPaused and is used to iterate over the raw logs and unpacked data for Paused events raised by the AVSDirectory contract.
-type AVSDirectoryPausedIterator struct {
-	Event *AVSDirectoryPaused // Event containing the contract specifics and raw log
+// AvsDirectoryPausedIterator is returned from FilterPaused and is used to iterate over the raw logs and unpacked data for Paused events raised by the AvsDirectory contract.
+type AvsDirectoryPausedIterator struct {
+	Event *AvsDirectoryPaused // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -1360,7 +1361,7 @@ type AVSDirectoryPausedIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *AVSDirectoryPausedIterator) Next() bool {
+func (it *AvsDirectoryPausedIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -1369,7 +1370,7 @@ func (it *AVSDirectoryPausedIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(AVSDirectoryPaused)
+			it.Event = new(AvsDirectoryPaused)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -1384,7 +1385,7 @@ func (it *AVSDirectoryPausedIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(AVSDirectoryPaused)
+		it.Event = new(AvsDirectoryPaused)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -1400,19 +1401,19 @@ func (it *AVSDirectoryPausedIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *AVSDirectoryPausedIterator) Error() error {
+func (it *AvsDirectoryPausedIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *AVSDirectoryPausedIterator) Close() error {
+func (it *AvsDirectoryPausedIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// AVSDirectoryPaused represents a Paused event raised by the AVSDirectory contract.
-type AVSDirectoryPaused struct {
+// AvsDirectoryPaused represents a Paused event raised by the AvsDirectory contract.
+type AvsDirectoryPaused struct {
 	Account         common.Address
 	NewPausedStatus *big.Int
 	Raw             types.Log // Blockchain specific contextual infos
@@ -1421,31 +1422,31 @@ type AVSDirectoryPaused struct {
 // FilterPaused is a free log retrieval operation binding the contract event 0xab40a374bc51de372200a8bc981af8c9ecdc08dfdaef0bb6e09f88f3c616ef3d.
 //
 // Solidity: event Paused(address indexed account, uint256 newPausedStatus)
-func (_AVSDirectory *AVSDirectoryFilterer) FilterPaused(opts *bind.FilterOpts, account []common.Address) (*AVSDirectoryPausedIterator, error) {
+func (_AvsDirectory *AvsDirectoryFilterer) FilterPaused(opts *bind.FilterOpts, account []common.Address) (*AvsDirectoryPausedIterator, error) {
 
 	var accountRule []interface{}
 	for _, accountItem := range account {
 		accountRule = append(accountRule, accountItem)
 	}
 
-	logs, sub, err := _AVSDirectory.contract.FilterLogs(opts, "Paused", accountRule)
+	logs, sub, err := _AvsDirectory.contract.FilterLogs(opts, "Paused", accountRule)
 	if err != nil {
 		return nil, err
 	}
-	return &AVSDirectoryPausedIterator{contract: _AVSDirectory.contract, event: "Paused", logs: logs, sub: sub}, nil
+	return &AvsDirectoryPausedIterator{contract: _AvsDirectory.contract, event: "Paused", logs: logs, sub: sub}, nil
 }
 
 // WatchPaused is a free log subscription operation binding the contract event 0xab40a374bc51de372200a8bc981af8c9ecdc08dfdaef0bb6e09f88f3c616ef3d.
 //
 // Solidity: event Paused(address indexed account, uint256 newPausedStatus)
-func (_AVSDirectory *AVSDirectoryFilterer) WatchPaused(opts *bind.WatchOpts, sink chan<- *AVSDirectoryPaused, account []common.Address) (event.Subscription, error) {
+func (_AvsDirectory *AvsDirectoryFilterer) WatchPaused(opts *bind.WatchOpts, sink chan<- *AvsDirectoryPaused, account []common.Address) (event.Subscription, error) {
 
 	var accountRule []interface{}
 	for _, accountItem := range account {
 		accountRule = append(accountRule, accountItem)
 	}
 
-	logs, sub, err := _AVSDirectory.contract.WatchLogs(opts, "Paused", accountRule)
+	logs, sub, err := _AvsDirectory.contract.WatchLogs(opts, "Paused", accountRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1455,8 +1456,8 @@ func (_AVSDirectory *AVSDirectoryFilterer) WatchPaused(opts *bind.WatchOpts, sin
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(AVSDirectoryPaused)
-				if err := _AVSDirectory.contract.UnpackLog(event, "Paused", log); err != nil {
+				event := new(AvsDirectoryPaused)
+				if err := _AvsDirectory.contract.UnpackLog(event, "Paused", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -1480,18 +1481,18 @@ func (_AVSDirectory *AVSDirectoryFilterer) WatchPaused(opts *bind.WatchOpts, sin
 // ParsePaused is a log parse operation binding the contract event 0xab40a374bc51de372200a8bc981af8c9ecdc08dfdaef0bb6e09f88f3c616ef3d.
 //
 // Solidity: event Paused(address indexed account, uint256 newPausedStatus)
-func (_AVSDirectory *AVSDirectoryFilterer) ParsePaused(log types.Log) (*AVSDirectoryPaused, error) {
-	event := new(AVSDirectoryPaused)
-	if err := _AVSDirectory.contract.UnpackLog(event, "Paused", log); err != nil {
+func (_AvsDirectory *AvsDirectoryFilterer) ParsePaused(log types.Log) (*AvsDirectoryPaused, error) {
+	event := new(AvsDirectoryPaused)
+	if err := _AvsDirectory.contract.UnpackLog(event, "Paused", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
 	return event, nil
 }
 
-// AVSDirectoryPauserRegistrySetIterator is returned from FilterPauserRegistrySet and is used to iterate over the raw logs and unpacked data for PauserRegistrySet events raised by the AVSDirectory contract.
-type AVSDirectoryPauserRegistrySetIterator struct {
-	Event *AVSDirectoryPauserRegistrySet // Event containing the contract specifics and raw log
+// AvsDirectoryPauserRegistrySetIterator is returned from FilterPauserRegistrySet and is used to iterate over the raw logs and unpacked data for PauserRegistrySet events raised by the AvsDirectory contract.
+type AvsDirectoryPauserRegistrySetIterator struct {
+	Event *AvsDirectoryPauserRegistrySet // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -1505,7 +1506,7 @@ type AVSDirectoryPauserRegistrySetIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *AVSDirectoryPauserRegistrySetIterator) Next() bool {
+func (it *AvsDirectoryPauserRegistrySetIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -1514,7 +1515,7 @@ func (it *AVSDirectoryPauserRegistrySetIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(AVSDirectoryPauserRegistrySet)
+			it.Event = new(AvsDirectoryPauserRegistrySet)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -1529,7 +1530,7 @@ func (it *AVSDirectoryPauserRegistrySetIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(AVSDirectoryPauserRegistrySet)
+		it.Event = new(AvsDirectoryPauserRegistrySet)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -1545,19 +1546,19 @@ func (it *AVSDirectoryPauserRegistrySetIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *AVSDirectoryPauserRegistrySetIterator) Error() error {
+func (it *AvsDirectoryPauserRegistrySetIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *AVSDirectoryPauserRegistrySetIterator) Close() error {
+func (it *AvsDirectoryPauserRegistrySetIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// AVSDirectoryPauserRegistrySet represents a PauserRegistrySet event raised by the AVSDirectory contract.
-type AVSDirectoryPauserRegistrySet struct {
+// AvsDirectoryPauserRegistrySet represents a PauserRegistrySet event raised by the AvsDirectory contract.
+type AvsDirectoryPauserRegistrySet struct {
 	PauserRegistry    common.Address
 	NewPauserRegistry common.Address
 	Raw               types.Log // Blockchain specific contextual infos
@@ -1566,21 +1567,21 @@ type AVSDirectoryPauserRegistrySet struct {
 // FilterPauserRegistrySet is a free log retrieval operation binding the contract event 0x6e9fcd539896fca60e8b0f01dd580233e48a6b0f7df013b89ba7f565869acdb6.
 //
 // Solidity: event PauserRegistrySet(address pauserRegistry, address newPauserRegistry)
-func (_AVSDirectory *AVSDirectoryFilterer) FilterPauserRegistrySet(opts *bind.FilterOpts) (*AVSDirectoryPauserRegistrySetIterator, error) {
+func (_AvsDirectory *AvsDirectoryFilterer) FilterPauserRegistrySet(opts *bind.FilterOpts) (*AvsDirectoryPauserRegistrySetIterator, error) {
 
-	logs, sub, err := _AVSDirectory.contract.FilterLogs(opts, "PauserRegistrySet")
+	logs, sub, err := _AvsDirectory.contract.FilterLogs(opts, "PauserRegistrySet")
 	if err != nil {
 		return nil, err
 	}
-	return &AVSDirectoryPauserRegistrySetIterator{contract: _AVSDirectory.contract, event: "PauserRegistrySet", logs: logs, sub: sub}, nil
+	return &AvsDirectoryPauserRegistrySetIterator{contract: _AvsDirectory.contract, event: "PauserRegistrySet", logs: logs, sub: sub}, nil
 }
 
 // WatchPauserRegistrySet is a free log subscription operation binding the contract event 0x6e9fcd539896fca60e8b0f01dd580233e48a6b0f7df013b89ba7f565869acdb6.
 //
 // Solidity: event PauserRegistrySet(address pauserRegistry, address newPauserRegistry)
-func (_AVSDirectory *AVSDirectoryFilterer) WatchPauserRegistrySet(opts *bind.WatchOpts, sink chan<- *AVSDirectoryPauserRegistrySet) (event.Subscription, error) {
+func (_AvsDirectory *AvsDirectoryFilterer) WatchPauserRegistrySet(opts *bind.WatchOpts, sink chan<- *AvsDirectoryPauserRegistrySet) (event.Subscription, error) {
 
-	logs, sub, err := _AVSDirectory.contract.WatchLogs(opts, "PauserRegistrySet")
+	logs, sub, err := _AvsDirectory.contract.WatchLogs(opts, "PauserRegistrySet")
 	if err != nil {
 		return nil, err
 	}
@@ -1590,8 +1591,8 @@ func (_AVSDirectory *AVSDirectoryFilterer) WatchPauserRegistrySet(opts *bind.Wat
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(AVSDirectoryPauserRegistrySet)
-				if err := _AVSDirectory.contract.UnpackLog(event, "PauserRegistrySet", log); err != nil {
+				event := new(AvsDirectoryPauserRegistrySet)
+				if err := _AvsDirectory.contract.UnpackLog(event, "PauserRegistrySet", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -1615,18 +1616,18 @@ func (_AVSDirectory *AVSDirectoryFilterer) WatchPauserRegistrySet(opts *bind.Wat
 // ParsePauserRegistrySet is a log parse operation binding the contract event 0x6e9fcd539896fca60e8b0f01dd580233e48a6b0f7df013b89ba7f565869acdb6.
 //
 // Solidity: event PauserRegistrySet(address pauserRegistry, address newPauserRegistry)
-func (_AVSDirectory *AVSDirectoryFilterer) ParsePauserRegistrySet(log types.Log) (*AVSDirectoryPauserRegistrySet, error) {
-	event := new(AVSDirectoryPauserRegistrySet)
-	if err := _AVSDirectory.contract.UnpackLog(event, "PauserRegistrySet", log); err != nil {
+func (_AvsDirectory *AvsDirectoryFilterer) ParsePauserRegistrySet(log types.Log) (*AvsDirectoryPauserRegistrySet, error) {
+	event := new(AvsDirectoryPauserRegistrySet)
+	if err := _AvsDirectory.contract.UnpackLog(event, "PauserRegistrySet", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
 	return event, nil
 }
 
-// AVSDirectoryUnpausedIterator is returned from FilterUnpaused and is used to iterate over the raw logs and unpacked data for Unpaused events raised by the AVSDirectory contract.
-type AVSDirectoryUnpausedIterator struct {
-	Event *AVSDirectoryUnpaused // Event containing the contract specifics and raw log
+// AvsDirectoryUnpausedIterator is returned from FilterUnpaused and is used to iterate over the raw logs and unpacked data for Unpaused events raised by the AvsDirectory contract.
+type AvsDirectoryUnpausedIterator struct {
+	Event *AvsDirectoryUnpaused // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -1640,7 +1641,7 @@ type AVSDirectoryUnpausedIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *AVSDirectoryUnpausedIterator) Next() bool {
+func (it *AvsDirectoryUnpausedIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -1649,7 +1650,7 @@ func (it *AVSDirectoryUnpausedIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(AVSDirectoryUnpaused)
+			it.Event = new(AvsDirectoryUnpaused)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -1664,7 +1665,7 @@ func (it *AVSDirectoryUnpausedIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(AVSDirectoryUnpaused)
+		it.Event = new(AvsDirectoryUnpaused)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -1680,19 +1681,19 @@ func (it *AVSDirectoryUnpausedIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *AVSDirectoryUnpausedIterator) Error() error {
+func (it *AvsDirectoryUnpausedIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *AVSDirectoryUnpausedIterator) Close() error {
+func (it *AvsDirectoryUnpausedIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// AVSDirectoryUnpaused represents a Unpaused event raised by the AVSDirectory contract.
-type AVSDirectoryUnpaused struct {
+// AvsDirectoryUnpaused represents a Unpaused event raised by the AvsDirectory contract.
+type AvsDirectoryUnpaused struct {
 	Account         common.Address
 	NewPausedStatus *big.Int
 	Raw             types.Log // Blockchain specific contextual infos
@@ -1701,31 +1702,31 @@ type AVSDirectoryUnpaused struct {
 // FilterUnpaused is a free log retrieval operation binding the contract event 0x3582d1828e26bf56bd801502bc021ac0bc8afb57c826e4986b45593c8fad389c.
 //
 // Solidity: event Unpaused(address indexed account, uint256 newPausedStatus)
-func (_AVSDirectory *AVSDirectoryFilterer) FilterUnpaused(opts *bind.FilterOpts, account []common.Address) (*AVSDirectoryUnpausedIterator, error) {
+func (_AvsDirectory *AvsDirectoryFilterer) FilterUnpaused(opts *bind.FilterOpts, account []common.Address) (*AvsDirectoryUnpausedIterator, error) {
 
 	var accountRule []interface{}
 	for _, accountItem := range account {
 		accountRule = append(accountRule, accountItem)
 	}
 
-	logs, sub, err := _AVSDirectory.contract.FilterLogs(opts, "Unpaused", accountRule)
+	logs, sub, err := _AvsDirectory.contract.FilterLogs(opts, "Unpaused", accountRule)
 	if err != nil {
 		return nil, err
 	}
-	return &AVSDirectoryUnpausedIterator{contract: _AVSDirectory.contract, event: "Unpaused", logs: logs, sub: sub}, nil
+	return &AvsDirectoryUnpausedIterator{contract: _AvsDirectory.contract, event: "Unpaused", logs: logs, sub: sub}, nil
 }
 
 // WatchUnpaused is a free log subscription operation binding the contract event 0x3582d1828e26bf56bd801502bc021ac0bc8afb57c826e4986b45593c8fad389c.
 //
 // Solidity: event Unpaused(address indexed account, uint256 newPausedStatus)
-func (_AVSDirectory *AVSDirectoryFilterer) WatchUnpaused(opts *bind.WatchOpts, sink chan<- *AVSDirectoryUnpaused, account []common.Address) (event.Subscription, error) {
+func (_AvsDirectory *AvsDirectoryFilterer) WatchUnpaused(opts *bind.WatchOpts, sink chan<- *AvsDirectoryUnpaused, account []common.Address) (event.Subscription, error) {
 
 	var accountRule []interface{}
 	for _, accountItem := range account {
 		accountRule = append(accountRule, accountItem)
 	}
 
-	logs, sub, err := _AVSDirectory.contract.WatchLogs(opts, "Unpaused", accountRule)
+	logs, sub, err := _AvsDirectory.contract.WatchLogs(opts, "Unpaused", accountRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1735,8 +1736,8 @@ func (_AVSDirectory *AVSDirectoryFilterer) WatchUnpaused(opts *bind.WatchOpts, s
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(AVSDirectoryUnpaused)
-				if err := _AVSDirectory.contract.UnpackLog(event, "Unpaused", log); err != nil {
+				event := new(AvsDirectoryUnpaused)
+				if err := _AvsDirectory.contract.UnpackLog(event, "Unpaused", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -1760,9 +1761,9 @@ func (_AVSDirectory *AVSDirectoryFilterer) WatchUnpaused(opts *bind.WatchOpts, s
 // ParseUnpaused is a log parse operation binding the contract event 0x3582d1828e26bf56bd801502bc021ac0bc8afb57c826e4986b45593c8fad389c.
 //
 // Solidity: event Unpaused(address indexed account, uint256 newPausedStatus)
-func (_AVSDirectory *AVSDirectoryFilterer) ParseUnpaused(log types.Log) (*AVSDirectoryUnpaused, error) {
-	event := new(AVSDirectoryUnpaused)
-	if err := _AVSDirectory.contract.UnpackLog(event, "Unpaused", log); err != nil {
+func (_AvsDirectory *AvsDirectoryFilterer) ParseUnpaused(log types.Log) (*AvsDirectoryUnpaused, error) {
+	event := new(AvsDirectoryUnpaused)
+	if err := _AvsDirectory.contract.UnpackLog(event, "Unpaused", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log

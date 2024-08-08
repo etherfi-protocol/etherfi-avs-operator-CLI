@@ -1,7 +1,7 @@
 // Code generated - DO NOT EDIT.
 // This file is a generated binding and any manual changes will be lost.
 
-package contracts
+package lagrange
 
 import (
 	"errors"
@@ -28,6 +28,13 @@ var (
 	_ = event.NewSubscription
 	_ = abi.ConvertType
 )
+
+// ISignatureUtilsSignatureWithSaltAndExpiry is an auto generated low-level Go binding around an user-defined struct.
+type ISignatureUtilsSignatureWithSaltAndExpiry struct {
+	Signature []byte
+	Salt      [32]byte
+	Expiry    *big.Int
+}
 
 // LagrangeServiceMetaData contains all meta data concerning the LagrangeService contract.
 var LagrangeServiceMetaData = &bind.MetaData{

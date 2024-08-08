@@ -9,7 +9,6 @@ import (
 	registryCoordinator "github.com/Layr-Labs/eigenda/contracts/bindings/RegistryCoordinator"
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/eigenda"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/ethereum/go-ethereum/ethclient"
@@ -50,7 +49,7 @@ func prepareEigendaCmd(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("loading config: %w", err)
 	}
 	registryCoordinator, _ := registryCoordinator.NewContractRegistryCoordinator(cfg.EigenDARegistryCoordinatorAddress, rpcClient)
-	avsOperatorManager, _ := contracts.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
+	avsOperatorManager, _ := etherfi.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
 
 	// make globally accessible by all sub commands
 	etherfiAPI = &etherfi.API{

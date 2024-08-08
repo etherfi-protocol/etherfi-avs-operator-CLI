@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/witnesschain"
 	"github.com/ethereum/go-ethereum/ethclient"
@@ -49,7 +48,7 @@ func prepareWitnessChainCmd(ctx context.Context, cmd *cli.Command) error {
 	}
 	witnessHub, _ := witnesschain.NewWitnessChainWitnessHub(cfg.WitnessChainWitnessHubAddress, rpcClient)
 	operatorRegistry, _ := witnesschain.NewWitnessChainOperatorRegistry(cfg.WitnessChainOperatorRegistryAddress, rpcClient)
-	avsOperatorManager, _ := contracts.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
+	avsOperatorManager, _ := etherfi.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
 
 	// make globally accessible by all sub commands
 	etherfiAPI = &etherfi.API{

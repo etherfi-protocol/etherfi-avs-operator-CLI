@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/eoracle"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/ethereum/go-ethereum/ethclient"
@@ -48,7 +47,7 @@ func prepareEoracleCmd(ctx context.Context, cmd *cli.Command) error {
 	}
 	registryCoordinator, _ := eoracle.NewRegistryCoordinator(cfg.EOracleRegistryCoordinatorAddress, rpcClient)
 	serviceManager, _ := eoracle.NewServiceManager(cfg.EOracleServiceManagerAddress, rpcClient)
-	avsOperatorManager, _ := contracts.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
+	avsOperatorManager, _ := etherfi.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
 
 	// make globally accessible by all sub commands
 	etherfiAPI = &etherfi.API{

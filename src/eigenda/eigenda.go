@@ -7,7 +7,6 @@ import (
 	"github.com/consensys/gnark-crypto/ecc/bn254"
 	"github.com/consensys/gnark-crypto/ecc/bn254/fp"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/avs/signer"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/gnosis"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/utils"
@@ -97,15 +96,15 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo
 	for i, v := range info.Quorums {
 		quorums[i] = byte(v)
 	}
-	sigParams := contracts.ISignatureUtilsSignatureWithSaltAndExpiry{
+	sigParams := registryCoordinator.ISignatureUtilsSignatureWithSaltAndExpiry{
 		Signature: sigWithSaltAndExpiry.Signature,
 		Salt:      sigWithSaltAndExpiry.Salt,
 		Expiry:    sigWithSaltAndExpiry.Expiry,
 	}
-	pubkeyParams := contracts.IBLSApkRegistryPubkeyRegistrationParams{
-		PubkeyRegistrationSignature: contracts.BN254G1Point(info.BLSPubkeyRegistrationParams.Signature),
-		PubkeyG1:                    contracts.BN254G1Point(info.BLSPubkeyRegistrationParams.G1),
-		PubkeyG2:                    contracts.BN254G2Point(info.BLSPubkeyRegistrationParams.G2),
+	pubkeyParams := registryCoordinator.IBLSApkRegistryPubkeyRegistrationParams{
+		PubkeyRegistrationSignature: registryCoordinator.BN254G1Point(info.BLSPubkeyRegistrationParams.Signature),
+		PubkeyG1:                    registryCoordinator.BN254G1Point(info.BLSPubkeyRegistrationParams.G1),
+		PubkeyG2:                    registryCoordinator.BN254G2Point(info.BLSPubkeyRegistrationParams.G2),
 	}
 
 	// manually pack tx data since we are submitting via gnosis instead of directly
