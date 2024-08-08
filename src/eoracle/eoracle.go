@@ -1,43 +1,41 @@
-package eigenda
+package eoracle
 
 import (
 	"crypto/ecdsa"
 	"fmt"
+	"math/big"
 
+	"github.com/Layr-Labs/eigensdk-go/crypto/bls"
 	"github.com/consensys/gnark-crypto/ecc/bn254"
 	"github.com/consensys/gnark-crypto/ecc/bn254/fp"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/avs/signer"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/gnosis"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/utils"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
-
-	// need to alias because eigenlayer has a package name that doesn't match the filepath
-	registryCoordinator "github.com/Layr-Labs/eigenda/contracts/bindings/RegistryCoordinator"
-	"github.com/Layr-Labs/eigensdk-go/crypto/bls"
 )
 
-// API handle for all core witness chain functionality
+// API handle for all core eOracle functionality
 type API struct {
 	Client *ethclient.Client
 
 	RegistryCoordinatorAddress common.Address
-	RegistryCoordinator        *registryCoordinator.ContractRegistryCoordinator
+	RegistryCoordinator        *RegistryCoordinator
+	ServiceManagerAddress      common.Address
+	ServiceManager             *ServiceManager
 	AvsOperatorManagerAddress  common.Address
 }
 
 // Info that node operator must supply to the ether.fi admin for registration
 type RegistrationInfo struct {
 	OperatorID                  int64
-	Socket                      string
-	Quorums                     []int64
 	BLSPubkeyRegistrationParams *types.BLSPubkeyRegistrationParams
+	AliasAddress                common.Address
 }
 
-func (a *API) PrepareRegistration(operator *etherfi.Operator, blsKey *bls.KeyPair, socket string, quorums []int64) error {
+func (a *API) PrepareRegistration(operator *etherfi.Operator, blsKey *bls.KeyPair, alias common.Address) error {
 
 	// compute hash to sign with bls key
 	// the hash is converted to a G1 point on the curve before it is returned
@@ -45,14 +43,6 @@ func (a *API) PrepareRegistration(operator *etherfi.Operator, blsKey *bls.KeyPai
 	if err != nil {
 		return fmt.Errorf("fetching pubkeyRegistrationMessageHash: %w", err)
 	}
-
-	// TODO: double check that the new setup is legal versus this old setup
-	/*
-		xElem := fp.NewElement(0)
-		xElem.SetBigInt(g1Point.X)
-		yElem := fp.NewElement(0)
-		yElem.SetBigInt(g1Point.Y)
-	*/
 
 	// map from contract type to type expected by signing algorithm
 	g1MsgToSign := &bn254.G1Affine{
@@ -77,43 +67,39 @@ func (a *API) PrepareRegistration(operator *etherfi.Operator, blsKey *bls.KeyPai
 
 	ri := RegistrationInfo{
 		OperatorID:                  operator.ID,
-		Socket:                      socket,
-		Quorums:                     quorums,
 		BLSPubkeyRegistrationParams: signedParams,
+		AliasAddress:                alias,
 	}
-	return utils.ExportJSON("eigenda-prepare-registration", operator.ID, ri)
+	return utils.ExportJSON("eoracle-prepare-registration", operator.ID, ri)
 }
 
-func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo, signerKey *ecdsa.PrivateKey) error {
+func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo, signerKey *ecdsa.PrivateKey, quorums []byte) error {
 
 	// generate and sign registration hash to be signed by admin ecdsa key
-	sigWithSaltAndExpiry, err := signer.GenerateAndSignRegistrationDigest(operator, signer.EIGEN_DA, a.Client, signerKey)
+	sigWithSaltAndExpiry, err := signer.GenerateAndSignRegistrationDigest(operator, signer.EORACLE, a.Client, signerKey)
 	if err != nil {
 		return fmt.Errorf("signing registration digest: %w", err)
 	}
 
 	// convert to types expected by contract call
-	quorums := make([]byte, len(info.Quorums))
-	for i, v := range info.Quorums {
-		quorums[i] = byte(v)
-	}
-	sigParams := contracts.ISignatureUtilsSignatureWithSaltAndExpiry{
+	sigParams := ISignatureUtilsSignatureWithSaltAndExpiry{
 		Signature: sigWithSaltAndExpiry.Signature,
 		Salt:      sigWithSaltAndExpiry.Salt,
 		Expiry:    sigWithSaltAndExpiry.Expiry,
 	}
-	pubkeyParams := contracts.IBLSApkRegistryPubkeyRegistrationParams{
-		PubkeyRegistrationSignature: contracts.BN254G1Point(info.BLSPubkeyRegistrationParams.Signature),
-		PubkeyG1:                    contracts.BN254G1Point(info.BLSPubkeyRegistrationParams.G1),
-		PubkeyG2:                    contracts.BN254G2Point(info.BLSPubkeyRegistrationParams.G2),
+	pubkeyParams := IEOBLSApkRegistryPubkeyRegistrationParams{
+		PubkeyRegistrationSignature: BN254G1Point(info.BLSPubkeyRegistrationParams.Signature),
+		ChainValidatorSignature:     BN254G1Point{X: big.NewInt(0), Y: big.NewInt(0)}, // not currently used by protocol
+		PubkeyG1:                    BN254G1Point(info.BLSPubkeyRegistrationParams.G1),
+		PubkeyG2:                    BN254G2Point(info.BLSPubkeyRegistrationParams.G2),
 	}
 
 	// manually pack tx data since we are submitting via gnosis instead of directly
-	coordinatorABI, err := registryCoordinator.ContractRegistryCoordinatorMetaData.GetAbi()
+	registryCoordinatorABI, err := RegistryCoordinatorMetaData.GetAbi()
 	if err != nil {
 		return fmt.Errorf("fetching abi: %w", err)
 	}
-	calldata, err := coordinatorABI.Pack("registerOperator", quorums, info.Socket, pubkeyParams, sigParams)
+	calldata, err := registryCoordinatorABI.Pack("registerOperator", quorums, pubkeyParams, sigParams)
 	if err != nil {
 		return fmt.Errorf("packing input: %w", err)
 	}
@@ -125,6 +111,7 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo
 	}
 
 	// output in gnosis compatible format
-	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("eigenda-register-operator-%d", operator.ID))
-	return utils.ExportJSON("eigenda-register-gnosis", operator.ID, batch)
+	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("witness-chain-register-watchtower-%d", operator.ID))
+	return utils.ExportJSON("witness-chain-register-gnosis", operator.ID, batch)
+
 }

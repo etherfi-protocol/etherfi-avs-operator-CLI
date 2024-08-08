@@ -10,6 +10,7 @@ import (
 
 var EigenDAPrepareRegistrationCmd = &cli.Command{
 	Name:   "prepare-registration",
+	Usage:  "(Node Operator) gather all inputs required to register for avs",
 	Action: handleEigenDAPrepareRegistration,
 	Flags: []cli.Flag{
 		&cli.IntFlag{

@@ -13,6 +13,7 @@ import (
 
 var EigenDARegisterCmd = &cli.Command{
 	Name:   "register",
+	Usage:  "(Admin) Register target operator to eigenDA AVS",
 	Action: handleEigenDARegister,
 	Flags: []cli.Flag{
 		&cli.StringFlag{
@@ -51,7 +52,7 @@ func handleEigenDARegister(ctx context.Context, cli *cli.Command) error {
 	}
 
 	// load eip-1271 admin signing key
-	signingKey, err := crypto.HexToECDSA(os.Getenv("PRIVATE_KEY"))
+	signingKey, err := crypto.HexToECDSA(os.Getenv("ADMIN_1271_SIGNING_KEY"))
 	if err != nil {
 		return fmt.Errorf("invalid private key: %w", err)
 	}

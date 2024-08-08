@@ -80,11 +80,11 @@ Supply a separate ECDSA key you control for the value of `operator_private_key`
 
 5. Register the watchtower on L1
 
-           ./avs-cli witness-chain register-watchtower --registration-input witness-input.json --rpc-url $RPC_URL
+           ./avs-cli witness-chain register-watchtower --registration-input witness-input.json
 
            // submit resulting output as a gnosis TX via AVS admin gnosis
 
----
+
 
 # EigenDA
 
@@ -108,11 +108,9 @@ Supply a separate ECDSA key you control for the value of `operator_private_key`
             // Expose the ECSDA signing key as an environment variable
             export PRIVATE_KEY={ECSDSA_SIGNING_KEY}
 
-           ./avs-cli eigenda register --registration-input eigenda-input.json --rpc-url $RPC_URL
+           ./avs-cli eigenda register --registration-input eigenda-input.json
 
            // submit resulting output as a gnosis TX via AVS admin gnosis   
-
----
 
 
 ## Contracts
@@ -122,8 +120,6 @@ Supply a separate ECDSA key you control for the value of `operator_private_key`
 - Deployment
   - Mainnet: 0x2093Bbb221f1d8C7c932c32ee28Be6dEe4a37A6a
   - Holesky: 0xdf9679e8bfce22ae503fd2726cb1218a18cd8bf4
-
----
 
 ## References.
 - [on-chain “operator” as a contract](https://etherfi.notion.site/Node-Operator-on-chain-operator-as-a-contract-9e86d3390a9e45df8c088d0c283a7dd1)

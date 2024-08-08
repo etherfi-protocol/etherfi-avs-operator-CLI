@@ -144,7 +144,3 @@ func TestSignerForOperatorID(t *testing.T) {
 		}
 	*/
 }
-
-func TestRegisterOperator(t *testing.T) {
-
-}

@@ -68,7 +68,7 @@ func (wc *WitnessChain) PrepareRegistration(operator *etherfi.Operator, watchtow
 func (wc *WitnessChain) RegisterOperator(operator *etherfi.Operator, signingKey *ecdsa.PrivateKey) error {
 
 	// generate and sign registration hash with admin ecdsa key
-	signature, err := signer.GenerateAndSignRegistrationDigest(operator.ID, signer.WITNESS_CHAIN, wc.Client, signingKey)
+	signature, err := signer.GenerateAndSignRegistrationDigest(operator, signer.WITNESS_CHAIN, wc.Client, signingKey)
 	if err != nil {
 		return fmt.Errorf("signing registration digest: %w", err)
 	}

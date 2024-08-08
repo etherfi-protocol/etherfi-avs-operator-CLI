@@ -39,8 +39,8 @@ type Config struct {
 
 	// EOracle
 	EOracleRegistryCoordinatorAddress common.Address
-	EOracleRegistryCoordinator        *contracts.EOracleRegistryCoordinator
-	EOracleServiceManagerAddress      common.Address
+	//	EOracleRegistryCoordinator        *contracts.EOracleRegistryCoordinator
+	EOracleServiceManagerAddress common.Address
 
 	// Brevis
 	BrevisRegistryCoordinatorAddress common.Address

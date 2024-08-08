@@ -10,6 +10,8 @@ import (
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/utils"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -80,32 +82,10 @@ func GenerateRegistrationDigest(operatorID int64, salt [32]byte, expiry *big.Int
 	return hash[:], nil
 }
 
-func GenerateAndSignRegistrationDigest(operatorID int64, avs AVS, rpcClient *ethclient.Client, privKey *ecdsa.PrivateKey) (*types.SignatureWithSaltAndExpiry, error) {
+func GenerateAndSignRegistrationDigest(operator *etherfi.Operator, avs AVS, rpcClient *ethclient.Client, privKey *ecdsa.PrivateKey) (*types.SignatureWithSaltAndExpiry, error) {
 
-	// load configuration
-	chainID, err := rpcClient.ChainID(context.Background())
-	if err != nil {
-		return nil, fmt.Errorf("querying chainID from RPC: %w", err)
-	}
-	cfg, err := bindings.ConfigForChain(chainID.Int64())
-	if err != nil {
-		return nil, err
-	}
-
-	// look up operator contract associated with this id and configured ecdsaSigner
-	operatorManagerContract, err := contracts.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
-	if err != nil {
-		return nil, fmt.Errorf("binding operatorManager: %w", err)
-	}
-	operatorAddr, err := operatorManagerContract.AvsOperators(nil, big.NewInt(operatorID))
-	if err != nil {
-		return nil, fmt.Errorf("looking up operator address: %w", err)
-	}
-	operatorContract, err := contracts.NewEtherfiAVSOperator(operatorAddr, rpcClient)
-	if err != nil {
-		return nil, fmt.Errorf("binding operator contract: %w", err)
-	}
-	ecdsaSigner, err := operatorContract.EcdsaSigner(nil)
+	// look up configured ecdsaSigner for this operator
+	ecdsaSigner, err := operator.Contract.EcdsaSigner(nil)
 	if err != nil {
 		return nil, fmt.Errorf("fetching configured ecdsaSigner: %w", err)
 	}
@@ -115,9 +95,9 @@ func GenerateAndSignRegistrationDigest(operatorID int64, avs AVS, rpcClient *eth
 		return nil, fmt.Errorf("gererating random salt: %w", err)
 	}
 	// TODO: revisit what we want the expiration to be
-	expiry := new(big.Int).SetInt64(time.Now().Add(24 * time.Hour * 10).Unix())
+	expiry := new(big.Int).SetInt64(time.Now().Add(24 * time.Hour * 7).Unix())
 
-	hash, err := GenerateRegistrationDigest(operatorID, [32]byte(salt), expiry, avs, rpcClient)
+	hash, err := GenerateRegistrationDigest(operator.ID, [32]byte(salt), expiry, avs, rpcClient)
 	if err != nil {
 		return nil, fmt.Errorf("generating registration digest: %w", err)
 	}
@@ -135,13 +115,10 @@ func GenerateAndSignRegistrationDigest(operatorID int64, avs AVS, rpcClient *eth
 	}
 
 	// sign the digest
-	signed, err := crypto.Sign(hash[:], privKey)
+	signed, err := utils.SignDigestECDSA(hash[:], privKey)
 	if err != nil {
 		return nil, fmt.Errorf("signing digest: %w", err)
 	}
-
-	// account for EIP-155
-	signed[64] += 27
 
 	return &types.SignatureWithSaltAndExpiry{
 		Signature: signed,

@@ -1,24 +1,6 @@
 package main
 
-import (
-	"context"
-	"crypto/ecdsa"
-	"crypto/rand"
-	"encoding/hex"
-	"fmt"
-	"math/big"
-	"os"
-	"time"
-
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/fatih/color"
-	"github.com/urfave/cli/v3"
-)
-
+/*
 var registrationDigestCmd = &cli.Command{
 	Name:   "registration-digest",
 	Usage:  "compute and optionally sign registration digest for registering an operator",
@@ -127,7 +109,7 @@ func registrationDigest(operatorID int64, registryCoordinator common.Address, sh
 		}
 
 		// ensure the provided key matches the ecdsaSigner the operator contract is expecting
-		privateKey, err := crypto.HexToECDSA(os.Getenv("PRIVATE_KEY"))
+		privateKey, err := crypto.HexToECDSA(os.Getenv("ADMIN_1271_SIGNING_KEY"))
 		if err != nil {
 			return fmt.Errorf("invalid private key: %w", err)
 		}
@@ -161,3 +143,4 @@ func registrationDigest(operatorID int64, registryCoordinator common.Address, sh
 
 	return nil
 }
+*/

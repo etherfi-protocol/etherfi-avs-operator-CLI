@@ -16,9 +16,10 @@ type API struct {
 }
 
 type Operator struct {
-	Client  *ethclient.Client
-	Address common.Address
-	ID      int64
+	Client   *ethclient.Client
+	Contract *contracts.EtherfiAVSOperator
+	Address  common.Address
+	ID       int64
 }
 
 func (e API) LookupOperatorByID(operatorID int64) (*Operator, error) {
@@ -28,10 +29,15 @@ func (e API) LookupOperatorByID(operatorID int64) (*Operator, error) {
 	if err != nil {
 		return nil, fmt.Errorf("looking up operator address: %w", err)
 	}
+	contract, err := contracts.NewEtherfiAVSOperator(operatorAddr, e.Client)
+	if err != nil {
+		return nil, fmt.Errorf("binding operator contract: %w", err)
+	}
 
 	return &Operator{
-		Client:  e.Client,
-		Address: operatorAddr,
-		ID:      operatorID,
+		Client:   e.Client,
+		Contract: contract,
+		Address:  operatorAddr,
+		ID:       operatorID,
 	}, nil
 }

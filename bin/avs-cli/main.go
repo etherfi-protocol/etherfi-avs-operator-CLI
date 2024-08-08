@@ -6,31 +6,23 @@ import (
 	"os"
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bin/avs-cli/eigenda"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/bin/avs-cli/eoracle"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bin/avs-cli/witness-chain"
 	"github.com/urfave/cli/v3"
 )
 
 func main() {
 	cmd := &cli.Command{
-		// global flags
-		Flags: []cli.Flag{
-			&cli.StringFlag{
-				Name: "rpc-url",
-			},
-		},
-
-		// operations we want to run for every single command
-		//	Before: before,
 
 		Commands: []*cli.Command{
 			//		registerBLSCmd,
-			registrationDigestCmd,
+			//registrationDigestCmd,
 			registerOperatorCmd,
 			//updateWhitelistCmd,
 			operatorDetailsCmd,
 			updateEcdsaSignerCmd,
 			lagrangeCmd,
-			//			eoracle.EOracleCmd,
+			eoracle.EOracleCmd,
 			eigenda.EigenDACmd,
 			witness.WitnessCmd,
 		},
