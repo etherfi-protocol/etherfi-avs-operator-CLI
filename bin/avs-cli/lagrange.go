@@ -9,8 +9,8 @@ import (
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/gnosis"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/avs/lagrange"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/lagrange"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/urfave/cli/v3"

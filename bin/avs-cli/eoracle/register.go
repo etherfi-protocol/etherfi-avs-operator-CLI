@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/eoracle"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/avs/eoracle"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/urfave/cli/v3"
 )

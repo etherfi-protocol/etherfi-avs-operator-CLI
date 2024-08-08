@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/eigenda"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/avs/eigenda"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/urfave/cli/v3"
 )

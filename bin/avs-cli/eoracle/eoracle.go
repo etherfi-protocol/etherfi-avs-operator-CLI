@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/eoracle"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/avs/eoracle"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/urfave/cli/v3"

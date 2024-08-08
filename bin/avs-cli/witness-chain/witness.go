@@ -6,8 +6,8 @@ import (
 	"os"
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/avs/witnesschain"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/witnesschain"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/urfave/cli/v3"
 )
