@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/brevis"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/eigenda"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/eoracle"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/witness-chain"
@@ -31,6 +32,7 @@ func main() {
 			eoracle.EOracleCmd,
 			eigenda.EigenDACmd,
 			witness.WitnessCmd,
+			brevis.BrevisCmd,
 		},
 	}
 

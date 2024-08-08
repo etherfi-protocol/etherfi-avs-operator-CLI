@@ -1,9 +1,8 @@
-package eoracle
+package brevis
 
 import (
 	"crypto/ecdsa"
 	"fmt"
-	"math/big"
 
 	"github.com/Layr-Labs/eigensdk-go/crypto/bls"
 	"github.com/consensys/gnark-crypto/ecc/bn254"
@@ -17,25 +16,24 @@ import (
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/types"
 )
 
-// API handle for all core eOracle functionality
+// API handle for all core witness chain functionality
 type API struct {
 	Client *ethclient.Client
 
 	RegistryCoordinatorAddress common.Address
 	RegistryCoordinator        *RegistryCoordinator
-	ServiceManagerAddress      common.Address
-	ServiceManager             *ServiceManager
 	AvsOperatorManagerAddress  common.Address
 }
 
 // Info that node operator must supply to the ether.fi admin for registration
 type RegistrationInfo struct {
 	OperatorID                  int64
+	Socket                      string
+	Quorums                     []int64
 	BLSPubkeyRegistrationParams *types.BLSPubkeyRegistrationParams
-	AliasAddress                common.Address
 }
 
-func (a *API) PrepareRegistration(operator *etherfi.Operator, blsKey *bls.KeyPair, alias common.Address) error {
+func (a *API) PrepareRegistration(operator *etherfi.Operator, blsKey *bls.KeyPair, socket string, quorums []int64) error {
 
 	// compute hash to sign with bls key
 	// the hash is converted to a G1 point on the curve before it is returned
@@ -67,39 +65,43 @@ func (a *API) PrepareRegistration(operator *etherfi.Operator, blsKey *bls.KeyPai
 
 	ri := RegistrationInfo{
 		OperatorID:                  operator.ID,
+		Socket:                      socket,
+		Quorums:                     quorums,
 		BLSPubkeyRegistrationParams: signedParams,
-		AliasAddress:                alias,
 	}
-	return utils.ExportJSON("eoracle-prepare-registration", operator.ID, ri)
+	return utils.ExportJSON("brevis-prepare-registration", operator.ID, ri)
 }
 
-func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo, signerKey *ecdsa.PrivateKey, quorums []byte) error {
+func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo, signerKey *ecdsa.PrivateKey) error {
 
 	// generate and sign registration hash to be signed by admin ecdsa key
-	sigWithSaltAndExpiry, err := signer.GenerateAndSignRegistrationDigest(operator, signer.EORACLE, a.Client, signerKey)
+	sigWithSaltAndExpiry, err := signer.GenerateAndSignRegistrationDigest(operator, signer.BREVIS, a.Client, signerKey)
 	if err != nil {
 		return fmt.Errorf("signing registration digest: %w", err)
 	}
 
 	// convert to types expected by contract call
+	quorums := make([]byte, len(info.Quorums))
+	for i, v := range info.Quorums {
+		quorums[i] = byte(v)
+	}
 	sigParams := ISignatureUtilsSignatureWithSaltAndExpiry{
 		Signature: sigWithSaltAndExpiry.Signature,
 		Salt:      sigWithSaltAndExpiry.Salt,
 		Expiry:    sigWithSaltAndExpiry.Expiry,
 	}
-	pubkeyParams := IEOBLSApkRegistryPubkeyRegistrationParams{
+	pubkeyParams := IBLSApkRegistryPubkeyRegistrationParams{
 		PubkeyRegistrationSignature: BN254G1Point(info.BLSPubkeyRegistrationParams.Signature),
-		ChainValidatorSignature:     BN254G1Point{X: big.NewInt(0), Y: big.NewInt(0)}, // not currently used by protocol
 		PubkeyG1:                    BN254G1Point(info.BLSPubkeyRegistrationParams.G1),
 		PubkeyG2:                    BN254G2Point(info.BLSPubkeyRegistrationParams.G2),
 	}
 
 	// manually pack tx data since we are submitting via gnosis instead of directly
-	registryCoordinatorABI, err := RegistryCoordinatorMetaData.GetAbi()
+	coordinatorABI, err := RegistryCoordinatorMetaData.GetAbi()
 	if err != nil {
 		return fmt.Errorf("fetching abi: %w", err)
 	}
-	calldata, err := registryCoordinatorABI.Pack("registerOperator", quorums, pubkeyParams, sigParams)
+	calldata, err := coordinatorABI.Pack("registerOperator", quorums, info.Socket, pubkeyParams, sigParams)
 	if err != nil {
 		return fmt.Errorf("packing input: %w", err)
 	}
@@ -111,6 +113,6 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo
 	}
 
 	// output in gnosis compatible format
-	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("witness-chain-register-watchtower-%d", operator.ID))
-	return utils.ExportJSON("witness-chain-register-gnosis", operator.ID, batch)
+	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("brevis-register-operator-%d", operator.ID))
+	return utils.ExportJSON("brevis-register-gnosis", operator.ID, batch)
 }

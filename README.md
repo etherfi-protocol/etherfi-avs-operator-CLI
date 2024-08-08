@@ -31,6 +31,7 @@ You will be assigned an operatorID and an operator smart contract that is regist
 * [Witness Chain](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI/blob/witness-chain/README.md#witness-chain)
 * [EigenDA](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI/blob/witness-chain/README.md#eigenda)
 * [eOracle](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI/blob/witness-chain/README.md#eoracle)
+* [Brevis](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI/blob/witness-chain/README.md#brevis)
 
 
 ---
@@ -90,11 +91,11 @@ Supply a separate ECDSA key you control for the value of `operator_private_key`
 2. Determine which `quorums` and `socket` you wish to register for
 3. Sign digest establishing ownership of your newly generated BLS key
 
-           ./avs-cli eigenda prepare-registration
+           ./avs-cli eigenda prepare-registration --operator-id {operator_id} --bls-keystore {path_to_keystore} --bls-password {password} --quorums {0,1} --socket {socket}
 
 4. Send the result of the previous command to the ether.fi team via `restaking@ether.fi`
 5. Wait for confirmation from the ether.fi team that your registration is complete
-6. Proceed to run the eOracle node software
+6. Proceed to run the eigenDA node software
 
 ## Ether.fi Admin Flow
 
@@ -104,6 +105,32 @@ Supply a separate ECDSA key you control for the value of `operator_private_key`
            ./avs-cli eigenda register --registration-input eigenda-input.json
 
            // submit resulting output as a gnosis TX via AVS admin gnosis
+
+---
+
+# Brevis
+
+## Operator Flow
+
+1. generate a new BLS keystore using the eigenlayer tooling https://docs.eigenlayer.xyz/eigenlayer/operator-guides/operator-installation#create-keys
+2. Determine which `quorums` and `socket` you wish to register for
+3. Sign digest establishing ownership of your newly generated BLS key
+
+           ./avs-cli brevis prepare-registration --operator-id {operator_id} --bls-keystore {path_to_keystore} --bls-password {password} --quorums {0,1} --socket {socket}
+
+4. Send the result of the previous command to the ether.fi team via `restaking@ether.fi`
+5. Wait for confirmation from the ether.fi team that your registration is complete
+6. Proceed to run the brevis node software
+
+## Ether.fi Admin Flow
+
+1. Recieve prepared registration json file from target node operator
+2. Register the operator contract with eigenda
+
+           ./avs-cli eigenda register --registration-input brevis-input.json
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
+
 
 ---
 
