@@ -14,6 +14,14 @@ import (
 func main() {
 	cmd := &cli.Command{
 
+		// global flags
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:     "rpc-url",
+				Usage:    "rpc url",
+				Required: false,
+			},
+		},
 		Commands: []*cli.Command{
 			//registrationDigestCmd,
 			//updateWhitelistCmd,

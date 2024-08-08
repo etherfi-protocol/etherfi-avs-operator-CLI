@@ -9,8 +9,8 @@ import (
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bindings"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/avs/lagrange"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/config"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/gnosis"
 	"github.com/urfave/cli/v3"
@@ -119,7 +119,7 @@ func lagrangeRegister(
 	if err != nil {
 		return fmt.Errorf("querying chainID from RPC: %w", err)
 	}
-	cfg, err := bindings.ConfigForChain(chainID.Int64())
+	cfg, err := config.ConfigForChain(chainID.Int64())
 	if err != nil {
 		return err
 	}
@@ -215,7 +215,7 @@ func handleLagrangeSubscribe(ctx context.Context, cli *cli.Command) error {
 	if err != nil {
 		return fmt.Errorf("querying chainID from RPC: %w", err)
 	}
-	cfg, err := bindings.ConfigForChain(chainID.Int64())
+	cfg, err := config.ConfigForChain(chainID.Int64())
 	if err != nil {
 		return err
 	}
@@ -223,7 +223,7 @@ func handleLagrangeSubscribe(ctx context.Context, cli *cli.Command) error {
 	return lagrangeSubscribe(operatorID, uint32(rollupChainID), cfg)
 }
 
-func lagrangeSubscribe(operatorID int64, rollupChainID uint32, cfg *bindings.Config) error {
+func lagrangeSubscribe(operatorID int64, rollupChainID uint32, cfg *config.Config) error {
 
 	lagrangeABI, err := lagrange.LagrangeServiceMetaData.GetAbi()
 	if err != nil {

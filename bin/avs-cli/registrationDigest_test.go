@@ -9,7 +9,7 @@ import (
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bindings"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/config"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
 )
 
@@ -21,7 +21,7 @@ func TestValidSignature(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	operatorManagerContract, err := etherfi.NewAvsOperatorManager(bindings.Holesky.AvsOperatorManagerAddress, rpcClient)
+	operatorManagerContract, err := etherfi.NewAvsOperatorManager(config.Holesky.AvsOperatorManagerAddress, rpcClient)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -59,7 +59,7 @@ func TestCalculateDigest(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	operatorManagerContract, err := etherfi.NewAvsOperatorManager(bindings.Holesky.AvsOperatorManagerAddress, rpcClient)
+	operatorManagerContract, err := etherfi.NewAvsOperatorManager(config.Holesky.AvsOperatorManagerAddress, rpcClient)
 	if err != nil {
 		t.Fatal(err)
 	}

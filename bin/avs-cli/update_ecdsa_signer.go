@@ -12,7 +12,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bindings"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/config"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/urfave/cli/v3"
 )
@@ -66,7 +66,7 @@ func updateEcdsaSigner(rpcClient *ethclient.Client, operatorID int64, ecdsaSigne
 	if err != nil {
 		return fmt.Errorf("querying chainID from RPC: %w", err)
 	}
-	cfg, err := bindings.ConfigForChain(chainID.Int64())
+	cfg, err := config.ConfigForChain(chainID.Int64())
 	if err != nil {
 		return err
 	}

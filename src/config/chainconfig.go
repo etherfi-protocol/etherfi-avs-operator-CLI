@@ -1,4 +1,4 @@
-package bindings
+package config
 
 import (
 	"context"
@@ -72,11 +72,13 @@ var Holesky = Config{
 	BeaconEthStrategyAddress: common.HexToAddress("0xbeaC0eeEeeeeEEeEeEEEEeeEEeEeeeEeeEEBEaC0"),
 	WethStrategyAddress:      common.HexToAddress("0x80528D6e9A2BAbFc766965E0E26d5aB08D9CFaF9"),
 
-	AvsOperatorManagerAddress:         common.HexToAddress("0xdf9679e8bfce22ae503fd2726cb1218a18cd8bf4"),
-	EigenDARegistryCoordinatorAddress: common.HexToAddress("0x53012C69A189cfA2D9d29eb6F19B32e0A2EA3490"),
-	EigenDAServiceManagerAddress:      common.HexToAddress("0xD4A7E1Bd8015057293f0D0A557088c286942e84b"),
-	BrevisRegistryCoordinatorAddress:  common.HexToAddress("0x0dB4ceE042705d47Ef6C0818E82776359c3A80Ca"),
-	BrevisServiceManagerAddress:       common.HexToAddress("0x7A46219950d8a9bf2186549552DA35Bf6fb85b1F"),
+	AvsOperatorManagerAddress:           common.HexToAddress("0xdf9679e8bfce22ae503fd2726cb1218a18cd8bf4"),
+	EigenDARegistryCoordinatorAddress:   common.HexToAddress("0x53012C69A189cfA2D9d29eb6F19B32e0A2EA3490"),
+	EigenDAServiceManagerAddress:        common.HexToAddress("0xD4A7E1Bd8015057293f0D0A557088c286942e84b"),
+	BrevisRegistryCoordinatorAddress:    common.HexToAddress("0x0dB4ceE042705d47Ef6C0818E82776359c3A80Ca"),
+	BrevisServiceManagerAddress:         common.HexToAddress("0x7A46219950d8a9bf2186549552DA35Bf6fb85b1F"),
+	WitnessChainOperatorRegistryAddress: common.HexToAddress("0x708CBDDdab358c1fa8efB82c75bB4a116F316Def"),
+	WitnessChainWitnessHubAddress:       common.HexToAddress("0xa987EC494b13b21A8a124F8Ac03c9F530648C87D"),
 }
 
 func ConfigForChain(chainID int64) (*Config, error) {
