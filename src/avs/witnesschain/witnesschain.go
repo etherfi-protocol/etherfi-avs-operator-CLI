@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/avs/signer"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/gnosis"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/gnosis"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/utils"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
