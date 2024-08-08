@@ -28,7 +28,7 @@ func main() {
 			//updateWhitelistCmd,
 			operatorDetailsCmd,
 			updateEcdsaSignerCmd,
-			lagrangeCmd,
+			lagrange.LagrangeCmd,
 			eoracle.EOracleCmd,
 			eigenda.EigenDACmd,
 			witness.WitnessCmd,
