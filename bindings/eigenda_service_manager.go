@@ -1,13 +1,6 @@
 package bindings
 
-import (
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/ethclient"
-
-	servicemanager "github.com/Layr-Labs/eigenda/contracts/bindings/EigenDAServiceManager"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/logging"
-)
-
+/*
 // EigenDAServiceManager is a wrapper around the EigenDAServiceManager contract
 type EigenDAServiceManager interface {
 	RegistryCoordinator() (RegistryCoordinator, error)
@@ -50,3 +43,4 @@ func NewEigenDAServiceManager(contractAddr string, client *ethclient.Client) (Ei
 		contractEigenDAServiceManager: contract,
 	}, nil
 }
+*/

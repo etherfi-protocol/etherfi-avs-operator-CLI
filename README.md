@@ -148,3 +148,5 @@ in the following step
 ### 3. Implement core logic in a new package `src/{my_avs}`
 Please also place any abi's and generated bindings in this package.
 For an example see https://github.com/etherfi-protocol/etherfi-avs-operator-CLI/blob/witness-chain/src/witnesschain/witnesschain.go
+
+### 4. Update readme with registration instructions

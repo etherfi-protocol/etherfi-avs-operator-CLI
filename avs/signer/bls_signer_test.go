@@ -20,7 +20,7 @@ func TestNewAVSSigner(t *testing.T) {
 	blsKeyPair, err := ks.LoadBLS(blsKeyFile, blsKeyPassword)
 	assert.Nil(t, err)
 
-	signer := NewAVSSigner(blsKeyPair)
+	signer := NewBLSSigner(blsKeyPair)
 
 	// Prepare message
 	msg := "hello world"

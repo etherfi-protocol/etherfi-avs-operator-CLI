@@ -35,6 +35,6 @@ func (s *eigenDABLSSigner) Verify(msg *bn254.G1Affine, signature *bn254.G1Affine
 	return bn254.PairingCheck(P[:], Q[:])
 }
 
-func NewAVSSigner(keypair *bls.KeyPair) BLSAvsSigner {
+func NewBLSSigner(keypair *bls.KeyPair) BLSAvsSigner {
 	return &eigenDABLSSigner{keypair: keypair}
 }

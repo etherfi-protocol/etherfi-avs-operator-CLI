@@ -1,16 +1,6 @@
 package bindings
 
-import (
-	"github.com/consensys/gnark-crypto/ecc/bn254"
-	"github.com/consensys/gnark-crypto/ecc/bn254/fp"
-
-	regcoordinator "github.com/Layr-Labs/eigenda/contracts/bindings/RegistryCoordinator"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/ethclient"
-
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/logging"
-)
-
+/*
 // RegisterCoordinator is a wrapper around the RegistryCoordinator contract
 type RegistryCoordinator interface {
 	PubkeyRegistrationMessageHash(operatorAddress common.Address) (*bn254.G1Affine, error)
@@ -55,3 +45,4 @@ func NewRegistryCoordinator(contractAddr common.Address, client *ethclient.Clien
 		contractRegistryCoordinator: coord,
 	}, nil
 }
+*/
