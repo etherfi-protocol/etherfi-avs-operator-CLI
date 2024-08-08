@@ -216,6 +216,11 @@
                 "type": "address"
             },
             {
+                "internalType": "bytes32",
+                "name": "salt",
+                "type": "bytes32"
+            },
+            {
                 "internalType": "uint256",
                 "name": "expiry",
                 "type": "uint256"
@@ -229,7 +234,7 @@
                 "type": "bytes32"
             }
         ],
-        "stateMutability": "pure",
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -276,6 +281,19 @@
         "name": "disableCheckIsDelegatedOperator",
         "outputs": [],
         "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "domainSeperator",
+        "outputs": [
+            {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -431,6 +449,13 @@
     },
     {
         "inputs": [],
+        "name": "pause",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "paused",
         "outputs": [
             {
@@ -461,6 +486,11 @@
                 "internalType": "address",
                 "name": "watchtower",
                 "type": "address"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "salt",
+                "type": "bytes32"
             },
             {
                 "internalType": "uint256",
@@ -551,6 +581,13 @@
         "type": "function"
     },
     {
+        "inputs": [],
+        "name": "unpause",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "internalType": "address",
@@ -579,6 +616,30 @@
         "name": "upgradeToAndCall",
         "outputs": [],
         "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+            }
+        ],
+        "name": "watchtowerSaltUsed",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     }
 ]

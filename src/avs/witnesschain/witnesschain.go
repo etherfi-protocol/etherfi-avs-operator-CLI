@@ -2,6 +2,7 @@ package witnesschain
 
 import (
 	"crypto/ecdsa"
+	"crypto/rand"
 	"encoding/hex"
 	"fmt"
 	"math/big"
@@ -42,7 +43,11 @@ func (wc *WitnessChain) PrepareRegistration(operator *etherfi.Operator, watchtow
 
 	// compute the watchtower registration digest
 	expiry := new(big.Int).SetInt64(time.Now().Add(24 * time.Hour * 10).Unix())
-	registrationDigest, err := wc.OperatorRegistry.CalculateWatchtowerRegistrationMessageHash(nil, operator.Address, expiry)
+	salt := make([]byte, 32)
+	if _, err := rand.Read(salt); err != nil {
+		return fmt.Errorf("gererating random salt: %w", err)
+	}
+	registrationDigest, err := wc.OperatorRegistry.CalculateWatchtowerRegistrationMessageHash(nil, operator.Address, [32]byte(salt), expiry)
 	if err != nil {
 		return fmt.Errorf("calculating watchtower registration digest: %w", err)
 	}
