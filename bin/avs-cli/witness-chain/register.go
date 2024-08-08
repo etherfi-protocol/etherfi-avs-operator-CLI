@@ -47,7 +47,7 @@ func handleWitnessRegister(ctx context.Context, cli *cli.Command) error {
 		return fmt.Errorf("looking up operator address: %w", err)
 	}
 
-	// generate and sign registration hash with admin ecdsa key
+	// load eip-1271 admin signing key
 	signingKey, err := crypto.HexToECDSA(os.Getenv("PRIVATE_KEY"))
 	if err != nil {
 		return fmt.Errorf("invalid private key: %w", err)

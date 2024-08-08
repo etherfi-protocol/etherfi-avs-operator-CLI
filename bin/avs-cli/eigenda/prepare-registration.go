@@ -5,16 +5,8 @@ import (
 	"fmt"
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/keystore"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/types"
 	"github.com/urfave/cli/v3"
 )
-
-type RegistrationInput struct {
-	OperatorID                  int64
-	Socket                      string
-	Quorums                     []int64
-	BLSPubkeyRegistrationParams *types.BLSPubkeyRegistrationParams
-}
 
 var EigenDAPrepareRegistrationCmd = &cli.Command{
 	Name:   "prepare-registration",

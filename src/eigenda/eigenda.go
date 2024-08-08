@@ -1,11 +1,14 @@
 package eigenda
 
 import (
+	"crypto/ecdsa"
 	"fmt"
 
 	"github.com/consensys/gnark-crypto/ecc/bn254"
 	"github.com/consensys/gnark-crypto/ecc/bn254/fp"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/avs/signer"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
+	"github.com/dsrvlabs/etherfi-avs-operator-tool/gnosis"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/utils"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/types"
@@ -79,4 +82,49 @@ func (a *API) PrepareRegistration(operator *etherfi.Operator, blsKey *bls.KeyPai
 		BLSPubkeyRegistrationParams: signedParams,
 	}
 	return utils.ExportJSON("eigenda-prepare-registration", operator.ID, ri)
+}
+
+func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo, signerKey *ecdsa.PrivateKey) error {
+
+	// generate and sign registration hash to be signed by admin ecdsa key
+	sigWithSaltAndExpiry, err := signer.GenerateAndSignRegistrationDigest(operator.ID, signer.EIGEN_DA, a.Client, signerKey)
+	if err != nil {
+		return fmt.Errorf("signing registration digest: %w", err)
+	}
+
+	// convert to types expected by contract call
+	quorums := make([]byte, len(info.Quorums))
+	for i, v := range info.Quorums {
+		quorums[i] = byte(v)
+	}
+	sigParams := contracts.ISignatureUtilsSignatureWithSaltAndExpiry{
+		Signature: sigWithSaltAndExpiry.Signature,
+		Salt:      sigWithSaltAndExpiry.Salt,
+		Expiry:    sigWithSaltAndExpiry.Expiry,
+	}
+	pubkeyParams := contracts.IBLSApkRegistryPubkeyRegistrationParams{
+		PubkeyRegistrationSignature: contracts.BN254G1Point(info.BLSPubkeyRegistrationParams.Signature),
+		PubkeyG1:                    contracts.BN254G1Point(info.BLSPubkeyRegistrationParams.G1),
+		PubkeyG2:                    contracts.BN254G2Point(info.BLSPubkeyRegistrationParams.G2),
+	}
+
+	// manually pack tx data since we are submitting via gnosis instead of directly
+	coordinatorABI, err := registryCoordinator.ContractRegistryCoordinatorMetaData.GetAbi()
+	if err != nil {
+		return fmt.Errorf("fetching abi: %w", err)
+	}
+	calldata, err := coordinatorABI.Pack("registerOperator", quorums, info.Socket, pubkeyParams, sigParams)
+	if err != nil {
+		return fmt.Errorf("packing input: %w", err)
+	}
+
+	// wrap the inner call to be forwarded via AvsOperatorManager
+	adminCall, err := utils.PackForwardCallForAdmin(operator.ID, calldata, a.RegistryCoordinatorAddress)
+	if err != nil {
+		return fmt.Errorf("wrapping call for admin: %w", err)
+	}
+
+	// output in gnosis compatible format
+	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("witness-chain-register-watchtower-%d", operator.ID))
+	return utils.ExportJSON("witness-chain-register-gnosis", operator.ID, batch)
 }

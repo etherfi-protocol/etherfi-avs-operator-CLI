@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/avs/signer"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/gnosis"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/utils"
@@ -120,13 +119,13 @@ func (wc *WitnessChain) RegisterWatchtower(operator *etherfi.Operator, info *Reg
 	}
 
 	// pack operatorRegistry.registerWatchtowerAsOperator()
-	input, err := witnessABI.Pack("registerWatchtowerAsOperator", info.WatchtowerAddress, info.WatchtowerSignatureExpiry, watchtowerSignature)
+	calldata, err := witnessABI.Pack("registerWatchtowerAsOperator", info.WatchtowerAddress, info.WatchtowerSignatureExpiry, watchtowerSignature)
 	if err != nil {
 		return fmt.Errorf("packing input: %w", err)
 	}
 
 	// wrap the inner call to be forwarded via AvsOperatorManager
-	adminCall, err := bindings.PackForwardCallForAdmin(operator.ID, input, wc.OperatorRegistryAddress)
+	adminCall, err := utils.PackForwardCallForAdmin(operator.ID, calldata, wc.OperatorRegistryAddress)
 	if err != nil {
 		return fmt.Errorf("wrapping call for admin: %w", err)
 	}
