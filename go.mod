@@ -1,4 +1,4 @@
-module github.com/dsrvlabs/etherfi-avs-operator-tool
+module github.com/etherfi-protocol/etherfi-avs-operator-tool
 
 go 1.22.0
 

@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bin/avs-cli/eigenda"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bin/avs-cli/eoracle"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bin/avs-cli/witness-chain"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/eigenda"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/eoracle"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/witness-chain"
 	"github.com/urfave/cli/v3"
 )
 

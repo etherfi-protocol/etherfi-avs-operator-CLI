@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/avs/eoracle"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bindings"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/avs/eoracle"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/urfave/cli/v3"
 )
 

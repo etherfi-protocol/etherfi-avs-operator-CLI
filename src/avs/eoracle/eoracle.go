@@ -8,13 +8,13 @@ import (
 	"github.com/Layr-Labs/eigensdk-go/crypto/bls"
 	"github.com/consensys/gnark-crypto/ecc/bn254"
 	"github.com/consensys/gnark-crypto/ecc/bn254/fp"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/avs/signer"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/gnosis"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/utils"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/avs/signer"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/gnosis"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/utils"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/types"
 )
 
 // API handle for all core eOracle functionality

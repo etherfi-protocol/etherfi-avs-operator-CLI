@@ -6,13 +6,13 @@ import (
 
 	"github.com/consensys/gnark-crypto/ecc/bn254"
 	"github.com/consensys/gnark-crypto/ecc/bn254/fp"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/avs/signer"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/gnosis"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/utils"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/avs/signer"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/gnosis"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/utils"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/types"
 
 	// need to alias because eigenlayer has a package name that doesn't match the filepath
 	registryCoordinator "github.com/Layr-Labs/eigenda/contracts/bindings/RegistryCoordinator"

@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
 )
 
 // PackForwardCallForAdmin encloses the provided calldata in a call to AvsOperatorManager.adminForwardCall()

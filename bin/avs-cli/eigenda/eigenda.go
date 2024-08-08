@@ -8,10 +8,10 @@ import (
 	// need to alias because eigenlayer has a package name that doesn't match the filepath
 	registryCoordinator "github.com/Layr-Labs/eigenda/contracts/bindings/RegistryCoordinator"
 
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/avs/eigenda"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bindings"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/avs/eigenda"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/urfave/cli/v3"
 )
 

@@ -7,7 +7,7 @@ import (
 	eigenbn254 "github.com/Layr-Labs/eigensdk-go/crypto/bn254"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/keystore"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/keystore"
 )
 
 func TestNewAVSSigner(t *testing.T) {

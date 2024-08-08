@@ -8,14 +8,14 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/eigenlayer"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/utils"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bindings"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/eigenlayer"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/utils"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/types"
 	"github.com/fatih/color"
 )
 

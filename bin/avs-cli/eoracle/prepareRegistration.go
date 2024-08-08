@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/keystore"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/keystore"
 	"github.com/urfave/cli/v3"
 )
 

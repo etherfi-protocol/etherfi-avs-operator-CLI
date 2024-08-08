@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/avs/witnesschain"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/avs/witnesschain"
 	"github.com/urfave/cli/v3"
 )
 

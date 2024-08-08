@@ -5,9 +5,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/bindings/contracts"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/eigenlayer"
 )
 
 func TestRegistrationEvents(t *testing.T) {
@@ -17,7 +17,7 @@ func TestRegistrationEvents(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	avsDirectory, err := contracts.NewAVSDirectory(common.HexToAddress("0x135DDa560e946695d6f155dACaFC6f1F25C1F5AF"), rpcClient)
+	avsDirectory, err := eigenlayer.NewAvsDirectory(common.HexToAddress("0x135DDa560e946695d6f155dACaFC6f1F25C1F5AF"), rpcClient)
 	if err != nil {
 		t.Fatal(err)
 	}

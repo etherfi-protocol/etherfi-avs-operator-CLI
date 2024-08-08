@@ -8,13 +8,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/avs/signer"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/etherfi"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/gnosis"
-	"github.com/dsrvlabs/etherfi-avs-operator-tool/src/utils"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/avs/signer"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/gnosis"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/utils"
 )
 
 // API handle for all core witness chain functionality
