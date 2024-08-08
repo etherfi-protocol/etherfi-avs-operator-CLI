@@ -35,6 +35,7 @@ type RegistrationInfo struct {
 	WatchtowerAddress         common.Address
 	WatchtowerSignature       string
 	WatchtowerSignatureExpiry *big.Int
+	WatchtowerSignatureSalt   []byte
 }
 
 // PrepareRegistration aggregates all required info from the node operator that
@@ -63,6 +64,7 @@ func (wc *WitnessChain) PrepareRegistration(operator *etherfi.Operator, watchtow
 		WatchtowerAddress:         crypto.PubkeyToAddress(watchtowerKey.PublicKey),
 		WatchtowerSignature:       "0x" + hex.EncodeToString(signed),
 		WatchtowerSignatureExpiry: expiry,
+		WatchtowerSignatureSalt:   salt,
 	}
 
 	return utils.ExportJSON("witnesschain-prepare-registration", operator.ID, ri)
@@ -124,7 +126,7 @@ func (wc *WitnessChain) RegisterWatchtower(operator *etherfi.Operator, info *Reg
 	}
 
 	// pack operatorRegistry.registerWatchtowerAsOperator()
-	calldata, err := witnessABI.Pack("registerWatchtowerAsOperator", info.WatchtowerAddress, info.WatchtowerSignatureExpiry, watchtowerSignature)
+	calldata, err := witnessABI.Pack("registerWatchtowerAsOperator", info.WatchtowerAddress, [32]byte(info.WatchtowerSignatureSalt), info.WatchtowerSignatureExpiry, watchtowerSignature)
 	if err != nil {
 		return fmt.Errorf("packing input: %w", err)
 	}
