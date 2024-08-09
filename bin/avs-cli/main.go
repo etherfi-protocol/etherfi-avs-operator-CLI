@@ -25,7 +25,7 @@ func main() {
 		},
 		Commands: []*cli.Command{
 			//registrationDigestCmd,
-			//updateWhitelistCmd,
+			BlsPubkeyRegistrationHashCmd,
 			operatorDetailsCmd,
 			updateEcdsaSignerCmd,
 			//			lagrange.LagrangeCmd,
