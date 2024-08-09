@@ -12,7 +12,7 @@ import (
 	"github.com/urfave/cli/v3"
 )
 
-var witnessAPI *witnesschain.WitnessChain
+var witnessAPI *witnesschain.API
 var etherfiAPI *etherfi.API
 
 var WitnessCmd = &cli.Command{
@@ -46,24 +46,10 @@ func prepareWitnessChainCmd(ctx context.Context, cmd *cli.Command) error {
 	if err != nil {
 		return fmt.Errorf("loading config: %w", err)
 	}
-	witnessHub, _ := witnesschain.NewWitnessChainWitnessHub(cfg.WitnessChainWitnessHubAddress, rpcClient)
-	operatorRegistry, _ := witnesschain.NewWitnessChainOperatorRegistry(cfg.WitnessChainOperatorRegistryAddress, rpcClient)
-	avsOperatorManager, _ := etherfi.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
 
 	// make globally accessible by all sub commands
-	etherfiAPI = &etherfi.API{
-		Client:                    rpcClient,
-		AvsOperatorManagerAddress: cfg.AvsOperatorManagerAddress,
-		AvsOperatorManager:        avsOperatorManager,
-	}
-	witnessAPI = &witnesschain.WitnessChain{
-		Client:                    rpcClient,
-		OperatorRegistryAddress:   cfg.WitnessChainOperatorRegistryAddress,
-		OperatorRegistry:          operatorRegistry,
-		WitnessHubAddress:         cfg.WitnessChainWitnessHubAddress,
-		WitnessHub:                witnessHub,
-		AvsOperatorManagerAddress: cfg.AvsOperatorManagerAddress,
-	}
+	etherfiAPI = etherfi.New(cfg, rpcClient)
+	witnessAPI = witnesschain.New(cfg, rpcClient)
 
 	return nil
 }

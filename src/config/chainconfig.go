@@ -81,7 +81,7 @@ var Holesky = Config{
 	WitnessChainWitnessHubAddress:       common.HexToAddress("0xa987EC494b13b21A8a124F8Ac03c9F530648C87D"),
 }
 
-func ConfigForChain(chainID int64) (*Config, error) {
+func ConfigForChain(chainID int64) (Config, error) {
 
 	var cfg Config
 	switch chainID {
@@ -90,16 +90,16 @@ func ConfigForChain(chainID int64) (*Config, error) {
 	case 17000:
 		cfg = Holesky
 	default:
-		return nil, fmt.Errorf("unimplemented chain: %d", chainID)
+		return Config{}, fmt.Errorf("unimplemented chain: %d", chainID)
 	}
 
-	return &cfg, nil
+	return cfg, nil
 }
 
-func AutodetectConfig(rpcClient *ethclient.Client) (*Config, error) {
+func AutodetectConfig(rpcClient *ethclient.Client) (Config, error) {
 	chainID, err := rpcClient.ChainID(context.Background())
 	if err != nil {
-		return nil, fmt.Errorf("querying chainID from RPC: %w", err)
+		return Config{}, fmt.Errorf("querying chainID from RPC: %w", err)
 	}
 	return ConfigForChain(chainID.Int64())
 }

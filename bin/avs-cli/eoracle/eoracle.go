@@ -45,24 +45,10 @@ func prepareEoracleCmd(ctx context.Context, cmd *cli.Command) error {
 	if err != nil {
 		return fmt.Errorf("loading config: %w", err)
 	}
-	registryCoordinator, _ := eoracle.NewRegistryCoordinator(cfg.EOracleRegistryCoordinatorAddress, rpcClient)
-	serviceManager, _ := eoracle.NewServiceManager(cfg.EOracleServiceManagerAddress, rpcClient)
-	avsOperatorManager, _ := etherfi.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
 
 	// make globally accessible by all sub commands
-	etherfiAPI = &etherfi.API{
-		Client:                    rpcClient,
-		AvsOperatorManagerAddress: cfg.AvsOperatorManagerAddress,
-		AvsOperatorManager:        avsOperatorManager,
-	}
-	eoracleAPI = &eoracle.API{
-		Client:                     rpcClient,
-		RegistryCoordinatorAddress: cfg.EOracleRegistryCoordinatorAddress,
-		RegistryCoordinator:        registryCoordinator,
-		ServiceManagerAddress:      cfg.EOracleServiceManagerAddress,
-		ServiceManager:             serviceManager,
-		AvsOperatorManagerAddress:  cfg.AvsOperatorManagerAddress,
-	}
+	etherfiAPI = etherfi.New(cfg, rpcClient)
+	eoracleAPI = eoracle.New(cfg, rpcClient)
 
 	return nil
 }

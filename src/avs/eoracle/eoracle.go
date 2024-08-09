@@ -11,6 +11,8 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/avs/signer"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/config"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/eigenlayer"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/gnosis"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/utils"
@@ -21,11 +23,28 @@ import (
 type API struct {
 	Client *ethclient.Client
 
-	RegistryCoordinatorAddress common.Address
 	RegistryCoordinator        *RegistryCoordinator
-	ServiceManagerAddress      common.Address
+	RegistryCoordinatorAddress common.Address
 	ServiceManager             *ServiceManager
+	ServiceManagerAddress      common.Address
 	AvsOperatorManagerAddress  common.Address
+
+	EigenlayerAPI *eigenlayer.API
+}
+
+func New(cfg config.Config, rpcClient *ethclient.Client) *API {
+
+	registryCoordinator, _ := NewRegistryCoordinator(cfg.EOracleRegistryCoordinatorAddress, rpcClient)
+	serviceManager, _ := NewServiceManager(cfg.EOracleServiceManagerAddress, rpcClient)
+
+	return &API{
+		Client:                     rpcClient,
+		RegistryCoordinator:        registryCoordinator,
+		RegistryCoordinatorAddress: cfg.EOracleRegistryCoordinatorAddress,
+		ServiceManager:             serviceManager,
+		ServiceManagerAddress:      cfg.EOracleServiceManagerAddress,
+		EigenlayerAPI:              eigenlayer.New(cfg, rpcClient),
+	}
 }
 
 // Info that node operator must supply to the ether.fi admin for registration
@@ -76,7 +95,7 @@ func (a *API) PrepareRegistration(operator *etherfi.Operator, blsKey *bls.KeyPai
 func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo, signerKey *ecdsa.PrivateKey, quorums []byte) error {
 
 	// generate and sign registration hash to be signed by admin ecdsa key
-	sigWithSaltAndExpiry, err := signer.GenerateAndSignRegistrationDigest(operator, signer.EORACLE, a.Client, signerKey)
+	sigWithSaltAndExpiry, err := a.EigenlayerAPI.GenerateAndSignRegistrationDigest(operator, a.ServiceManagerAddress, signerKey)
 	if err != nil {
 		return fmt.Errorf("signing registration digest: %w", err)
 	}

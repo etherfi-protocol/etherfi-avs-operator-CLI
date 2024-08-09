@@ -6,7 +6,6 @@ import (
 	"os"
 
 	// need to alias because eigenlayer has a package name that doesn't match the filepath
-	registryCoordinator "github.com/Layr-Labs/eigenda/contracts/bindings/RegistryCoordinator"
 
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/avs/eigenda"
@@ -48,21 +47,10 @@ func prepareEigendaCmd(ctx context.Context, cmd *cli.Command) error {
 	if err != nil {
 		return fmt.Errorf("loading config: %w", err)
 	}
-	registryCoordinator, _ := registryCoordinator.NewContractRegistryCoordinator(cfg.EigenDARegistryCoordinatorAddress, rpcClient)
-	avsOperatorManager, _ := etherfi.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
 
 	// make globally accessible by all sub commands
-	etherfiAPI = &etherfi.API{
-		Client:                    rpcClient,
-		AvsOperatorManagerAddress: cfg.AvsOperatorManagerAddress,
-		AvsOperatorManager:        avsOperatorManager,
-	}
-	eigendaAPI = &eigenda.API{
-		Client:                     rpcClient,
-		RegistryCoordinatorAddress: cfg.EigenDARegistryCoordinatorAddress,
-		RegistryCoordinator:        registryCoordinator,
-		AvsOperatorManagerAddress:  cfg.AvsOperatorManagerAddress,
-	}
+	etherfiAPI = etherfi.New(cfg, rpcClient)
+	eigendaAPI = eigenda.New(cfg, rpcClient)
 
 	return nil
 }

@@ -8,12 +8,6 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
-type API struct {
-	Client                    *ethclient.Client
-	AvsOperatorManagerAddress common.Address
-	AvsOperatorManager        *AvsOperatorManager
-}
-
 type Operator struct {
 	Client   *ethclient.Client
 	Contract *AvsOperator

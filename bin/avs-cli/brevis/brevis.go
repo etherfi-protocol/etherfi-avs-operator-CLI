@@ -40,26 +40,15 @@ func prepareBrevisCmd(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("dialing RPC: %w", err)
 	}
 
-	// load all required addresses for this chain and bind applicable contracts
+	// load all required addresses for this chain
 	cfg, err := config.AutodetectConfig(rpcClient)
 	if err != nil {
 		return fmt.Errorf("loading config: %w", err)
 	}
-	registryCoordinator, _ := brevis.NewRegistryCoordinator(cfg.BrevisRegistryCoordinatorAddress, rpcClient)
-	avsOperatorManager, _ := etherfi.NewAvsOperatorManager(cfg.AvsOperatorManagerAddress, rpcClient)
 
 	// make globally accessible by all sub commands
-	etherfiAPI = &etherfi.API{
-		Client:                    rpcClient,
-		AvsOperatorManagerAddress: cfg.AvsOperatorManagerAddress,
-		AvsOperatorManager:        avsOperatorManager,
-	}
-	brevisAPI = &brevis.API{
-		Client:                     rpcClient,
-		RegistryCoordinatorAddress: cfg.BrevisRegistryCoordinatorAddress,
-		RegistryCoordinator:        registryCoordinator,
-		AvsOperatorManagerAddress:  cfg.AvsOperatorManagerAddress,
-	}
+	etherfiAPI = etherfi.New(cfg, rpcClient)
+	brevisAPI = brevis.New(cfg, rpcClient)
 
 	return nil
 }

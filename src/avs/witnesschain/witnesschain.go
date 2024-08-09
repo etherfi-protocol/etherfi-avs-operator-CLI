@@ -11,21 +11,45 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/etherfi-protocol/etherfi-avs-operator-tool/avs/signer"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/config"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/eigenlayer"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/gnosis"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/utils"
 )
 
 // API handle for all core witness chain functionality
-type WitnessChain struct {
+type API struct {
 	Client *ethclient.Client
 
-	OperatorRegistryAddress   common.Address
 	OperatorRegistry          *WitnessChainOperatorRegistry
-	WitnessHubAddress         common.Address
+	OperatorRegistryAddress   common.Address
 	WitnessHub                *WitnessChainWitnessHub
+	WitnessHubAddress         common.Address
+	ServiceManagerAddress     common.Address
 	AvsOperatorManagerAddress common.Address
+
+	EigenlayerAPI *eigenlayer.API
+}
+
+func New(cfg config.Config, rpcClient *ethclient.Client) *API {
+
+	operatorRegistry, _ := NewWitnessChainOperatorRegistry(cfg.WitnessChainOperatorRegistryAddress, rpcClient)
+	witnessHub, _ := NewWitnessChainWitnessHub(cfg.WitnessChainWitnessHubAddress, rpcClient)
+
+	return &API{
+		Client: rpcClient,
+
+		OperatorRegistry:          operatorRegistry,
+		OperatorRegistryAddress:   cfg.WitnessChainOperatorRegistryAddress,
+		WitnessHub:                witnessHub,
+		WitnessHubAddress:         cfg.WitnessChainWitnessHubAddress,
+		AvsOperatorManagerAddress: cfg.AvsOperatorManagerAddress,
+		EigenlayerAPI:             eigenlayer.New(cfg, rpcClient),
+
+		// witnessHub serves as the ServiceManager for this AVS
+		ServiceManagerAddress: cfg.WitnessChainWitnessHubAddress,
+	}
 }
 
 // Info that node operator must supply to the ether.fi admin for registration
@@ -38,7 +62,7 @@ type RegistrationInfo struct {
 
 // PrepareRegistration aggregates all required info from the node operator that
 // the ether.fi admin will need to register them to the Witness Chain AVS
-func (wc *WitnessChain) PrepareRegistration(operator *etherfi.Operator, watchtowerKey *ecdsa.PrivateKey) error {
+func (wc *API) PrepareRegistration(operator *etherfi.Operator, watchtowerKey *ecdsa.PrivateKey) error {
 
 	// compute the watchtower registration digest
 	expiry := new(big.Int).SetInt64(time.Now().Add(24 * time.Hour * 10).Unix())
@@ -65,10 +89,10 @@ func (wc *WitnessChain) PrepareRegistration(operator *etherfi.Operator, watchtow
 
 // RegisterOperator is used by the ether.fi admin to register a node operator's AvsOperator contract
 // with the Witness Chain AVS.
-func (wc *WitnessChain) RegisterOperator(operator *etherfi.Operator, signingKey *ecdsa.PrivateKey) error {
+func (wc *API) RegisterOperator(operator *etherfi.Operator, signingKey *ecdsa.PrivateKey) error {
 
 	// generate and sign registration hash with admin ecdsa key
-	signature, err := signer.GenerateAndSignRegistrationDigest(operator, signer.WITNESS_CHAIN, wc.Client, signingKey)
+	signature, err := wc.EigenlayerAPI.GenerateAndSignRegistrationDigest(operator, wc.ServiceManagerAddress, signingKey)
 	if err != nil {
 		return fmt.Errorf("signing registration digest: %w", err)
 	}
@@ -101,7 +125,7 @@ func (wc *WitnessChain) RegisterOperator(operator *etherfi.Operator, signingKey 
 	return utils.ExportJSON("witness-chain-register-gnosis", operator.ID, batch)
 }
 
-func (wc *WitnessChain) RegisterWatchtower(operator *etherfi.Operator, info *RegistrationInfo) error {
+func (wc *API) RegisterWatchtower(operator *etherfi.Operator, info *RegistrationInfo) error {
 
 	// parse watchtower signature
 	if strings.HasPrefix(info.WatchtowerSignature, "0x") {
@@ -132,5 +156,5 @@ func (wc *WitnessChain) RegisterWatchtower(operator *etherfi.Operator, info *Reg
 
 	// output in gnosis compatible format
 	batch := gnosis.NewSingleTxBatch(adminCall, wc.AvsOperatorManagerAddress, fmt.Sprintf("witness-chain-register-watchtower-%d", operator.ID))
-	return utils.ExportJSON("witness-chain-register-gnosis", operator.ID, batch)
+	return utils.ExportJSON("witness-chain-register-watchtower-gnosis", operator.ID, batch)
 }
