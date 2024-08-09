@@ -10,12 +10,12 @@ import (
 	"github.com/consensys/gnark-crypto/ecc/bn254/fp"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/etherfi-protocol/etherfi-avs-operator-tool/avs/signer"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/config"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/eigenlayer"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/gnosis"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/utils"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/utils/signer"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/types"
 )
 
