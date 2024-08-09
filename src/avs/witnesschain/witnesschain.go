@@ -139,5 +139,5 @@ func (wc *WitnessChain) RegisterWatchtower(operator *etherfi.Operator, info *Reg
 
 	// output in gnosis compatible format
 	batch := gnosis.NewSingleTxBatch(adminCall, wc.AvsOperatorManagerAddress, fmt.Sprintf("witness-chain-register-watchtower-%d", operator.ID))
-	return utils.ExportJSON("witness-chain-register-gnosis", operator.ID, batch)
+	return utils.ExportJSON("witness-chain-register-watchtower-gnosis", operator.ID, batch)
 }

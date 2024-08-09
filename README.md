@@ -42,11 +42,12 @@ In order to run the witnesschain node software you will need to register a watch
 
 ### registering operator + watchtower on L1
 
-1. Generate a new ECDSA keypair that will be associated with a witness chain "Watchtower"
-2. Sign required inputs for registering watchtower
+1. Generate a new ECDSA keypair `watchtower_private_key` that will be associated with a WitnessChain "Watchtower"
+2. Generate another ECDSA keypair `operator_private_Key` that will be used in the L1 + L2 config files when running WitnessChain node software
+3. Sign required inputs for registering watchtower
 
-        // Expose the private key generated above as an environment variable
-        export WATCHTOWER_PRIVATE_KEY={MY_PRIVATE_KEY}
+        // Expose the watchtower key generated above as an environment variable
+        export WATCHTOWER_PRIVATE_KEY={watchtower_private_key}
 
         // Sign 
         ./avs-cli witness-chain prepare-registration --rpc-url $RPC_URL --operator-id {operator_id}
@@ -58,8 +59,9 @@ In order to run the witnesschain node software you will need to register a watch
 ### registering watchtower on L2
 
 1. Follow the steps at https://docs.witnesschain.com/rollup-watchtower-network-live/for-the-node-operators/watchtower-setup/mainnet-setup#step-3.3-registering-the-watchtowers-on-witnesschain-mainnet-l2
+to register your watchtower on the L2.
 
-Supply a separate ECDSA key you control for the value of `operator_private_key`
+In your config files be sure to use the same `watchtower_private_key` and `operator_private_key` as you used above
 
 2. Notify the ether.fi team that you have completed registration and begin to run witnesschain node software
     
