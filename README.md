@@ -1,5 +1,191 @@
 # etherfi-avs-operator-CLI
 
+
+## Build
+
+```bash
+make build
+```
+
+## Run
+
+```bash
+./avs-cli
+```
+
+---
+
+# AVS Registration
+
+### Prerequisites
+- Etherereum RPC endpoint to send transactions.
+
+
+## Step 1: Request ether.fi team to be registered as a Delegated AVS operator
+
+You will be assigned an operatorID and an operator smart contract that is registered with eigenlayeer
+- `operatorId`: AVS operator ID assigned by ether.fi team.
+- `operatorAddress`: Eigenlayer operator address, which is managed by ether.fi team.
+
+## Step 2: Follow the instructions for the specific AVS you are registering for
+* [Witness Chain](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI/blob/witness-chain/README.md#witness-chain)
+* [EigenDA](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI/blob/witness-chain/README.md#eigenda)
+* [eOracle](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI/blob/witness-chain/README.md#eoracle)
+* [Brevis](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI/blob/witness-chain/README.md#brevis)
+
+
+---
+
+# Witness Chain
+
+## Operator Flow
+In order to run the witnesschain node software you will need to register a watchtower on both mainnet and their L2
+
+### registering operator + watchtower on L1
+
+1. Generate a new ECDSA keypair that will be associated with a witness chain "Watchtower"
+2. Sign required inputs for registering watchtower
+
+        // Expose the private key generated above as an environment variable
+        export WATCHTOWER_PRIVATE_KEY={MY_PRIVATE_KEY}
+
+        // Sign 
+        ./avs-cli witness-chain prepare-registration --rpc-url $RPC_URL --operator-id {operator_id}
+
+3. Send the json output of the above command to `restaking@ether.fi`
+4. Wait for confirmation from ether.fi team that L1 registration is complete
+5. Proceed to L2 watchtower registration below
+
+### registering watchtower on L2
+
+1. Follow the steps at https://docs.witnesschain.com/rollup-watchtower-network-live/for-the-node-operators/watchtower-setup/mainnet-setup#step-3.3-registering-the-watchtowers-on-witnesschain-mainnet-l2
+
+Supply a separate ECDSA key you control for the value of `operator_private_key`
+
+2. Notify the ether.fi team that you have completed registration and begin to run witnesschain node software
+    
+
+## Ether.fi Admin Flow
+
+1. Request WitnessChain team to whitelist target Operator contract
+2. Recieve prepared registration json file from target node operator
+3. Register the operator contract with witness chain
+
+           ./avs-cli witness-chain register --registration-input witness-input.json --rpc-url $RPC_URL
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
+
+5. Register the watchtower on L1
+
+           ./avs-cli witness-chain register-watchtower --registration-input witness-input.json
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
+
+---
+
+# EigenDA
+
+## Operator Flow
+
+1. generate a new BLS keystore using the eigenlayer tooling https://docs.eigenlayer.xyz/eigenlayer/operator-guides/operator-installation#create-keys
+2. Determine which `quorums` and `socket` you wish to register for
+3. Sign digest establishing ownership of your newly generated BLS key
+
+           ./avs-cli eigenda prepare-registration --operator-id {operator_id} --bls-keystore {path_to_keystore} --bls-password {password} --quorums {0,1} --socket {socket}
+
+4. Send the result of the previous command to the ether.fi team via `restaking@ether.fi`
+5. Wait for confirmation from the ether.fi team that your registration is complete
+6. Proceed to run the eigenDA node software
+
+## Ether.fi Admin Flow
+
+1. Recieve prepared registration json file from target node operator
+2. Register the operator contract with eigenda
+
+           ./avs-cli eigenda register --registration-input eigenda-input.json
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
+
+---
+
+# Brevis
+
+## Operator Flow
+
+1. generate a new BLS keystore using the eigenlayer tooling https://docs.eigenlayer.xyz/eigenlayer/operator-guides/operator-installation#create-keys
+2. Determine which `quorums` and `socket` you wish to register for
+3. Sign digest establishing ownership of your newly generated BLS key
+
+           ./avs-cli brevis prepare-registration --operator-id {operator_id} --bls-keystore {path_to_keystore} --bls-password {password} --quorums {0,1} --socket {socket}
+
+4. Send the result of the previous command to the ether.fi team via `restaking@ether.fi`
+5. Wait for confirmation from the ether.fi team that your registration is complete
+6. Proceed to run the brevis node software
+
+## Ether.fi Admin Flow
+
+1. Recieve prepared registration json file from target node operator
+2. Register the operator contract with eigenda
+
+           ./avs-cli eigenda register --registration-input brevis-input.json
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
+
+
+---
+
+# eOracle
+
+## Operator Flow
+
+1. generate and encrypt a new BLS keystore using the eOracle tooling https://eoracle.gitbook.io/eoracle/operators/registration#generate-a-bls-pair-recommended
+2. generate a new ECDSA key pair to serve as your `aliasAddress`
+3. Sign digest establishing ownership of your newly generated BLS key
+
+           ./avs-cli eoracle prepare-registration --operator-id 12 --bls-keystore {path_to_keystore} --bls-password {keystore_password} --alias-address {alias_address}
+
+4. Send the result of the previous command to the ether.fi team via `restaking@ether.fi`
+5. Wait for confirmation from the ether.fi team that your registration is complete
+6. Proceed to run the eigenda node software
+
+## Ether.fi Admin Flow
+
+1. Recieve prepared registration json file from target node operator
+2. Register the operator contract with eoracle
+
+           ./avs-cli eoracle register --registration-input eoracle-input.json
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
+
+---
+
+# Adding a new AVS to the CLI
+
+### 1. Understand the complete registration flow for the AVS you are adding
+Ether.fi utilizes a contract based operator alongside EIP-1271 signing. Most AVS's do not support this
+out of the box. Please confirm that their contracts will be compatible with this scheme.
+Many AVS's also utilize different styles of keys/signatures and different numbers of them and even multiple chains.
+Figure out which actions need to be taken by the individual node operators and which need to be 
+done by an ether.fi admin with the EIP-1271 signing key.
+Please take the time to open a PR against https://github.com/etherfi-protocol/avs-smart-contracts/tree/witness-chain
+with a test walking through the entire registration flow. You can find an example here https://github.com/etherfi-protocol/avs-smart-contracts/blob/witness-chain/test/WitnessChain.t.sol
+
+### 2. Add a new command for your avs to `bin/avs-cli/main.go`
+Add your top level command to this file and then implement subcommands in their own package.
+For an example see https://github.com/etherfi-protocol/etherfi-avs-operator-CLI/tree/witness-chain/bin/avs-cli/witness-chain
+The CLI command should be a simple wrapper that forwards data to the package you implement
+in the following step
+
+### 3. Implement core logic in a new package `src/avs/{my_avs}`
+Please also place any abi's and generated bindings in this package.
+For an example see https://github.com/etherfi-protocol/etherfi-avs-operator-CLI/blob/witness-chain/src/witnesschain/witnesschain.go
+
+### 4. Update readme with registration instructions
+
+
+---------------------------------------------------------------------
+
+
 ## Contracts
 - Code
   - https://github.com/etherfi-protocol/smart-contracts/blob/syko/feature/etherfi_avs_operator/src/EtherFiAvsOperatorsManager.sol
@@ -8,173 +194,6 @@
   - Mainnet: 0x2093Bbb221f1d8C7c932c32ee28Be6dEe4a37A6a
   - Holesky: 0xdf9679e8bfce22ae503fd2726cb1218a18cd8bf4
 
-## Prerequisites as AVS operator
-
-- Environment file for expected ENV variables(See sample.env).
-- BLS key file which is used for AVS operation.
-- a wallet (EOA or gnosis safe) to interact with ether.fi AVS operator contracts.
-- Etherereum RPC endpoint to send transactions.
-
-## Scenario
-
-1. AVS operators prepare their BLS and a wallet (EOA or gnosis safe).
-2. ether.fi team registers the AVS operator's wallet address as Delegated AVS operator (or AVS runner).
-3. AVS operators register their BLS key to `EtherFiAvsOperator' contract.
-4. ether.fi team trigger `registerOperator` function with their ECDSA signature to register the node to the AVS.
-
-## Build
-
-Simply run `make build` to build the binary. The binary will be placed in the `dist` directory.
-
-```bash
-~$ make build
-~$ tree dist
-dist
-└── etherfi
-```
-
-
-## Workflows
-
-### Step 1: Request ether.fi team to be registered as a Delegated AVS operator
-
-Request to ether.fi team to register your wallet address as delegated AVS operator.
-Then, ether.fi team will register submitted account to `EtherFiAvsOperatorManager` contract.
-
-After ether.fi team register the information, delegted AVS operator should have the following information.
-- `operatorId`: AVS operator ID assigned by ether.fi team.
-- `operatorAddress`: Eigenlayer operator address, which is managed by ether.fi team.
-
-### Step 2: Request ether.fi team to whitelist the target AVSs
-- the target AVS
-- `operatorId`
-- `registryCoordinator`: the address of the RegistryCoordinator contract of the target AVS
-You can request, but ether.fi might not be able to whitelist because of security & constraints
-
-### Step 3: Create BLS signature
-
-If *delegated AVS operator* decide to opt-in to AVS through ether.fi contract,
-delegated AVS operator should submit BLS signature to `EtherFiAvsOperator` contract.
-
-The AVS operator should create BLS signature using BLS key file.
-To create BLS signaure, *service manager* address is required,
-which is provided by [AVS Dashboard](https://app.eigenlayer.xyz/avs/0x870679e138bcdf293b7ff14dd44b70fc97e12fc0).
-
-You can find your `eigenlayer-operator` at https://app.eigenlayer.xyz/operator by 'ether.fi-${operatorId}'
-
-If all the required information is ready, then run the following command to create BLS signature.
-
-```bash
-~$ ./dist/etherfi create-bls-signature \
-  --bls-key-file "<Key Filepath>" \
-  --bls-key-password "<Key password>" \
-  --service-manager "<Service Manager Address of AVS>" \
-  --eigenlayer-operator "<Address of Eigenlayer Operator>" \
-  --rpc "<Ethereum RPC Endpoint>"
-```
-
-Example of the command like below.
-
-```bash
-~$ ./dist/etherfi create-bls-signature \
-  --bls-key-file "./keystore/fixtures/fixture.bls.json" \
-  --bls-key-password "password@1234" \
-  --service-manager "0xd4a7e1bd8015057293f0d0a557088c286942e84b" \
-  --eigenlayer-operator "0x53F69255A16E6a924665EB839f2730bFF01BE7D8" \
-  --rpc https://ethereum-holesky-rpc.publicnode.com
-```
-
-If the command is successful, then the BLS signature file will be created in the current directory.
-
-```bash
-~$ cat b1585827df842b01be31601d3b09fa094a40a59a2bd67e1a1cf8fad52a8bad86.json | jq .
-{
-  "g1": {
-    "x": "11309115092513905692011766794268611533060860132450390416706713417007017003290",
-    "y": "10099038639465945853355841479849128282561908322481975349946661108792552165464"
-  },
-  "g2": {
-    "x": [
-      "9999874916423263486182869108140729809350389216313891965609964113333324489295",
-      "1748646664750896244090849000611144921186133596533213003220432661350444049387"
-    ],
-    "y": [
-      "12385645521204038946454065367448594647484214586612685207057210041675620555895",
-      "11847573064610017387949012476285891282019683730026575197328924744021789701473"
-    ]
-  },
-  "signature": {
-    "x": "20492878901239690531093557663058547107183361356438727967873867738966365432584",
-    "y": "13238159785824621533432502787105333225248656315234010974670933048183046701631"
-  }
-}
-```
-
-### Step 4: Register BLS signature
-
-The BLS signature file created on the previous step should be registered on-chain.
-
-```bash
-~$ ./dist/etherfi register-bls \
-		--bls-signature-file "<BLS signature file created on the previous stpe>" \
-		--operator-id <Deleted AVS Operator ID assigned by ether.fi> \
-		--registry-coordinator <RegistryCoordinator of AVS> \
-		--quorum-numbers <Quorum code, 0> \
-		--socket "not yet decided" \
-		--broadcast \
-		--chain-id <Chain ID, 1: mainnet, 17000: holesky>
-```
-
-Example of the command like below.
-
-```bash
-
-#!/bin/bash
-source .env
-
-~$ ./dist/etherfi register-bls \
-		--bls-signature-file "b1585827df842b01be31601d3b09fa094a40a59a2bd67e1a1cf8fad52a8bad86.json" \
-		--operator-id 1 \
-		--registry-coordinator "0x0BAAc79acD45A023E19345c352d8a7a83C4e5656" \
-		--quorum-numbers 0x0000 \
-		--socket "not yet decided" \
-		--broadcast \
-		--chain-id 17000
-
-~$ bash register_eigenda.sh
-raw tx: b9027802f902748242680d8404906e0385010e48ff858301d2cd94df9679e8bfce22ae503fd2726cb1218a18cd8bf480b90204c74e7ae5000000000000000000000000000000000000000000000000000000000000000100000000000000000000000053012c69a189cfa2d9d29eb6f19b32e0a2ea3490000000000000000000000000000000000000000000000000000000000000018000000000000000000000000000000000000000000000000000000000000001c0304bc6600485c4c85e020f5f2ce1bde9fec6df8b02b7cda506cecf2fc9e69cce163cfd445e4da14a229e1fa771dc84577b637aacfbff373fff80f9b29113f47c1a8ce2b5d15f311972826258f59e0edad1d5880f48dfc18f4a9d25d1601ccc240507c97e361ef729d74db6f03762cbdb3b3b2dcb0a4d6fb5af81db0162cc6a650c65fb0713560e5c4aca8f1f113579d80116f12c5b365ab0a1a57ca69b875493238a86dc749e842699a945028e361ff7a648589cee7ae4067fe7224db2d070b727c253813f2db2a1055dbf60745f831dee11890366f5bc5c9518bb642a899ba62e4f6e4f0829b13a3b48de33070ad43f6bcf4e143dc9d76feea05c2e6d0187f700000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f6e6f742079657420646563696465640000000000000000000000000000000000c080a087d531c1181ddef62ecaa53a9383502bd9ffa179ed8524ce66cd781beb78bb6fa04f7b6316bea822c764470adba68bd59f27deff91fc63b8bf268e1a8386896fd1
-```
-
-### Step 5: registerOperator (by ether.fi team)
-
-After all the above steps are completed,
-ether.fi team should trigger `registerOperator` function to register BLS key which is submitted by AVS operator after signing with their ECDSA key.
-
-```bash
-#!/bin/bash
-source .env
-
-~$ ./dist/etherfi register-operator \
-        --operator-id 1 \
-        --registry-coordinator 0x0dB4ceE042705d47Ef6C0818E82776359c3A80Ca \
-        --signature 0x79f529ba4257af48865fcec577fd08a506e9aa7f38cc727a674301682c8b40a20fa28b13cde6127b98079366edf5c603aba582fa90a1c3b2847cfb96d8a94df21c \
-        --salt 0xbd320e070eceae61901e284e73b45355833172dc8fa97cc2fe10a76660aa97a8 \
-        --expiry 1744684487 \
-        --chain-id 17000
-```
-
-### Update Whitelist (by ether.fi team)
-
-```bash
-#!/bin/bash
-source .env
-
-~$ ./dist/etherfi register-operator \
-        --operator-id 1 \
-        --registry-coordinator 0x0dB4ceE042705d47Ef6C0818E82776359c3A80Ca \
-        --is-whitelisted true \
-        --chain-id 17000
-```
-
-## Ref.
+## References.
 - [on-chain “operator” as a contract](https://etherfi.notion.site/Node-Operator-on-chain-operator-as-a-contract-9e86d3390a9e45df8c088d0c283a7dd1)
+
