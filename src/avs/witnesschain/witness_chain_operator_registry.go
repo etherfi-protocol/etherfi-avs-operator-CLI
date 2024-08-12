@@ -31,7 +31,7 @@ var (
 
 // WitnessChainOperatorRegistryMetaData contains all meta data concerning the WitnessChainOperatorRegistry contract.
 var WitnessChainOperatorRegistryMetaData = &bind.MetaData{
-	ABI: "[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"previousAdmin\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"newAdmin\",\"type\":\"address\"}],\"name\":\"AdminChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"beacon\",\"type\":\"address\"}],\"name\":\"BeaconUpgraded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"version\",\"type\":\"uint8\"}],\"name\":\"Initialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"blockNumber\",\"type\":\"uint256\"}],\"name\":\"OperatorSuspended\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address[]\",\"name\":\"operator\",\"type\":\"address[]\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"blockNumber\",\"type\":\"uint256\"}],\"name\":\"OperatorsWhiteListed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"Paused\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"Unpaused\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"implementation\",\"type\":\"address\"}],\"name\":\"Upgraded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"watchtower\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"blockNumber\",\"type\":\"uint256\"}],\"name\":\"WatchtowerDeRegisteredFromOperator\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"watchtower\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"blockNumber\",\"type\":\"uint256\"}],\"name\":\"WatchtowerRegisteredToOperator\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"operatorsList\",\"type\":\"address[]\"}],\"name\":\"addToOperatorWhitelist\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"expiry\",\"type\":\"uint256\"}],\"name\":\"calculateWatchtowerRegistrationMessageHash\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"checkIsDelegatedOperator\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"watchtowerAddress\",\"type\":\"address\"}],\"name\":\"deRegister\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"delegationManagerAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"disableCheckIsDelegatedOperator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"enableCheckIsDelegatedOperator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getAllActiveOperators\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"watchtower\",\"type\":\"address\"}],\"name\":\"getOperator\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_delegationManagerAddress\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_slasherAddress\",\"type\":\"address\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"}],\"name\":\"isActiveOperator\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"watchtower\",\"type\":\"address\"}],\"name\":\"isValidWatchtower\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"}],\"name\":\"isWhitelisted\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"operatorDetails\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"operatorAddress\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"isActive\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"paused\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"proxiableUUID\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"watchtower\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"expiry\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signedMessage\",\"type\":\"bytes\"}],\"name\":\"registerWatchtowerAsOperator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_delegationManagerAddress\",\"type\":\"address\"}],\"name\":\"setDelegationManagerAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_slasherAddress\",\"type\":\"address\"}],\"name\":\"setSlasherAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"slasherAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"operatorAddress\",\"type\":\"address\"}],\"name\":\"suspend\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newImplementation\",\"type\":\"address\"}],\"name\":\"upgradeTo\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newImplementation\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"upgradeToAndCall\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"}]",
+	ABI: "[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"previousAdmin\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"newAdmin\",\"type\":\"address\"}],\"name\":\"AdminChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"beacon\",\"type\":\"address\"}],\"name\":\"BeaconUpgraded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"version\",\"type\":\"uint8\"}],\"name\":\"Initialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"blockNumber\",\"type\":\"uint256\"}],\"name\":\"OperatorSuspended\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address[]\",\"name\":\"operator\",\"type\":\"address[]\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"blockNumber\",\"type\":\"uint256\"}],\"name\":\"OperatorsWhiteListed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"Paused\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"Unpaused\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"implementation\",\"type\":\"address\"}],\"name\":\"Upgraded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"watchtower\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"blockNumber\",\"type\":\"uint256\"}],\"name\":\"WatchtowerDeRegisteredFromOperator\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"watchtower\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"blockNumber\",\"type\":\"uint256\"}],\"name\":\"WatchtowerRegisteredToOperator\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"operatorsList\",\"type\":\"address[]\"}],\"name\":\"addToOperatorWhitelist\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"expiry\",\"type\":\"uint256\"}],\"name\":\"calculateWatchtowerRegistrationMessageHash\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"checkIsDelegatedOperator\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"watchtowerAddress\",\"type\":\"address\"}],\"name\":\"deRegister\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"delegationManagerAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"disableCheckIsDelegatedOperator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"domainSeperator\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"enableCheckIsDelegatedOperator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getAllActiveOperators\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"watchtower\",\"type\":\"address\"}],\"name\":\"getOperator\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_delegationManagerAddress\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_slasherAddress\",\"type\":\"address\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"}],\"name\":\"isActiveOperator\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"watchtower\",\"type\":\"address\"}],\"name\":\"isValidWatchtower\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"}],\"name\":\"isWhitelisted\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"operatorDetails\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"operatorAddress\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"isActive\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pause\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"paused\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"proxiableUUID\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"watchtower\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"expiry\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signedMessage\",\"type\":\"bytes\"}],\"name\":\"registerWatchtowerAsOperator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_delegationManagerAddress\",\"type\":\"address\"}],\"name\":\"setDelegationManagerAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_slasherAddress\",\"type\":\"address\"}],\"name\":\"setSlasherAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"slasherAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"operatorAddress\",\"type\":\"address\"}],\"name\":\"suspend\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"unpause\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newImplementation\",\"type\":\"address\"}],\"name\":\"upgradeTo\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newImplementation\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"upgradeToAndCall\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"name\":\"watchtowerSaltUsed\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
 }
 
 // WitnessChainOperatorRegistryABI is the input ABI used to generate the binding from.
@@ -180,12 +180,12 @@ func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistryTransactorRaw) 
 	return _WitnessChainOperatorRegistry.Contract.contract.Transact(opts, method, params...)
 }
 
-// CalculateWatchtowerRegistrationMessageHash is a free data retrieval call binding the contract method 0x45adeda0.
+// CalculateWatchtowerRegistrationMessageHash is a free data retrieval call binding the contract method 0xae103725.
 //
-// Solidity: function calculateWatchtowerRegistrationMessageHash(address operator, uint256 expiry) pure returns(bytes32)
-func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistryCaller) CalculateWatchtowerRegistrationMessageHash(opts *bind.CallOpts, operator common.Address, expiry *big.Int) ([32]byte, error) {
+// Solidity: function calculateWatchtowerRegistrationMessageHash(address operator, bytes32 salt, uint256 expiry) view returns(bytes32)
+func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistryCaller) CalculateWatchtowerRegistrationMessageHash(opts *bind.CallOpts, operator common.Address, salt [32]byte, expiry *big.Int) ([32]byte, error) {
 	var out []interface{}
-	err := _WitnessChainOperatorRegistry.contract.Call(opts, &out, "calculateWatchtowerRegistrationMessageHash", operator, expiry)
+	err := _WitnessChainOperatorRegistry.contract.Call(opts, &out, "calculateWatchtowerRegistrationMessageHash", operator, salt, expiry)
 
 	if err != nil {
 		return *new([32]byte), err
@@ -197,18 +197,18 @@ func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistryCaller) Calcula
 
 }
 
-// CalculateWatchtowerRegistrationMessageHash is a free data retrieval call binding the contract method 0x45adeda0.
+// CalculateWatchtowerRegistrationMessageHash is a free data retrieval call binding the contract method 0xae103725.
 //
-// Solidity: function calculateWatchtowerRegistrationMessageHash(address operator, uint256 expiry) pure returns(bytes32)
-func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistrySession) CalculateWatchtowerRegistrationMessageHash(operator common.Address, expiry *big.Int) ([32]byte, error) {
-	return _WitnessChainOperatorRegistry.Contract.CalculateWatchtowerRegistrationMessageHash(&_WitnessChainOperatorRegistry.CallOpts, operator, expiry)
+// Solidity: function calculateWatchtowerRegistrationMessageHash(address operator, bytes32 salt, uint256 expiry) view returns(bytes32)
+func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistrySession) CalculateWatchtowerRegistrationMessageHash(operator common.Address, salt [32]byte, expiry *big.Int) ([32]byte, error) {
+	return _WitnessChainOperatorRegistry.Contract.CalculateWatchtowerRegistrationMessageHash(&_WitnessChainOperatorRegistry.CallOpts, operator, salt, expiry)
 }
 
-// CalculateWatchtowerRegistrationMessageHash is a free data retrieval call binding the contract method 0x45adeda0.
+// CalculateWatchtowerRegistrationMessageHash is a free data retrieval call binding the contract method 0xae103725.
 //
-// Solidity: function calculateWatchtowerRegistrationMessageHash(address operator, uint256 expiry) pure returns(bytes32)
-func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistryCallerSession) CalculateWatchtowerRegistrationMessageHash(operator common.Address, expiry *big.Int) ([32]byte, error) {
-	return _WitnessChainOperatorRegistry.Contract.CalculateWatchtowerRegistrationMessageHash(&_WitnessChainOperatorRegistry.CallOpts, operator, expiry)
+// Solidity: function calculateWatchtowerRegistrationMessageHash(address operator, bytes32 salt, uint256 expiry) view returns(bytes32)
+func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistryCallerSession) CalculateWatchtowerRegistrationMessageHash(operator common.Address, salt [32]byte, expiry *big.Int) ([32]byte, error) {
+	return _WitnessChainOperatorRegistry.Contract.CalculateWatchtowerRegistrationMessageHash(&_WitnessChainOperatorRegistry.CallOpts, operator, salt, expiry)
 }
 
 // CheckIsDelegatedOperator is a free data retrieval call binding the contract method 0x9053c5b3.
@@ -271,6 +271,37 @@ func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistrySession) Delega
 // Solidity: function delegationManagerAddress() view returns(address)
 func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistryCallerSession) DelegationManagerAddress() (common.Address, error) {
 	return _WitnessChainOperatorRegistry.Contract.DelegationManagerAddress(&_WitnessChainOperatorRegistry.CallOpts)
+}
+
+// DomainSeperator is a free data retrieval call binding the contract method 0xcb73ac56.
+//
+// Solidity: function domainSeperator() view returns(bytes32)
+func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistryCaller) DomainSeperator(opts *bind.CallOpts) ([32]byte, error) {
+	var out []interface{}
+	err := _WitnessChainOperatorRegistry.contract.Call(opts, &out, "domainSeperator")
+
+	if err != nil {
+		return *new([32]byte), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new([32]byte)).(*[32]byte)
+
+	return out0, err
+
+}
+
+// DomainSeperator is a free data retrieval call binding the contract method 0xcb73ac56.
+//
+// Solidity: function domainSeperator() view returns(bytes32)
+func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistrySession) DomainSeperator() ([32]byte, error) {
+	return _WitnessChainOperatorRegistry.Contract.DomainSeperator(&_WitnessChainOperatorRegistry.CallOpts)
+}
+
+// DomainSeperator is a free data retrieval call binding the contract method 0xcb73ac56.
+//
+// Solidity: function domainSeperator() view returns(bytes32)
+func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistryCallerSession) DomainSeperator() ([32]byte, error) {
+	return _WitnessChainOperatorRegistry.Contract.DomainSeperator(&_WitnessChainOperatorRegistry.CallOpts)
 }
 
 // GetAllActiveOperators is a free data retrieval call binding the contract method 0x5c468db3.
@@ -597,6 +628,37 @@ func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistryCallerSession) 
 	return _WitnessChainOperatorRegistry.Contract.SlasherAddress(&_WitnessChainOperatorRegistry.CallOpts)
 }
 
+// WatchtowerSaltUsed is a free data retrieval call binding the contract method 0x35e40350.
+//
+// Solidity: function watchtowerSaltUsed(address , bytes32 ) view returns(bool)
+func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistryCaller) WatchtowerSaltUsed(opts *bind.CallOpts, arg0 common.Address, arg1 [32]byte) (bool, error) {
+	var out []interface{}
+	err := _WitnessChainOperatorRegistry.contract.Call(opts, &out, "watchtowerSaltUsed", arg0, arg1)
+
+	if err != nil {
+		return *new(bool), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
+
+	return out0, err
+
+}
+
+// WatchtowerSaltUsed is a free data retrieval call binding the contract method 0x35e40350.
+//
+// Solidity: function watchtowerSaltUsed(address , bytes32 ) view returns(bool)
+func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistrySession) WatchtowerSaltUsed(arg0 common.Address, arg1 [32]byte) (bool, error) {
+	return _WitnessChainOperatorRegistry.Contract.WatchtowerSaltUsed(&_WitnessChainOperatorRegistry.CallOpts, arg0, arg1)
+}
+
+// WatchtowerSaltUsed is a free data retrieval call binding the contract method 0x35e40350.
+//
+// Solidity: function watchtowerSaltUsed(address , bytes32 ) view returns(bool)
+func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistryCallerSession) WatchtowerSaltUsed(arg0 common.Address, arg1 [32]byte) (bool, error) {
+	return _WitnessChainOperatorRegistry.Contract.WatchtowerSaltUsed(&_WitnessChainOperatorRegistry.CallOpts, arg0, arg1)
+}
+
 // AddToOperatorWhitelist is a paid mutator transaction binding the contract method 0xc8525c3e.
 //
 // Solidity: function addToOperatorWhitelist(address[] operatorsList) returns()
@@ -702,25 +764,46 @@ func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistryTransactorSessi
 	return _WitnessChainOperatorRegistry.Contract.Initialize(&_WitnessChainOperatorRegistry.TransactOpts, _delegationManagerAddress, _slasherAddress)
 }
 
-// RegisterWatchtowerAsOperator is a paid mutator transaction binding the contract method 0x11d2c708.
+// Pause is a paid mutator transaction binding the contract method 0x8456cb59.
 //
-// Solidity: function registerWatchtowerAsOperator(address watchtower, uint256 expiry, bytes signedMessage) returns()
-func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistryTransactor) RegisterWatchtowerAsOperator(opts *bind.TransactOpts, watchtower common.Address, expiry *big.Int, signedMessage []byte) (*types.Transaction, error) {
-	return _WitnessChainOperatorRegistry.contract.Transact(opts, "registerWatchtowerAsOperator", watchtower, expiry, signedMessage)
+// Solidity: function pause() returns()
+func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistryTransactor) Pause(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _WitnessChainOperatorRegistry.contract.Transact(opts, "pause")
 }
 
-// RegisterWatchtowerAsOperator is a paid mutator transaction binding the contract method 0x11d2c708.
+// Pause is a paid mutator transaction binding the contract method 0x8456cb59.
 //
-// Solidity: function registerWatchtowerAsOperator(address watchtower, uint256 expiry, bytes signedMessage) returns()
-func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistrySession) RegisterWatchtowerAsOperator(watchtower common.Address, expiry *big.Int, signedMessage []byte) (*types.Transaction, error) {
-	return _WitnessChainOperatorRegistry.Contract.RegisterWatchtowerAsOperator(&_WitnessChainOperatorRegistry.TransactOpts, watchtower, expiry, signedMessage)
+// Solidity: function pause() returns()
+func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistrySession) Pause() (*types.Transaction, error) {
+	return _WitnessChainOperatorRegistry.Contract.Pause(&_WitnessChainOperatorRegistry.TransactOpts)
 }
 
-// RegisterWatchtowerAsOperator is a paid mutator transaction binding the contract method 0x11d2c708.
+// Pause is a paid mutator transaction binding the contract method 0x8456cb59.
 //
-// Solidity: function registerWatchtowerAsOperator(address watchtower, uint256 expiry, bytes signedMessage) returns()
-func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistryTransactorSession) RegisterWatchtowerAsOperator(watchtower common.Address, expiry *big.Int, signedMessage []byte) (*types.Transaction, error) {
-	return _WitnessChainOperatorRegistry.Contract.RegisterWatchtowerAsOperator(&_WitnessChainOperatorRegistry.TransactOpts, watchtower, expiry, signedMessage)
+// Solidity: function pause() returns()
+func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistryTransactorSession) Pause() (*types.Transaction, error) {
+	return _WitnessChainOperatorRegistry.Contract.Pause(&_WitnessChainOperatorRegistry.TransactOpts)
+}
+
+// RegisterWatchtowerAsOperator is a paid mutator transaction binding the contract method 0xfc4bd47f.
+//
+// Solidity: function registerWatchtowerAsOperator(address watchtower, bytes32 salt, uint256 expiry, bytes signedMessage) returns()
+func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistryTransactor) RegisterWatchtowerAsOperator(opts *bind.TransactOpts, watchtower common.Address, salt [32]byte, expiry *big.Int, signedMessage []byte) (*types.Transaction, error) {
+	return _WitnessChainOperatorRegistry.contract.Transact(opts, "registerWatchtowerAsOperator", watchtower, salt, expiry, signedMessage)
+}
+
+// RegisterWatchtowerAsOperator is a paid mutator transaction binding the contract method 0xfc4bd47f.
+//
+// Solidity: function registerWatchtowerAsOperator(address watchtower, bytes32 salt, uint256 expiry, bytes signedMessage) returns()
+func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistrySession) RegisterWatchtowerAsOperator(watchtower common.Address, salt [32]byte, expiry *big.Int, signedMessage []byte) (*types.Transaction, error) {
+	return _WitnessChainOperatorRegistry.Contract.RegisterWatchtowerAsOperator(&_WitnessChainOperatorRegistry.TransactOpts, watchtower, salt, expiry, signedMessage)
+}
+
+// RegisterWatchtowerAsOperator is a paid mutator transaction binding the contract method 0xfc4bd47f.
+//
+// Solidity: function registerWatchtowerAsOperator(address watchtower, bytes32 salt, uint256 expiry, bytes signedMessage) returns()
+func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistryTransactorSession) RegisterWatchtowerAsOperator(watchtower common.Address, salt [32]byte, expiry *big.Int, signedMessage []byte) (*types.Transaction, error) {
+	return _WitnessChainOperatorRegistry.Contract.RegisterWatchtowerAsOperator(&_WitnessChainOperatorRegistry.TransactOpts, watchtower, salt, expiry, signedMessage)
 }
 
 // RenounceOwnership is a paid mutator transaction binding the contract method 0x715018a6.
@@ -826,6 +909,27 @@ func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistrySession) Transf
 // Solidity: function transferOwnership(address newOwner) returns()
 func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistryTransactorSession) TransferOwnership(newOwner common.Address) (*types.Transaction, error) {
 	return _WitnessChainOperatorRegistry.Contract.TransferOwnership(&_WitnessChainOperatorRegistry.TransactOpts, newOwner)
+}
+
+// Unpause is a paid mutator transaction binding the contract method 0x3f4ba83a.
+//
+// Solidity: function unpause() returns()
+func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistryTransactor) Unpause(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _WitnessChainOperatorRegistry.contract.Transact(opts, "unpause")
+}
+
+// Unpause is a paid mutator transaction binding the contract method 0x3f4ba83a.
+//
+// Solidity: function unpause() returns()
+func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistrySession) Unpause() (*types.Transaction, error) {
+	return _WitnessChainOperatorRegistry.Contract.Unpause(&_WitnessChainOperatorRegistry.TransactOpts)
+}
+
+// Unpause is a paid mutator transaction binding the contract method 0x3f4ba83a.
+//
+// Solidity: function unpause() returns()
+func (_WitnessChainOperatorRegistry *WitnessChainOperatorRegistryTransactorSession) Unpause() (*types.Transaction, error) {
+	return _WitnessChainOperatorRegistry.Contract.Unpause(&_WitnessChainOperatorRegistry.TransactOpts)
 }
 
 // UpgradeTo is a paid mutator transaction binding the contract method 0x3659cfe6.

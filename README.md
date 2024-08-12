@@ -46,8 +46,7 @@ In order to run the witnesschain node software you will need to register a watch
 1. Generate a new ECDSA keypair that will be associated with a witness chain "Watchtower"
 2. Sign required inputs for registering watchtower
 
-        // Expose the private key generated above as an environment variable
-        export WATCHTOWER_PRIVATE_KEY={MY_PRIVATE_KEY}
+        // Expose the private key generated above as an environment variable "WATCHTOWER_PRIVATE_KEY"
 
         // Sign 
         ./avs-cli witness-chain prepare-registration --rpc-url $RPC_URL --operator-id {operator_id}
@@ -60,9 +59,11 @@ In order to run the witnesschain node software you will need to register a watch
 
 1. Follow the steps at https://docs.witnesschain.com/rollup-watchtower-network-live/for-the-node-operators/watchtower-setup/mainnet-setup#step-3.3-registering-the-watchtowers-on-witnesschain-mainnet-l2
 
-Supply a separate ECDSA key you control for the value of `operator_private_key`
+Generate a separate ECDSA key you control for the value of `operator_private_key`
 
-2. Notify the ether.fi team that you have completed registration and begin to run witnesschain node software
+2. Notify the ether.fi team that you have completed registration and begin to run witnesschain node software.
+Please use the same value as `operator_private_key` in your L1 + L2 config files.
+
     
 
 ## Ether.fi Admin Flow
@@ -125,9 +126,11 @@ Supply a separate ECDSA key you control for the value of `operator_private_key`
 ## Ether.fi Admin Flow
 
 1. Recieve prepared registration json file from target node operator
-2. Register the operator contract with eigenda
+2. Brevis operates with a strict limit on operator numbers. Prior to registering a new operator, you must organize a time with the brevis team
+where they will briefly update the limits. After you get confirmation that they have updated the limits, immediately perform the below registration
+3. Register the operator contract with brevis
 
-           ./avs-cli eigenda register --registration-input brevis-input.json
+           ./avs-cli brevis register --registration-input brevis-input.json
 
            // submit resulting output as a gnosis TX via AVS admin gnosis
 

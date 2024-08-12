@@ -39,7 +39,7 @@ func handleWitnessPrepareRegistration(ctx context.Context, cli *cli.Command) err
 	// load watchtower private key
 	watchtowerPrivateKey, err := crypto.HexToECDSA(os.Getenv("WATCHTOWER_PRIVATE_KEY"))
 	if err != nil {
-		return fmt.Errorf("loading signing key: %w", err)
+		return fmt.Errorf("invalid WATCHTOWER_PRIVATE_KEY env var: %w", err)
 	}
 
 	// look up operator contract associated with this id
