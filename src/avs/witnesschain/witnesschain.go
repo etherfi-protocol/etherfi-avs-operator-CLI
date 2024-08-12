@@ -2,6 +2,7 @@ package witnesschain
 
 import (
 	"crypto/ecdsa"
+	"crypto/rand"
 	"encoding/hex"
 	"fmt"
 	"math/big"
@@ -57,6 +58,7 @@ type RegistrationInfo struct {
 	OperatorID                int64
 	WatchtowerAddress         common.Address
 	WatchtowerSignature       string
+	WatchtowerSignatureSalt   []byte
 	WatchtowerSignatureExpiry *big.Int
 }
 
@@ -66,7 +68,11 @@ func (wc *API) PrepareRegistration(operator *etherfi.Operator, watchtowerKey *ec
 
 	// compute the watchtower registration digest
 	expiry := new(big.Int).SetInt64(time.Now().Add(24 * time.Hour * 10).Unix())
-	registrationDigest, err := wc.OperatorRegistry.CalculateWatchtowerRegistrationMessageHash(nil, operator.Address, expiry)
+	salt := make([]byte, 32)
+	if _, err := rand.Read(salt); err != nil {
+		return fmt.Errorf("gererating random salt: %w", err)
+	}
+	registrationDigest, err := wc.OperatorRegistry.CalculateWatchtowerRegistrationMessageHash(nil, operator.Address, [32]byte(salt), expiry)
 	if err != nil {
 		return fmt.Errorf("calculating watchtower registration digest: %w", err)
 	}
@@ -81,6 +87,7 @@ func (wc *API) PrepareRegistration(operator *etherfi.Operator, watchtowerKey *ec
 		OperatorID:                operator.ID,
 		WatchtowerAddress:         crypto.PubkeyToAddress(watchtowerKey.PublicKey),
 		WatchtowerSignature:       "0x" + hex.EncodeToString(signed),
+		WatchtowerSignatureSalt:   salt,
 		WatchtowerSignatureExpiry: expiry,
 	}
 
@@ -143,7 +150,7 @@ func (wc *API) RegisterWatchtower(operator *etherfi.Operator, info *Registration
 	}
 
 	// pack operatorRegistry.registerWatchtowerAsOperator()
-	calldata, err := witnessABI.Pack("registerWatchtowerAsOperator", info.WatchtowerAddress, info.WatchtowerSignatureExpiry, watchtowerSignature)
+	calldata, err := witnessABI.Pack("registerWatchtowerAsOperator", info.WatchtowerAddress, [32]byte(info.WatchtowerSignatureSalt), info.WatchtowerSignatureExpiry, watchtowerSignature)
 	if err != nil {
 		return fmt.Errorf("packing input: %w", err)
 	}
