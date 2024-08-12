@@ -160,6 +160,9 @@ where they will briefly update the limits. After you get confirmation that they 
 
            // submit resulting output as a gnosis TX via AVS admin gnosis
 
+3. Ask the eOracle team to manually set the alias address from the input to be associated with the target operator
+4. Once the eOracle has confirmed set the alias address, you may proceed to tell the node operator to begin running the node software
+
 ---
 
 # Adding a new AVS to the CLI
