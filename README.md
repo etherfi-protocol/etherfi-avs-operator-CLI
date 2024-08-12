@@ -145,7 +145,7 @@ where they will briefly update the limits. After you get confirmation that they 
 2. generate a new ECDSA key pair to serve as your `aliasAddress`
 3. Sign digest establishing ownership of your newly generated BLS key
 
-           ./avs-cli eoracle prepare-registration --operator-id 12 --bls-keystore {path_to_keystore} --bls-password {keystore_password} --alias-address {alias_address}
+           ./avs-cli eoracle prepare-registration --operator-id {my_operator_id} --bls-keystore {path_to_keystore} --bls-password {keystore_password} --alias-address {alias_address}
 
 4. Send the result of the previous command to the ether.fi team via `restaking@ether.fi`
 5. Wait for confirmation from the ether.fi team that your registration is complete
