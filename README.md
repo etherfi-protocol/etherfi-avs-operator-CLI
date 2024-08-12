@@ -28,10 +28,10 @@ You will be assigned an operatorID and an operator smart contract that is regist
 - `operatorAddress`: Eigenlayer operator address, which is managed by ether.fi team.
 
 ## Step 2: Follow the instructions for the specific AVS you are registering for
-* [Witness Chain](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI/blob/witness-chain/README.md#witness-chain)
-* [EigenDA](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI/blob/witness-chain/README.md#eigenda)
-* [eOracle](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI/blob/witness-chain/README.md#eoracle)
-* [Brevis](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI/blob/witness-chain/README.md#brevis)
+* [Witness Chain](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
+* [EigenDA](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#eigenda)
+* [eOracle](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
+* [Brevis](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
 
 
 ---
