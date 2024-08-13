@@ -131,6 +131,6 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo
 	}
 
 	// output in gnosis compatible format
-	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("witness-chain-register-watchtower-%d", operator.ID))
+	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("eoracle-register-%d", operator.ID))
 	return utils.ExportJSON("eoracle-register-gnosis", operator.ID, batch)
 }
