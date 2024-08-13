@@ -43,6 +43,7 @@ func New(cfg config.Config, rpcClient *ethclient.Client) *API {
 		RegistryCoordinatorAddress: cfg.EOracleRegistryCoordinatorAddress,
 		ServiceManager:             serviceManager,
 		ServiceManagerAddress:      cfg.EOracleServiceManagerAddress,
+		AvsOperatorManagerAddress:  cfg.AvsOperatorManagerAddress,
 		EigenlayerAPI:              eigenlayer.New(cfg, rpcClient),
 	}
 }
@@ -131,5 +132,5 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo
 
 	// output in gnosis compatible format
 	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("witness-chain-register-watchtower-%d", operator.ID))
-	return utils.ExportJSON("witness-chain-register-gnosis", operator.ID, batch)
+	return utils.ExportJSON("eoracle-register-gnosis", operator.ID, batch)
 }
