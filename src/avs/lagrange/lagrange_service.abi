@@ -128,11 +128,57 @@
         "type": "event"
     },
     {
+        "anonymous": false,
         "inputs": [
             {
-                "internalType": "uint256[2][]",
-                "name": "additionalBlsPubKeys",
-                "type": "uint256[2][]"
+                "indexed": true,
+                "internalType": "address",
+                "name": "operator",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "uint32",
+                "name": "chainID",
+                "type": "uint32"
+            }
+        ],
+        "name": "UnsubscribedByAdmin",
+        "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256[2][]",
+                        "name": "blsG1PublicKeys",
+                        "type": "uint256[2][]"
+                    },
+                    {
+                        "internalType": "uint256[2][2]",
+                        "name": "aggG2PublicKey",
+                        "type": "uint256[2][2]"
+                    },
+                    {
+                        "internalType": "uint256[2]",
+                        "name": "signature",
+                        "type": "uint256[2]"
+                    },
+                    {
+                        "internalType": "bytes32",
+                        "name": "salt",
+                        "type": "bytes32"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "expiry",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct IBLSKeyChecker.BLSKeyWithProof",
+                "name": "blsKeyWithProof",
+                "type": "tuple"
             }
         ],
         "name": "addBlsPubKeys",
@@ -271,9 +317,36 @@
                 "type": "address"
             },
             {
-                "internalType": "uint256[2][]",
-                "name": "blsPubKeys",
-                "type": "uint256[2][]"
+                "components": [
+                    {
+                        "internalType": "uint256[2][]",
+                        "name": "blsG1PublicKeys",
+                        "type": "uint256[2][]"
+                    },
+                    {
+                        "internalType": "uint256[2][2]",
+                        "name": "aggG2PublicKey",
+                        "type": "uint256[2][2]"
+                    },
+                    {
+                        "internalType": "uint256[2]",
+                        "name": "signature",
+                        "type": "uint256[2]"
+                    },
+                    {
+                        "internalType": "bytes32",
+                        "name": "salt",
+                        "type": "bytes32"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "expiry",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct IBLSKeyChecker.BLSKeyWithProof",
+                "name": "blsKeyWithProof",
+                "type": "tuple"
             },
             {
                 "components": [
@@ -391,6 +464,24 @@
     {
         "inputs": [
             {
+                "internalType": "address[]",
+                "name": "operators",
+                "type": "address[]"
+            },
+            {
+                "internalType": "uint32",
+                "name": "chainID",
+                "type": "uint32"
+            }
+        ],
+        "name": "unsubscribeByAdmin",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "string",
                 "name": "_metadataURI",
                 "type": "string"
@@ -409,9 +500,36 @@
                 "type": "uint32"
             },
             {
-                "internalType": "uint256[2]",
-                "name": "blsPubKey",
-                "type": "uint256[2]"
+                "components": [
+                    {
+                        "internalType": "uint256[2][]",
+                        "name": "blsG1PublicKeys",
+                        "type": "uint256[2][]"
+                    },
+                    {
+                        "internalType": "uint256[2][2]",
+                        "name": "aggG2PublicKey",
+                        "type": "uint256[2][2]"
+                    },
+                    {
+                        "internalType": "uint256[2]",
+                        "name": "signature",
+                        "type": "uint256[2]"
+                    },
+                    {
+                        "internalType": "bytes32",
+                        "name": "salt",
+                        "type": "bytes32"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "expiry",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct IBLSKeyChecker.BLSKeyWithProof",
+                "name": "blsKeyWithProof",
+                "type": "tuple"
             }
         ],
         "name": "updateBlsPubKey",
