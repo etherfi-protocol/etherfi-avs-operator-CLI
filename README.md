@@ -18,7 +18,7 @@ make build
 # AVS Registration
 
 ### Prerequisites
-- Etherereum RPC endpoint to send transactions.
+- Ethereum RPC endpoint to send transactions.
 
 
 ## Step 1: Request ether.fi team to be registered as a Delegated AVS operator
@@ -69,7 +69,7 @@ Please use the same value as `operator_private_key` in your L1 + L2 config files
 ## Ether.fi Admin Flow
 
 1. Request WitnessChain team to whitelist target Operator contract
-2. Recieve prepared registration json file from target node operator
+2. Receive prepared registration json file from target node operator
 3. Register the operator contract with witness chain
 
            ./avs-cli witness-chain register --registration-input witness-input.json --rpc-url $RPC_URL
@@ -100,7 +100,7 @@ Please use the same value as `operator_private_key` in your L1 + L2 config files
 
 ## Ether.fi Admin Flow
 
-1. Recieve prepared registration json file from target node operator
+1. Receive prepared registration json file from target node operator
 2. Register the operator contract with eigenda
 
            ./avs-cli eigenda register --registration-input eigenda-input.json
@@ -125,7 +125,7 @@ Please use the same value as `operator_private_key` in your L1 + L2 config files
 
 ## Ether.fi Admin Flow
 
-1. Recieve prepared registration json file from target node operator
+1. Receive prepared registration json file from target node operator
 2. Brevis operates with a strict limit on operator numbers. Prior to registering a new operator, you must organize a time with the brevis team
 where they will briefly update the limits. After you get confirmation that they have updated the limits, immediately perform the below registration
 3. Register the operator contract with brevis
@@ -153,7 +153,7 @@ where they will briefly update the limits. After you get confirmation that they 
 
 ## Ether.fi Admin Flow
 
-1. Recieve prepared registration json file from target node operator
+1. Receive prepared registration json file from target node operator
 2. Register the operator contract with eoracle
 
            ./avs-cli eoracle register --registration-input eoracle-input.json
@@ -162,6 +162,32 @@ where they will briefly update the limits. After you get confirmation that they 
 
 3. Ask the eOracle team to manually set the alias address from the input to be associated with the target operator
 4. Once the eOracle has confirmed set the alias address, you may proceed to tell the node operator to begin running the node software
+
+---
+
+# AltLayer
+
+## Operator Flow
+
+1. generate and encrypt a new BLS keystore using the EigenLayer CLI tooling https://docs.eigenlayer.xyz/eigenlayer/operator-guides/operator-installation#create-and-list-keys
+2. Determine which `quorums` and `socket` you wish to register for
+3. Sign digest establishing ownership of your newly generated BLS key
+
+           ./avs-cli altlayer prepare-registration --operator-id {operator_id} --bls-keystore {path_to_keystore} --bls-password {password} --quorums {0,1} --socket {socket}
+
+4. Send the result of the previous command to the ether.fi team via `restaking@ether.fi`
+5. Wait for confirmation from the ether.fi team that your registration is complete
+6. Proceed to run the eigenda node software
+
+## Ether.fi Admin Flow
+
+1. Receive prepared registration json file from target node operator
+2. Register the operator contract with altlayer
+
+           ./avs-cli altlayer register --registration-input eoracle-input.json
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
+3. Ensure that the ECDSA signer for this operator contract is funded with at least 0.3 ETH to ensure you have sufficient gas tokens for AVS registering, opt-in and de-registering operation. 
 
 ---
 

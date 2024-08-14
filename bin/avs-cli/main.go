@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/altlayer"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/brevis"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/eigenda"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/eoracle"
@@ -33,6 +34,7 @@ func main() {
 			eigenda.EigenDACmd,
 			witness.WitnessCmd,
 			brevis.BrevisCmd,
+			altlayer.AltLayerCmd,
 		},
 	}
 

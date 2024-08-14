@@ -42,6 +42,10 @@ type Config struct {
 	// Witnesschain
 	WitnessChainOperatorRegistryAddress common.Address
 	WitnessChainWitnessHubAddress       common.Address
+
+	// AltLayer
+	AltLayerRegistryCoordinatorAddress common.Address
+	AltLayerServiceManagerAddress      common.Address
 }
 
 var Mainnet = Config{
@@ -62,6 +66,8 @@ var Mainnet = Config{
 	LagrangeServiceAddress:              common.HexToAddress("0x35F4f28A8d3Ff20EEd10e087e8F96Ea2641E6AA2"),
 	WitnessChainOperatorRegistryAddress: common.HexToAddress("0xEf1a89841fd189ba28e780A977ca70eb1A5e985D"),
 	WitnessChainWitnessHubAddress:       common.HexToAddress("0xD25c2c5802198CB8541987b73A8db4c9BCaE5cC7"),
+	AltLayerRegistryCoordinatorAddress:  common.HexToAddress("0x561be1AB42170a19f31645F774e6e3862B2139AA"),
+	AltLayerServiceManagerAddress:       common.HexToAddress("0x71a77037870169d47aad6c2C9360861A4C0df2bF"),
 }
 
 var Holesky = Config{
@@ -79,6 +85,8 @@ var Holesky = Config{
 	BrevisServiceManagerAddress:         common.HexToAddress("0x7A46219950d8a9bf2186549552DA35Bf6fb85b1F"),
 	WitnessChainOperatorRegistryAddress: common.HexToAddress("0x708CBDDdab358c1fa8efB82c75bB4a116F316Def"),
 	WitnessChainWitnessHubAddress:       common.HexToAddress("0xa987EC494b13b21A8a124F8Ac03c9F530648C87D"),
+	AltLayerRegistryCoordinatorAddress:  common.HexToAddress("0x1eA7D160d325B289bF981e0D7aB6Bf3261a0FFf2"),
+	AltLayerServiceManagerAddress:       common.HexToAddress("0xae9a4497dee2540daf489beddb0706128a99ec63"),
 }
 
 func ConfigForChain(chainID int64) (Config, error) {
