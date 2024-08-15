@@ -24,6 +24,16 @@ type Config struct {
 	// Etherfi AVS contracts
 	AvsOperatorManagerAddress common.Address
 
+	// AVS specific contracts
+
+	// Automata
+	AutomataRegistryCoordinatorAddress common.Address
+	AutomataServiceManagerAddress      common.Address
+
+	// Brevis
+	BrevisRegistryCoordinatorAddress common.Address
+	BrevisServiceManagerAddress      common.Address
+
 	// EigenDA
 	EigenDARegistryCoordinatorAddress common.Address
 	EigenDAServiceManagerAddress      common.Address
@@ -31,10 +41,6 @@ type Config struct {
 	// EOracle
 	EOracleRegistryCoordinatorAddress common.Address
 	EOracleServiceManagerAddress      common.Address
-
-	// Brevis
-	BrevisRegistryCoordinatorAddress common.Address
-	BrevisServiceManagerAddress      common.Address
 
 	// Lagrange
 	LagrangeServiceAddress common.Address
@@ -52,13 +58,16 @@ var Mainnet = Config{
 	BeaconEthStrategyAddress: common.HexToAddress("0xbeaC0eeEeeeeEEeEeEEEEeeEEeEeeeEeeEEBEaC0"),
 	WethStrategyAddress:      common.HexToAddress(""),
 
-	AvsOperatorManagerAddress:           common.HexToAddress("0x2093Bbb221f1d8C7c932c32ee28Be6dEe4a37A6a"),
+	AvsOperatorManagerAddress: common.HexToAddress("0x2093Bbb221f1d8C7c932c32ee28Be6dEe4a37A6a"),
+
+	AutomataRegistryCoordinatorAddress:  common.HexToAddress("0x414696E4F7f06273973E89bfD3499e8666D63Bd4"),
+	AutomataServiceManagerAddress:       common.HexToAddress("0xe5445838c475a2980e6a88054ff1514230b83aeb"),
+	BrevisRegistryCoordinatorAddress:    common.HexToAddress("0x434621cfd8BcDbe8839a33c85aE2B2893a4d596C"),
+	BrevisServiceManagerAddress:         common.HexToAddress("0x9FC952BdCbB7Daca7d420fA55b942405B073A89d"),
 	EigenDARegistryCoordinatorAddress:   common.HexToAddress("0x0BAAc79acD45A023E19345c352d8a7a83C4e5656"),
 	EigenDAServiceManagerAddress:        common.HexToAddress("0x870679E138bCdf293b7Ff14dD44b70FC97e12fc0"),
 	EOracleRegistryCoordinatorAddress:   common.HexToAddress("0x757E6f572AfD8E111bD913d35314B5472C051cA8"),
 	EOracleServiceManagerAddress:        common.HexToAddress("0x23221c5bB90C7c57ecc1E75513e2E4257673F0ef"),
-	BrevisRegistryCoordinatorAddress:    common.HexToAddress("0x434621cfd8BcDbe8839a33c85aE2B2893a4d596C"),
-	BrevisServiceManagerAddress:         common.HexToAddress("0x9FC952BdCbB7Daca7d420fA55b942405B073A89d"),
 	LagrangeServiceAddress:              common.HexToAddress("0x35F4f28A8d3Ff20EEd10e087e8F96Ea2641E6AA2"),
 	WitnessChainOperatorRegistryAddress: common.HexToAddress("0xEf1a89841fd189ba28e780A977ca70eb1A5e985D"),
 	WitnessChainWitnessHubAddress:       common.HexToAddress("0xD25c2c5802198CB8541987b73A8db4c9BCaE5cC7"),
@@ -72,11 +81,14 @@ var Holesky = Config{
 	BeaconEthStrategyAddress: common.HexToAddress("0xbeaC0eeEeeeeEEeEeEEEEeeEEeEeeeEeeEEBEaC0"),
 	WethStrategyAddress:      common.HexToAddress("0x80528D6e9A2BAbFc766965E0E26d5aB08D9CFaF9"),
 
-	AvsOperatorManagerAddress:           common.HexToAddress("0xdf9679e8bfce22ae503fd2726cb1218a18cd8bf4"),
-	EigenDARegistryCoordinatorAddress:   common.HexToAddress("0x53012C69A189cfA2D9d29eb6F19B32e0A2EA3490"),
-	EigenDAServiceManagerAddress:        common.HexToAddress("0xD4A7E1Bd8015057293f0D0A557088c286942e84b"),
+	AvsOperatorManagerAddress: common.HexToAddress("0xdf9679e8bfce22ae503fd2726cb1218a18cd8bf4"),
+
+	AutomataRegistryCoordinatorAddress:  common.HexToAddress("0x62c715575cE3Ad7C5a43aA325b881c70564f2215"),
+	AutomataServiceManagerAddress:       common.HexToAddress("0x4665Af665df5703445645D243f0FD63eD3b9D132"),
 	BrevisRegistryCoordinatorAddress:    common.HexToAddress("0x0dB4ceE042705d47Ef6C0818E82776359c3A80Ca"),
 	BrevisServiceManagerAddress:         common.HexToAddress("0x7A46219950d8a9bf2186549552DA35Bf6fb85b1F"),
+	EigenDARegistryCoordinatorAddress:   common.HexToAddress("0x53012C69A189cfA2D9d29eb6F19B32e0A2EA3490"),
+	EigenDAServiceManagerAddress:        common.HexToAddress("0xD4A7E1Bd8015057293f0D0A557088c286942e84b"),
 	WitnessChainOperatorRegistryAddress: common.HexToAddress("0x708CBDDdab358c1fa8efB82c75bB4a116F316Def"),
 	WitnessChainWitnessHubAddress:       common.HexToAddress("0xa987EC494b13b21A8a124F8Ac03c9F530648C87D"),
 }
