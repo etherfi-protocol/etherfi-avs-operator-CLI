@@ -55,7 +55,7 @@ func New(cfg config.Config, rpcClient *ethclient.Client) *API {
 }
 
 // PrepareRegistration aggregates all required info from the node operator that
-// the ether.fi admin will need to register them to the Witness Chain AVS
+// the ether.fi admin will need to register them to the AVS
 func (a *API) PrepareRegistration(operator *etherfi.Operator, pubkeyX *big.Int, pubkeyY *big.Int) error {
 
 	ri := RegistrationInfo{

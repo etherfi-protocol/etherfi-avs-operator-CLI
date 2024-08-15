@@ -28,7 +28,7 @@ func handleWitnessRegister(ctx context.Context, cli *cli.Command) error {
 	// parse cli params
 	inputFilepath := cli.String("registration-input")
 
-	// read input file with required witnesschain data
+	// read input file with required registration data
 	var input RegistrationInput
 	buf, err := os.ReadFile(inputFilepath)
 	if err != nil {
