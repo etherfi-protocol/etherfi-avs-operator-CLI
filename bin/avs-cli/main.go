@@ -30,13 +30,14 @@ func main() {
 			BlsPubkeyRegistrationHashCmd,
 			operatorDetailsCmd,
 			updateEcdsaSignerCmd,
-			//			lagrange.LagrangeCmd,
+
+			// AVS specific commands
+			automata.AutomataCmd,
+			brevis.BrevisCmd,
 			eoracle.EOracleCmd,
 			eigenda.EigenDACmd,
-			witness.WitnessCmd,
-			brevis.BrevisCmd,
-			automata.AutomataCmd,
 			lagrangezk.LagrangeZKCmd,
+			witness.WitnessCmd,
 		},
 	}
 

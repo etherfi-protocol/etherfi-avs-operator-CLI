@@ -28,16 +28,6 @@ var AutomataPrepareRegistrationCmd = &cli.Command{
 			Usage:    "password for encrypted keystore file",
 			Required: true,
 		},
-		&cli.IntSliceFlag{
-			Name:     "quorums",
-			Usage:    "which quorums to register for i.e. 0,1",
-			Required: true,
-		},
-		&cli.StringFlag{
-			Name:     "socket",
-			Usage:    "automata socket",
-			Required: true,
-		},
 	},
 }
 
@@ -47,8 +37,10 @@ func handleAutomataPrepareRegistration(ctx context.Context, cli *cli.Command) er
 	operatorID := cli.Int("operator-id")
 	blsKeyFile := cli.String("bls-keystore")
 	blsKeyPassword := cli.String("bls-password")
-	quorums := cli.IntSlice("quorums")
-	socket := cli.String("socket")
+
+	// automata does not make use inputs in the call to `registerOperator`
+	quorums := []int64{0}
+	socket := "Not Needed"
 
 	// decrypt and load bls key from keystore
 	ks := keystore.NewKeystoreV3()

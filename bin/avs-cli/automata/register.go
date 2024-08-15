@@ -29,7 +29,7 @@ func handleAutomataRegister(ctx context.Context, cli *cli.Command) error {
 	// parse cli params
 	inputFilepath := cli.String("registration-input")
 
-	// read input file with required eigenDA data
+	// read input file with required automata data
 	var input automata.RegistrationInfo
 	buf, err := os.ReadFile(inputFilepath)
 	if err != nil {
