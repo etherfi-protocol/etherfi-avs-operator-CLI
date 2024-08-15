@@ -63,7 +63,7 @@ type RegistrationInfo struct {
 }
 
 // PrepareRegistration aggregates all required info from the node operator that
-// the ether.fi admin will need to register them to the Witness Chain AVS
+// the ether.fi admin will need to register them to the AVS
 func (wc *API) PrepareRegistration(operator *etherfi.Operator, watchtowerKey *ecdsa.PrivateKey) error {
 
 	// compute the watchtower registration digest

@@ -9,6 +9,7 @@ import (
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/brevis"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/eigenda"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/eoracle"
+	lagrangezk "github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/lagrangeZK"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/witness-chain"
 	"github.com/urfave/cli/v3"
 )
@@ -35,6 +36,7 @@ func main() {
 			witness.WitnessCmd,
 			brevis.BrevisCmd,
 			automata.AutomataCmd,
+			lagrangezk.LagrangeZKCmd,
 		},
 	}
 

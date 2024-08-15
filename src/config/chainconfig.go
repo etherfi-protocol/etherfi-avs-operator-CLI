@@ -42,8 +42,12 @@ type Config struct {
 	EOracleRegistryCoordinatorAddress common.Address
 	EOracleServiceManagerAddress      common.Address
 
-	// Lagrange
+	// Lagrange State Committee
 	LagrangeServiceAddress common.Address
+
+	// Lagrange ZK Coprocessor
+	LagrangeZKMRServiceManagerAddress common.Address
+	LagrangeZKMRStakeRegistryAddress  common.Address
 
 	// Witnesschain
 	WitnessChainOperatorRegistryAddress common.Address
@@ -69,6 +73,8 @@ var Mainnet = Config{
 	EOracleRegistryCoordinatorAddress:   common.HexToAddress("0x757E6f572AfD8E111bD913d35314B5472C051cA8"),
 	EOracleServiceManagerAddress:        common.HexToAddress("0x23221c5bB90C7c57ecc1E75513e2E4257673F0ef"),
 	LagrangeServiceAddress:              common.HexToAddress("0x35F4f28A8d3Ff20EEd10e087e8F96Ea2641E6AA2"),
+	LagrangeZKMRServiceManagerAddress:   common.HexToAddress("0x22CAc0e6A1465F043428e8AeF737b3cb09D0eEDa"),
+	LagrangeZKMRStakeRegistryAddress:    common.HexToAddress("0x8dcdCc50Cc00Fe898b037bF61cCf3bf9ba46f15C"),
 	WitnessChainOperatorRegistryAddress: common.HexToAddress("0xEf1a89841fd189ba28e780A977ca70eb1A5e985D"),
 	WitnessChainWitnessHubAddress:       common.HexToAddress("0xD25c2c5802198CB8541987b73A8db4c9BCaE5cC7"),
 }
