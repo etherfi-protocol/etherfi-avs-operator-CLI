@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/automata"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/brevis"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/eigenda"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/eoracle"
@@ -29,12 +30,14 @@ func main() {
 			BlsPubkeyRegistrationHashCmd,
 			operatorDetailsCmd,
 			updateEcdsaSignerCmd,
-			//			lagrange.LagrangeCmd,
+
+			// AVS specific commands
+			automata.AutomataCmd,
+			brevis.BrevisCmd,
 			eoracle.EOracleCmd,
 			eigenda.EigenDACmd,
-			witness.WitnessCmd,
-			brevis.BrevisCmd,
 			lagrangezk.LagrangeZKCmd,
+			witness.WitnessCmd,
 		},
 	}
 

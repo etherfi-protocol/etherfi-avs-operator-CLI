@@ -33,6 +33,7 @@ You will be assigned an operatorID and an operator smart contract that is regist
 * [eOracle](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
 * [Brevis](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
 * [Lagrange ZK Coprocessor](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#lagrange-zk-coprocessor)
+* [Automata Multi-Prover](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#automata-multi-prover)
 
 ---
 
@@ -186,6 +187,32 @@ where they will briefly update the limits. After you get confirmation that they 
 
 3. Ask the eOracle team to manually set the alias address from the input to be associated with the target operator
 4. Once the eOracle has confirmed set the alias address, you may proceed to tell the node operator to begin running the node software
+
+---
+
+# Automata Multi-Prover
+
+## Operator Flow
+
+1. generate and encrypt a BLS keystore using the [EigenLayer CLI](https://docs.eigenlayer.xyz/eigenlayer/operator-guides/operator-installation#create-and-list-keys)
+2. Sign digest establishing ownership of your newly generated BLS key
+
+           ./avs-cli automata prepare-registration --operator-id {operator_id} --bls-keystore {path_to_keystore} --bls-password {password}
+
+4. Send the result of the previous command to the ether.fi team via `restaking@ether.fi`
+5. Wait for confirmation from the ether.fi team that your registration is complete
+6. Follow the [Automata Mainnet Runbook](https://github.com/automata-network/multiprover-avs-operator-setup/blob/main/mainnet/README.md) skipping the steps to `Deposit into strategies` and `Opt into Multi-Prover AVS` to run the automata operator node
+
+
+## Ether.fi Admin Flow
+
+1. Recieve prepared registration json file from target node operator
+2. Ensure target operator contract is whitelisted by automata team (Whitelisting was requested for operators 1-12)
+3. Register the operator contract with automata
+
+           ./avs-cli automata register --registration-input automata-input.json
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
 
 ---
 
