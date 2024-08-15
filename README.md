@@ -32,7 +32,7 @@ You will be assigned an operatorID and an operator smart contract that is regist
 * [EigenDA](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#eigenda)
 * [eOracle](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
 * [Brevis](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
-
+* [Lagrange ZK Coprocessor](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#lagrange-zk-coprocessor)
 
 ---
 
@@ -64,7 +64,6 @@ Generate a separate ECDSA key you control for the value of `operator_private_key
 2. Notify the ether.fi team that you have completed registration and begin to run witnesschain node software.
 Please use the same value as `operator_private_key` in your L1 + L2 config files.
 
-    
 
 ## Ether.fi Admin Flow
 
@@ -79,6 +78,31 @@ Please use the same value as `operator_private_key` in your L1 + L2 config files
 5. Register the watchtower on L1
 
            ./avs-cli witness-chain register-watchtower --registration-input witness-input.json
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
+
+---
+
+# Lagrange ZK Coprocessor
+
+## Operator Flow
+
+1. Generate a new key via the lagrange tooling https://docs.lagrange.dev/zk-coprocessor/avs-operators/registration#lagrange-network-avs-key
+Be sure to save the `public_key` hex string that will be returned as part of the above command
+2. Run the following command and send the output to the ether.fi team via `restaking@ether.fi`
+
+           ./avs-cli lagrangeZK prepare-registration --operator-id {operator_id} --public-key {pubkey_hex}
+
+3. Wait for confirmation from the ether.fi team that your registration is complete
+4. Proceed to run the lagrange zk coprocessor node software
+
+## Ether.fi Admin Flow
+
+1. Recieve prepared registration json file from target node operator
+2. Ensure target operator contract is whitelisted by lagrange team (Whitelisting was requested for operators 1-12)
+3. Register the operator contract with lagrange ZK Coprocessor
+
+           ./avs-cli lagrangeZK register --registration-input lagrangeZK-input.json
 
            // submit resulting output as a gnosis TX via AVS admin gnosis
 

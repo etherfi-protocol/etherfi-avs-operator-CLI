@@ -29,6 +29,15 @@ var (
 	_ = abi.ConvertType
 )
 
+// IBLSKeyCheckerBLSKeyWithProof is an auto generated low-level Go binding around an user-defined struct.
+type IBLSKeyCheckerBLSKeyWithProof struct {
+	BlsG1PublicKeys [][2]*big.Int
+	AggG2PublicKey  [2][2]*big.Int
+	Signature       [2]*big.Int
+	Salt            [32]byte
+	Expiry          *big.Int
+}
+
 // ISignatureUtilsSignatureWithSaltAndExpiry is an auto generated low-level Go binding around an user-defined struct.
 type ISignatureUtilsSignatureWithSaltAndExpiry struct {
 	Signature []byte
@@ -38,7 +47,7 @@ type ISignatureUtilsSignatureWithSaltAndExpiry struct {
 
 // LagrangeServiceMetaData contains all meta data concerning the LagrangeService contract.
 var LagrangeServiceMetaData = &bind.MetaData{
-	ABI: "[{\"inputs\":[{\"internalType\":\"contractILagrangeCommittee\",\"name\":\"_committee\",\"type\":\"address\"},{\"internalType\":\"contractIStakeManager\",\"name\":\"_stakeManager\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_avsDirectoryAddress\",\"type\":\"address\"},{\"internalType\":\"contractIVoteWeigher\",\"name\":\"_voteWeigher\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"version\",\"type\":\"uint8\"}],\"name\":\"Initialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"}],\"name\":\"OperatorDeregistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint32\",\"name\":\"serveUntilBlock\",\"type\":\"uint32\"}],\"name\":\"OperatorRegistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint32\",\"name\":\"chainID\",\"type\":\"uint32\"}],\"name\":\"OperatorSubscribed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint32\",\"name\":\"chainID\",\"type\":\"uint32\"}],\"name\":\"OperatorUnsubscribed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256[2][]\",\"name\":\"additionalBlsPubKeys\",\"type\":\"uint256[2][]\"}],\"name\":\"addBlsPubKeys\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"operators\",\"type\":\"address[]\"}],\"name\":\"addOperatorsToWhitelist\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"avsDirectory\",\"outputs\":[{\"internalType\":\"contractIAVSDirectory\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"committee\",\"outputs\":[{\"internalType\":\"contractILagrangeCommittee\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"deregister\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"}],\"name\":\"getOperatorRestakedStrategies\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getRestakeableStrategies\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"initialOwner\",\"type\":\"address\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"operatorWhitelist\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"signAddress\",\"type\":\"address\"},{\"internalType\":\"uint256[2][]\",\"name\":\"blsPubKeys\",\"type\":\"uint256[2][]\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"expiry\",\"type\":\"uint256\"}],\"internalType\":\"structISignatureUtils.SignatureWithSaltAndExpiry\",\"name\":\"operatorSignature\",\"type\":\"tuple\"}],\"name\":\"register\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32[]\",\"name\":\"indices\",\"type\":\"uint32[]\"}],\"name\":\"removeBlsPubKeys\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"operators\",\"type\":\"address[]\"}],\"name\":\"removeOperatorsFromWhitelist\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"stakeManager\",\"outputs\":[{\"internalType\":\"contractIStakeManager\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"chainID\",\"type\":\"uint32\"}],\"name\":\"subscribe\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"chainID\",\"type\":\"uint32\"}],\"name\":\"unsubscribe\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_metadataURI\",\"type\":\"string\"}],\"name\":\"updateAVSMetadataURI\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"index\",\"type\":\"uint32\"},{\"internalType\":\"uint256[2]\",\"name\":\"blsPubKey\",\"type\":\"uint256[2]\"}],\"name\":\"updateBlsPubKey\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newSignAddress\",\"type\":\"address\"}],\"name\":\"updateSignAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"voteWeigher\",\"outputs\":[{\"internalType\":\"contractIVoteWeigher\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
+	ABI: "[{\"inputs\":[{\"internalType\":\"contractILagrangeCommittee\",\"name\":\"_committee\",\"type\":\"address\"},{\"internalType\":\"contractIStakeManager\",\"name\":\"_stakeManager\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_avsDirectoryAddress\",\"type\":\"address\"},{\"internalType\":\"contractIVoteWeigher\",\"name\":\"_voteWeigher\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"version\",\"type\":\"uint8\"}],\"name\":\"Initialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"}],\"name\":\"OperatorDeregistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint32\",\"name\":\"serveUntilBlock\",\"type\":\"uint32\"}],\"name\":\"OperatorRegistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint32\",\"name\":\"chainID\",\"type\":\"uint32\"}],\"name\":\"OperatorSubscribed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint32\",\"name\":\"chainID\",\"type\":\"uint32\"}],\"name\":\"OperatorUnsubscribed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint32\",\"name\":\"chainID\",\"type\":\"uint32\"}],\"name\":\"UnsubscribedByAdmin\",\"type\":\"event\"},{\"inputs\":[{\"components\":[{\"internalType\":\"uint256[2][]\",\"name\":\"blsG1PublicKeys\",\"type\":\"uint256[2][]\"},{\"internalType\":\"uint256[2][2]\",\"name\":\"aggG2PublicKey\",\"type\":\"uint256[2][2]\"},{\"internalType\":\"uint256[2]\",\"name\":\"signature\",\"type\":\"uint256[2]\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"expiry\",\"type\":\"uint256\"}],\"internalType\":\"structIBLSKeyChecker.BLSKeyWithProof\",\"name\":\"blsKeyWithProof\",\"type\":\"tuple\"}],\"name\":\"addBlsPubKeys\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"operators\",\"type\":\"address[]\"}],\"name\":\"addOperatorsToWhitelist\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"avsDirectory\",\"outputs\":[{\"internalType\":\"contractIAVSDirectory\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"committee\",\"outputs\":[{\"internalType\":\"contractILagrangeCommittee\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"deregister\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"}],\"name\":\"getOperatorRestakedStrategies\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getRestakeableStrategies\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"initialOwner\",\"type\":\"address\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"operatorWhitelist\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"signAddress\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"uint256[2][]\",\"name\":\"blsG1PublicKeys\",\"type\":\"uint256[2][]\"},{\"internalType\":\"uint256[2][2]\",\"name\":\"aggG2PublicKey\",\"type\":\"uint256[2][2]\"},{\"internalType\":\"uint256[2]\",\"name\":\"signature\",\"type\":\"uint256[2]\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"expiry\",\"type\":\"uint256\"}],\"internalType\":\"structIBLSKeyChecker.BLSKeyWithProof\",\"name\":\"blsKeyWithProof\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"expiry\",\"type\":\"uint256\"}],\"internalType\":\"structISignatureUtils.SignatureWithSaltAndExpiry\",\"name\":\"operatorSignature\",\"type\":\"tuple\"}],\"name\":\"register\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32[]\",\"name\":\"indices\",\"type\":\"uint32[]\"}],\"name\":\"removeBlsPubKeys\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"operators\",\"type\":\"address[]\"}],\"name\":\"removeOperatorsFromWhitelist\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"stakeManager\",\"outputs\":[{\"internalType\":\"contractIStakeManager\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"chainID\",\"type\":\"uint32\"}],\"name\":\"subscribe\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"chainID\",\"type\":\"uint32\"}],\"name\":\"unsubscribe\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"operators\",\"type\":\"address[]\"},{\"internalType\":\"uint32\",\"name\":\"chainID\",\"type\":\"uint32\"}],\"name\":\"unsubscribeByAdmin\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_metadataURI\",\"type\":\"string\"}],\"name\":\"updateAVSMetadataURI\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"index\",\"type\":\"uint32\"},{\"components\":[{\"internalType\":\"uint256[2][]\",\"name\":\"blsG1PublicKeys\",\"type\":\"uint256[2][]\"},{\"internalType\":\"uint256[2][2]\",\"name\":\"aggG2PublicKey\",\"type\":\"uint256[2][2]\"},{\"internalType\":\"uint256[2]\",\"name\":\"signature\",\"type\":\"uint256[2]\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"expiry\",\"type\":\"uint256\"}],\"internalType\":\"structIBLSKeyChecker.BLSKeyWithProof\",\"name\":\"blsKeyWithProof\",\"type\":\"tuple\"}],\"name\":\"updateBlsPubKey\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newSignAddress\",\"type\":\"address\"}],\"name\":\"updateSignAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"voteWeigher\",\"outputs\":[{\"internalType\":\"contractIVoteWeigher\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
 }
 
 // LagrangeServiceABI is the input ABI used to generate the binding from.
@@ -435,25 +444,25 @@ func (_LagrangeService *LagrangeServiceCallerSession) VoteWeigher() (common.Addr
 	return _LagrangeService.Contract.VoteWeigher(&_LagrangeService.CallOpts)
 }
 
-// AddBlsPubKeys is a paid mutator transaction binding the contract method 0x992b098e.
+// AddBlsPubKeys is a paid mutator transaction binding the contract method 0x63d944ea.
 //
-// Solidity: function addBlsPubKeys(uint256[2][] additionalBlsPubKeys) returns()
-func (_LagrangeService *LagrangeServiceTransactor) AddBlsPubKeys(opts *bind.TransactOpts, additionalBlsPubKeys [][2]*big.Int) (*types.Transaction, error) {
-	return _LagrangeService.contract.Transact(opts, "addBlsPubKeys", additionalBlsPubKeys)
+// Solidity: function addBlsPubKeys((uint256[2][],uint256[2][2],uint256[2],bytes32,uint256) blsKeyWithProof) returns()
+func (_LagrangeService *LagrangeServiceTransactor) AddBlsPubKeys(opts *bind.TransactOpts, blsKeyWithProof IBLSKeyCheckerBLSKeyWithProof) (*types.Transaction, error) {
+	return _LagrangeService.contract.Transact(opts, "addBlsPubKeys", blsKeyWithProof)
 }
 
-// AddBlsPubKeys is a paid mutator transaction binding the contract method 0x992b098e.
+// AddBlsPubKeys is a paid mutator transaction binding the contract method 0x63d944ea.
 //
-// Solidity: function addBlsPubKeys(uint256[2][] additionalBlsPubKeys) returns()
-func (_LagrangeService *LagrangeServiceSession) AddBlsPubKeys(additionalBlsPubKeys [][2]*big.Int) (*types.Transaction, error) {
-	return _LagrangeService.Contract.AddBlsPubKeys(&_LagrangeService.TransactOpts, additionalBlsPubKeys)
+// Solidity: function addBlsPubKeys((uint256[2][],uint256[2][2],uint256[2],bytes32,uint256) blsKeyWithProof) returns()
+func (_LagrangeService *LagrangeServiceSession) AddBlsPubKeys(blsKeyWithProof IBLSKeyCheckerBLSKeyWithProof) (*types.Transaction, error) {
+	return _LagrangeService.Contract.AddBlsPubKeys(&_LagrangeService.TransactOpts, blsKeyWithProof)
 }
 
-// AddBlsPubKeys is a paid mutator transaction binding the contract method 0x992b098e.
+// AddBlsPubKeys is a paid mutator transaction binding the contract method 0x63d944ea.
 //
-// Solidity: function addBlsPubKeys(uint256[2][] additionalBlsPubKeys) returns()
-func (_LagrangeService *LagrangeServiceTransactorSession) AddBlsPubKeys(additionalBlsPubKeys [][2]*big.Int) (*types.Transaction, error) {
-	return _LagrangeService.Contract.AddBlsPubKeys(&_LagrangeService.TransactOpts, additionalBlsPubKeys)
+// Solidity: function addBlsPubKeys((uint256[2][],uint256[2][2],uint256[2],bytes32,uint256) blsKeyWithProof) returns()
+func (_LagrangeService *LagrangeServiceTransactorSession) AddBlsPubKeys(blsKeyWithProof IBLSKeyCheckerBLSKeyWithProof) (*types.Transaction, error) {
+	return _LagrangeService.Contract.AddBlsPubKeys(&_LagrangeService.TransactOpts, blsKeyWithProof)
 }
 
 // AddOperatorsToWhitelist is a paid mutator transaction binding the contract method 0x1be4b9f7.
@@ -519,25 +528,25 @@ func (_LagrangeService *LagrangeServiceTransactorSession) Initialize(initialOwne
 	return _LagrangeService.Contract.Initialize(&_LagrangeService.TransactOpts, initialOwner)
 }
 
-// Register is a paid mutator transaction binding the contract method 0x7a79ea33.
+// Register is a paid mutator transaction binding the contract method 0x4e32e904.
 //
-// Solidity: function register(address signAddress, uint256[2][] blsPubKeys, (bytes,bytes32,uint256) operatorSignature) returns()
-func (_LagrangeService *LagrangeServiceTransactor) Register(opts *bind.TransactOpts, signAddress common.Address, blsPubKeys [][2]*big.Int, operatorSignature ISignatureUtilsSignatureWithSaltAndExpiry) (*types.Transaction, error) {
-	return _LagrangeService.contract.Transact(opts, "register", signAddress, blsPubKeys, operatorSignature)
+// Solidity: function register(address signAddress, (uint256[2][],uint256[2][2],uint256[2],bytes32,uint256) blsKeyWithProof, (bytes,bytes32,uint256) operatorSignature) returns()
+func (_LagrangeService *LagrangeServiceTransactor) Register(opts *bind.TransactOpts, signAddress common.Address, blsKeyWithProof IBLSKeyCheckerBLSKeyWithProof, operatorSignature ISignatureUtilsSignatureWithSaltAndExpiry) (*types.Transaction, error) {
+	return _LagrangeService.contract.Transact(opts, "register", signAddress, blsKeyWithProof, operatorSignature)
 }
 
-// Register is a paid mutator transaction binding the contract method 0x7a79ea33.
+// Register is a paid mutator transaction binding the contract method 0x4e32e904.
 //
-// Solidity: function register(address signAddress, uint256[2][] blsPubKeys, (bytes,bytes32,uint256) operatorSignature) returns()
-func (_LagrangeService *LagrangeServiceSession) Register(signAddress common.Address, blsPubKeys [][2]*big.Int, operatorSignature ISignatureUtilsSignatureWithSaltAndExpiry) (*types.Transaction, error) {
-	return _LagrangeService.Contract.Register(&_LagrangeService.TransactOpts, signAddress, blsPubKeys, operatorSignature)
+// Solidity: function register(address signAddress, (uint256[2][],uint256[2][2],uint256[2],bytes32,uint256) blsKeyWithProof, (bytes,bytes32,uint256) operatorSignature) returns()
+func (_LagrangeService *LagrangeServiceSession) Register(signAddress common.Address, blsKeyWithProof IBLSKeyCheckerBLSKeyWithProof, operatorSignature ISignatureUtilsSignatureWithSaltAndExpiry) (*types.Transaction, error) {
+	return _LagrangeService.Contract.Register(&_LagrangeService.TransactOpts, signAddress, blsKeyWithProof, operatorSignature)
 }
 
-// Register is a paid mutator transaction binding the contract method 0x7a79ea33.
+// Register is a paid mutator transaction binding the contract method 0x4e32e904.
 //
-// Solidity: function register(address signAddress, uint256[2][] blsPubKeys, (bytes,bytes32,uint256) operatorSignature) returns()
-func (_LagrangeService *LagrangeServiceTransactorSession) Register(signAddress common.Address, blsPubKeys [][2]*big.Int, operatorSignature ISignatureUtilsSignatureWithSaltAndExpiry) (*types.Transaction, error) {
-	return _LagrangeService.Contract.Register(&_LagrangeService.TransactOpts, signAddress, blsPubKeys, operatorSignature)
+// Solidity: function register(address signAddress, (uint256[2][],uint256[2][2],uint256[2],bytes32,uint256) blsKeyWithProof, (bytes,bytes32,uint256) operatorSignature) returns()
+func (_LagrangeService *LagrangeServiceTransactorSession) Register(signAddress common.Address, blsKeyWithProof IBLSKeyCheckerBLSKeyWithProof, operatorSignature ISignatureUtilsSignatureWithSaltAndExpiry) (*types.Transaction, error) {
+	return _LagrangeService.Contract.Register(&_LagrangeService.TransactOpts, signAddress, blsKeyWithProof, operatorSignature)
 }
 
 // RemoveBlsPubKeys is a paid mutator transaction binding the contract method 0x5e332fe4.
@@ -666,6 +675,27 @@ func (_LagrangeService *LagrangeServiceTransactorSession) Unsubscribe(chainID ui
 	return _LagrangeService.Contract.Unsubscribe(&_LagrangeService.TransactOpts, chainID)
 }
 
+// UnsubscribeByAdmin is a paid mutator transaction binding the contract method 0x935a9b6a.
+//
+// Solidity: function unsubscribeByAdmin(address[] operators, uint32 chainID) returns()
+func (_LagrangeService *LagrangeServiceTransactor) UnsubscribeByAdmin(opts *bind.TransactOpts, operators []common.Address, chainID uint32) (*types.Transaction, error) {
+	return _LagrangeService.contract.Transact(opts, "unsubscribeByAdmin", operators, chainID)
+}
+
+// UnsubscribeByAdmin is a paid mutator transaction binding the contract method 0x935a9b6a.
+//
+// Solidity: function unsubscribeByAdmin(address[] operators, uint32 chainID) returns()
+func (_LagrangeService *LagrangeServiceSession) UnsubscribeByAdmin(operators []common.Address, chainID uint32) (*types.Transaction, error) {
+	return _LagrangeService.Contract.UnsubscribeByAdmin(&_LagrangeService.TransactOpts, operators, chainID)
+}
+
+// UnsubscribeByAdmin is a paid mutator transaction binding the contract method 0x935a9b6a.
+//
+// Solidity: function unsubscribeByAdmin(address[] operators, uint32 chainID) returns()
+func (_LagrangeService *LagrangeServiceTransactorSession) UnsubscribeByAdmin(operators []common.Address, chainID uint32) (*types.Transaction, error) {
+	return _LagrangeService.Contract.UnsubscribeByAdmin(&_LagrangeService.TransactOpts, operators, chainID)
+}
+
 // UpdateAVSMetadataURI is a paid mutator transaction binding the contract method 0xa98fb355.
 //
 // Solidity: function updateAVSMetadataURI(string _metadataURI) returns()
@@ -687,25 +717,25 @@ func (_LagrangeService *LagrangeServiceTransactorSession) UpdateAVSMetadataURI(_
 	return _LagrangeService.Contract.UpdateAVSMetadataURI(&_LagrangeService.TransactOpts, _metadataURI)
 }
 
-// UpdateBlsPubKey is a paid mutator transaction binding the contract method 0xc8d8e013.
+// UpdateBlsPubKey is a paid mutator transaction binding the contract method 0xc5bdc30a.
 //
-// Solidity: function updateBlsPubKey(uint32 index, uint256[2] blsPubKey) returns()
-func (_LagrangeService *LagrangeServiceTransactor) UpdateBlsPubKey(opts *bind.TransactOpts, index uint32, blsPubKey [2]*big.Int) (*types.Transaction, error) {
-	return _LagrangeService.contract.Transact(opts, "updateBlsPubKey", index, blsPubKey)
+// Solidity: function updateBlsPubKey(uint32 index, (uint256[2][],uint256[2][2],uint256[2],bytes32,uint256) blsKeyWithProof) returns()
+func (_LagrangeService *LagrangeServiceTransactor) UpdateBlsPubKey(opts *bind.TransactOpts, index uint32, blsKeyWithProof IBLSKeyCheckerBLSKeyWithProof) (*types.Transaction, error) {
+	return _LagrangeService.contract.Transact(opts, "updateBlsPubKey", index, blsKeyWithProof)
 }
 
-// UpdateBlsPubKey is a paid mutator transaction binding the contract method 0xc8d8e013.
+// UpdateBlsPubKey is a paid mutator transaction binding the contract method 0xc5bdc30a.
 //
-// Solidity: function updateBlsPubKey(uint32 index, uint256[2] blsPubKey) returns()
-func (_LagrangeService *LagrangeServiceSession) UpdateBlsPubKey(index uint32, blsPubKey [2]*big.Int) (*types.Transaction, error) {
-	return _LagrangeService.Contract.UpdateBlsPubKey(&_LagrangeService.TransactOpts, index, blsPubKey)
+// Solidity: function updateBlsPubKey(uint32 index, (uint256[2][],uint256[2][2],uint256[2],bytes32,uint256) blsKeyWithProof) returns()
+func (_LagrangeService *LagrangeServiceSession) UpdateBlsPubKey(index uint32, blsKeyWithProof IBLSKeyCheckerBLSKeyWithProof) (*types.Transaction, error) {
+	return _LagrangeService.Contract.UpdateBlsPubKey(&_LagrangeService.TransactOpts, index, blsKeyWithProof)
 }
 
-// UpdateBlsPubKey is a paid mutator transaction binding the contract method 0xc8d8e013.
+// UpdateBlsPubKey is a paid mutator transaction binding the contract method 0xc5bdc30a.
 //
-// Solidity: function updateBlsPubKey(uint32 index, uint256[2] blsPubKey) returns()
-func (_LagrangeService *LagrangeServiceTransactorSession) UpdateBlsPubKey(index uint32, blsPubKey [2]*big.Int) (*types.Transaction, error) {
-	return _LagrangeService.Contract.UpdateBlsPubKey(&_LagrangeService.TransactOpts, index, blsPubKey)
+// Solidity: function updateBlsPubKey(uint32 index, (uint256[2][],uint256[2][2],uint256[2],bytes32,uint256) blsKeyWithProof) returns()
+func (_LagrangeService *LagrangeServiceTransactorSession) UpdateBlsPubKey(index uint32, blsKeyWithProof IBLSKeyCheckerBLSKeyWithProof) (*types.Transaction, error) {
+	return _LagrangeService.Contract.UpdateBlsPubKey(&_LagrangeService.TransactOpts, index, blsKeyWithProof)
 }
 
 // UpdateSignAddress is a paid mutator transaction binding the contract method 0x5fa7306a.
@@ -1605,6 +1635,159 @@ func (_LagrangeService *LagrangeServiceFilterer) WatchOwnershipTransferred(opts 
 func (_LagrangeService *LagrangeServiceFilterer) ParseOwnershipTransferred(log types.Log) (*LagrangeServiceOwnershipTransferred, error) {
 	event := new(LagrangeServiceOwnershipTransferred)
 	if err := _LagrangeService.contract.UnpackLog(event, "OwnershipTransferred", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
+// LagrangeServiceUnsubscribedByAdminIterator is returned from FilterUnsubscribedByAdmin and is used to iterate over the raw logs and unpacked data for UnsubscribedByAdmin events raised by the LagrangeService contract.
+type LagrangeServiceUnsubscribedByAdminIterator struct {
+	Event *LagrangeServiceUnsubscribedByAdmin // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *LagrangeServiceUnsubscribedByAdminIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(LagrangeServiceUnsubscribedByAdmin)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(LagrangeServiceUnsubscribedByAdmin)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *LagrangeServiceUnsubscribedByAdminIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *LagrangeServiceUnsubscribedByAdminIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// LagrangeServiceUnsubscribedByAdmin represents a UnsubscribedByAdmin event raised by the LagrangeService contract.
+type LagrangeServiceUnsubscribedByAdmin struct {
+	Operator common.Address
+	ChainID  uint32
+	Raw      types.Log // Blockchain specific contextual infos
+}
+
+// FilterUnsubscribedByAdmin is a free log retrieval operation binding the contract event 0x2bb1cce1818b83dc9a614be5ae7471f32f000b48764252d856e61dd2c439d97f.
+//
+// Solidity: event UnsubscribedByAdmin(address indexed operator, uint32 indexed chainID)
+func (_LagrangeService *LagrangeServiceFilterer) FilterUnsubscribedByAdmin(opts *bind.FilterOpts, operator []common.Address, chainID []uint32) (*LagrangeServiceUnsubscribedByAdminIterator, error) {
+
+	var operatorRule []interface{}
+	for _, operatorItem := range operator {
+		operatorRule = append(operatorRule, operatorItem)
+	}
+	var chainIDRule []interface{}
+	for _, chainIDItem := range chainID {
+		chainIDRule = append(chainIDRule, chainIDItem)
+	}
+
+	logs, sub, err := _LagrangeService.contract.FilterLogs(opts, "UnsubscribedByAdmin", operatorRule, chainIDRule)
+	if err != nil {
+		return nil, err
+	}
+	return &LagrangeServiceUnsubscribedByAdminIterator{contract: _LagrangeService.contract, event: "UnsubscribedByAdmin", logs: logs, sub: sub}, nil
+}
+
+// WatchUnsubscribedByAdmin is a free log subscription operation binding the contract event 0x2bb1cce1818b83dc9a614be5ae7471f32f000b48764252d856e61dd2c439d97f.
+//
+// Solidity: event UnsubscribedByAdmin(address indexed operator, uint32 indexed chainID)
+func (_LagrangeService *LagrangeServiceFilterer) WatchUnsubscribedByAdmin(opts *bind.WatchOpts, sink chan<- *LagrangeServiceUnsubscribedByAdmin, operator []common.Address, chainID []uint32) (event.Subscription, error) {
+
+	var operatorRule []interface{}
+	for _, operatorItem := range operator {
+		operatorRule = append(operatorRule, operatorItem)
+	}
+	var chainIDRule []interface{}
+	for _, chainIDItem := range chainID {
+		chainIDRule = append(chainIDRule, chainIDItem)
+	}
+
+	logs, sub, err := _LagrangeService.contract.WatchLogs(opts, "UnsubscribedByAdmin", operatorRule, chainIDRule)
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(LagrangeServiceUnsubscribedByAdmin)
+				if err := _LagrangeService.contract.UnpackLog(event, "UnsubscribedByAdmin", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseUnsubscribedByAdmin is a log parse operation binding the contract event 0x2bb1cce1818b83dc9a614be5ae7471f32f000b48764252d856e61dd2c439d97f.
+//
+// Solidity: event UnsubscribedByAdmin(address indexed operator, uint32 indexed chainID)
+func (_LagrangeService *LagrangeServiceFilterer) ParseUnsubscribedByAdmin(log types.Log) (*LagrangeServiceUnsubscribedByAdmin, error) {
+	event := new(LagrangeServiceUnsubscribedByAdmin)
+	if err := _LagrangeService.contract.UnpackLog(event, "UnsubscribedByAdmin", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log

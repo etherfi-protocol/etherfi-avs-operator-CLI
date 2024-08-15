@@ -36,8 +36,12 @@ type Config struct {
 	BrevisRegistryCoordinatorAddress common.Address
 	BrevisServiceManagerAddress      common.Address
 
-	// Lagrange
+	// Lagrange State Committee
 	LagrangeServiceAddress common.Address
+
+	// Lagrange ZK Coprocessor
+	LagrangeZKMRServiceManagerAddress common.Address
+	LagrangeZKMRStakeRegistryAddress  common.Address
 
 	// Witnesschain
 	WitnessChainOperatorRegistryAddress common.Address
@@ -60,6 +64,8 @@ var Mainnet = Config{
 	BrevisRegistryCoordinatorAddress:    common.HexToAddress("0x434621cfd8BcDbe8839a33c85aE2B2893a4d596C"),
 	BrevisServiceManagerAddress:         common.HexToAddress("0x9FC952BdCbB7Daca7d420fA55b942405B073A89d"),
 	LagrangeServiceAddress:              common.HexToAddress("0x35F4f28A8d3Ff20EEd10e087e8F96Ea2641E6AA2"),
+	LagrangeZKMRServiceManagerAddress:   common.HexToAddress("0x22CAc0e6A1465F043428e8AeF737b3cb09D0eEDa"),
+	LagrangeZKMRStakeRegistryAddress:    common.HexToAddress("0x8dcdCc50Cc00Fe898b037bF61cCf3bf9ba46f15C"),
 	WitnessChainOperatorRegistryAddress: common.HexToAddress("0xEf1a89841fd189ba28e780A977ca70eb1A5e985D"),
 	WitnessChainWitnessHubAddress:       common.HexToAddress("0xD25c2c5802198CB8541987b73A8db4c9BCaE5cC7"),
 }
