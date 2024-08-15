@@ -33,7 +33,7 @@ You will be assigned an operatorID and an operator smart contract that is regist
 * [eOracle](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
 * [Brevis](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
 * [Lagrange ZK Coprocessor](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#lagrange-zk-coprocessor)
-* [Automata Multi-Prover]()
+* [Automata Multi-Prover](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#automata-multi-prover)
 
 ---
 
