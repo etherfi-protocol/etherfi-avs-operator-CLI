@@ -100,10 +100,6 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo
 	if err != nil {
 		return fmt.Errorf("wrapping call for admin: %w", err)
 	}
-	fmt.Println("stakeRegistry:", a.StakeRegistryAddress)
-	fmt.Println("manager:", a.AvsOperatorManagerAddress)
-	fmt.Println("operator:", operator.Address)
-	fmt.Println("serviceManager:", a.ServiceManagerAddress)
 
 	// output in gnosis compatible format
 	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("lagrangeZK-register-operator-%d", operator.ID))

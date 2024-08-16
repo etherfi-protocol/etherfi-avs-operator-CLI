@@ -42,6 +42,10 @@ type Config struct {
 	EOracleRegistryCoordinatorAddress common.Address
 	EOracleServiceManagerAddress      common.Address
 
+	// Hyperlane
+	HyperlaneStakeRegistryAddress  common.Address
+	HyperlaneServiceManagerAddress common.Address
+
 	// Lagrange State Committee
 	LagrangeServiceAddress common.Address
 
@@ -72,6 +76,8 @@ var Mainnet = Config{
 	EigenDAServiceManagerAddress:        common.HexToAddress("0x870679E138bCdf293b7Ff14dD44b70FC97e12fc0"),
 	EOracleRegistryCoordinatorAddress:   common.HexToAddress("0x757E6f572AfD8E111bD913d35314B5472C051cA8"),
 	EOracleServiceManagerAddress:        common.HexToAddress("0x23221c5bB90C7c57ecc1E75513e2E4257673F0ef"),
+	HyperlaneStakeRegistryAddress:       common.HexToAddress("0x272CF0BB70D3B4f79414E0823B426d2EaFd48910"),
+	HyperlaneServiceManagerAddress:      common.HexToAddress("0xe8E59c6C8B56F2c178f63BCFC4ce5e5e2359c8fc"),
 	LagrangeServiceAddress:              common.HexToAddress("0x35F4f28A8d3Ff20EEd10e087e8F96Ea2641E6AA2"),
 	LagrangeZKMRServiceManagerAddress:   common.HexToAddress("0x22CAc0e6A1465F043428e8AeF737b3cb09D0eEDa"),
 	LagrangeZKMRStakeRegistryAddress:    common.HexToAddress("0x8dcdCc50Cc00Fe898b037bF61cCf3bf9ba46f15C"),

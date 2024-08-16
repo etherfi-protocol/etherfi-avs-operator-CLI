@@ -11,10 +11,10 @@ import (
 	"github.com/urfave/cli/v3"
 )
 
-var EigenDARegisterCmd = &cli.Command{
+var RegisterCmd = &cli.Command{
 	Name:   "register",
-	Usage:  "(Admin) Register target operator to eigenDA AVS",
-	Action: handleEigenDARegister,
+	Usage:  "(Admin) Register target operator to the AVS",
+	Action: handleRegister,
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:     "registration-input",
@@ -24,7 +24,7 @@ var EigenDARegisterCmd = &cli.Command{
 	},
 }
 
-func handleEigenDARegister(ctx context.Context, cli *cli.Command) error {
+func handleRegister(ctx context.Context, cli *cli.Command) error {
 
 	// parse cli params
 	inputFilepath := cli.String("registration-input")

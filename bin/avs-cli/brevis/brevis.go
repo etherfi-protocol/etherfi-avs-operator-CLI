@@ -20,8 +20,8 @@ var BrevisCmd = &cli.Command{
 	Usage:  "various actions related to managing Brevis operators",
 	Before: prepareBrevisCmd,
 	Commands: []*cli.Command{
-		BrevisPrepareRegistrationCmd,
-		BrevisRegisterCmd,
+		PrepareRegistrationCmd,
+		RegisterCmd,
 	},
 }
 

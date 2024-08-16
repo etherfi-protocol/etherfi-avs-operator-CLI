@@ -8,10 +8,10 @@ import (
 	"github.com/urfave/cli/v3"
 )
 
-var EigenDAPrepareRegistrationCmd = &cli.Command{
+var PrepareRegistrationCmd = &cli.Command{
 	Name:   "prepare-registration",
 	Usage:  "(Node Operator) gather all inputs required to register for avs",
-	Action: handleEigenDAPrepareRegistration,
+	Action: handlePrepareRegistration,
 	Flags: []cli.Flag{
 		&cli.IntFlag{
 			Name:     "operator-id",
@@ -41,7 +41,7 @@ var EigenDAPrepareRegistrationCmd = &cli.Command{
 	},
 }
 
-func handleEigenDAPrepareRegistration(ctx context.Context, cli *cli.Command) error {
+func handlePrepareRegistration(ctx context.Context, cli *cli.Command) error {
 
 	// parse cli input
 	operatorID := cli.Int("operator-id")
