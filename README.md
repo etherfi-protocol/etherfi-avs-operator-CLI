@@ -34,6 +34,7 @@ You will be assigned an operatorID and an operator smart contract that is regist
 * [Brevis](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
 * [Lagrange ZK Coprocessor](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#lagrange-zk-coprocessor)
 * [Automata Multi-Prover](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#automata-multi-prover)
+* [Hyperlane](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#hyperlane)
 
 ---
 
@@ -60,7 +61,7 @@ In order to run the witnesschain node software you will need to register a watch
 
 1. Follow the steps at https://docs.witnesschain.com/rollup-watchtower-network-live/for-the-node-operators/watchtower-setup/mainnet-setup#step-3.3-registering-the-watchtowers-on-witnesschain-mainnet-l2
 
-Generate a separate ECDSA key you control for the value of `operator_private_key`
+Generate a separate ECDSA key you control for the value of `operator_private_key`, and request the witnesschain team to whitelist this address on their L2
 
 2. Notify the ether.fi team that you have completed registration and begin to run witnesschain node software.
 Please use the same value as `operator_private_key` in your L1 + L2 config files.
@@ -216,6 +217,31 @@ where they will briefly update the limits. After you get confirmation that they 
 
 ---
 
+# Hyperlane
+
+## Operator Flow
+
+1. Generate a new ECDSA key using [EigenLayer CLI](https://docs.eigenlayer.xyz/eigenlayer/operator-guides/operator-installation#create-and-list-keys)
+and note the address of the key you generated
+2. Run the following command and send the output to the ether.fi team via `restaking@ether.fi`
+
+           ./avs-cli hyperlane prepare-registration --operator-id {operator_id} --avs-signer {address_of_generated_ecdsa_key}
+
+3. Wait for confirmation from the ether.fi team that your registration is complete
+4. Proceed to run the hyperlane node software
+
+
+## Ether.fi Admin Flow
+
+1. Recieve prepared registration json file from target node operator
+2. Register the operator contract with Hyperlane
+
+           ./avs-cli hyperlane register --registration-input hyperlane-input.json
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
+
+---
+
 # Adding a new AVS to the CLI
 
 ### 1. Understand the complete registration flow for the AVS you are adding
@@ -224,8 +250,8 @@ out of the box. Please confirm that their contracts will be compatible with this
 Many AVS's also utilize different styles of keys/signatures and different numbers of them and even multiple chains.
 Figure out which actions need to be taken by the individual node operators and which need to be 
 done by an ether.fi admin with the EIP-1271 signing key.
-Please take the time to open a PR against https://github.com/etherfi-protocol/avs-smart-contracts/tree/witness-chain
-with a test walking through the entire registration flow. You can find an example here https://github.com/etherfi-protocol/avs-smart-contracts/blob/witness-chain/test/WitnessChain.t.sol
+Please take the time to open a PR against https://github.com/etherfi-protocol/avs-smart-contracts/
+with a test walking through the entire registration flow. You can find an examples in the `test/` directory of the avs-smart-contracts repo
 
 ### 2. Add a new command for your avs to `bin/avs-cli/main.go`
 Add your top level command to this file and then implement subcommands in their own package.
