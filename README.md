@@ -33,6 +33,7 @@ You will be assigned an operatorID and an operator smart contract that is regist
 * [eOracle](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
 * [Brevis](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
 * [Lagrange ZK Coprocessor](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#lagrange-zk-coprocessor)
+* [AltLayer MACH](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#altlayermach)
 * [Automata Multi-Prover](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#automata-multi-prover)
 * [Hyperlane](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#hyperlane)
 
@@ -191,11 +192,11 @@ where they will briefly update the limits. After you get confirmation that they 
 
 ---
 
-# AltLayer
+# AltLayer MACH
 
 ## Operator Flow
 
-1. generate and encrypt a new BLS keystore using the EigenLayer CLI tooling https://docs.eigenlayer.xyz/eigenlayer/operator-guides/operator-installation#create-and-list-keys
+1. generate and encrypt a BLS keystore using the [EigenLayer CLI](https://docs.eigenlayer.xyz/eigenlayer/operator-guides/operator-installation#create-and-list-keys)
 2. Determine which `quorums` and `socket` you wish to register for
 3. Sign digest establishing ownership of your newly generated BLS key
 
@@ -203,7 +204,7 @@ where they will briefly update the limits. After you get confirmation that they 
 
 4. Send the result of the previous command to the ether.fi team via `restaking@ether.fi`
 5. Wait for confirmation from the ether.fi team that your registration is complete
-6. Proceed to run the eigenda node software
+6. Follow the [AltLayer Operator Guide](https://docs.altlayer.io/altlayer-documentation/altlayer-facilitated-actively-validated-services/altlayer-mach-avs/operator-guide) skipping the `Opt-in and out of MACH AVS` sections. The `Opt-in` was already handling by the steps above. The `OPERATOR_ECDSA_ADDRESS` is `ecdsaSigner` of ether.fi operator contract you are registering with.
 
 ## Ether.fi Admin Flow
 
@@ -213,34 +214,9 @@ where they will briefly update the limits. After you get confirmation that they 
            ./avs-cli altlayer register --registration-input eoracle-input.json
 
            // submit resulting output as a gnosis TX via AVS admin gnosis
-3. Ensure that the ECDSA signer for this operator contract is funded with at least 0.3 ETH to ensure you have sufficient gas tokens for AVS registering, opt-in and de-registering operation. 
 
 ---
 
-# AltLayer
-
-## Operator Flow
-
-1. generate and encrypt a new BLS keystore using the EigenLayer CLI tooling https://docs.eigenlayer.xyz/eigenlayer/operator-guides/operator-installation#create-and-list-keys
-2. Determine which `quorums` and `socket` you wish to register for
-3. Sign digest establishing ownership of your newly generated BLS key
-
-           ./avs-cli altlayer prepare-registration --operator-id {operator_id} --bls-keystore {path_to_keystore} --bls-password {password} --quorums {0,1} --socket {socket}
-
-4. Send the result of the previous command to the ether.fi team via `restaking@ether.fi`
-5. Wait for confirmation from the ether.fi team that your registration is complete
-6. Proceed to run the eigenda node software
-
-## Ether.fi Admin Flow
-
-1. Receive prepared registration json file from target node operator
-2. Register the operator contract with altlayer
-
-           ./avs-cli altlayer register --registration-input eoracle-input.json
-
-           // submit resulting output as a gnosis TX via AVS admin gnosis
-3. Ensure that the ECDSA signer for this operator contract is funded with at least 0.3 ETH to ensure you have sufficient gas tokens for AVS registering, opt-in and de-registering operation. 
-=======
 # Automata Multi-Prover
 
 ## Operator Flow

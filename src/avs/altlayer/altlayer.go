@@ -39,6 +39,7 @@ func New(cfg config.Config, rpcClient *ethclient.Client) *API {
 		RegistryCoordinator:        registryCoordinator,
 		RegistryCoordinatorAddress: cfg.AltLayerRegistryCoordinatorAddress,
 		ServiceManagerAddress:      cfg.AltLayerServiceManagerAddress,
+		AvsOperatorManagerAddress:  cfg.AvsOperatorManagerAddress,
 		EigenlayerAPI:              eigenlayer.New(cfg, rpcClient),
 	}
 }
