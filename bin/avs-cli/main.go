@@ -6,9 +6,12 @@ import (
 	"os"
 
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/altlayer"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/automata"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/brevis"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/eigenda"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/eoracle"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/hyperlane"
+	lagrangezk "github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/lagrangeZK"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/witness-chain"
 	"github.com/urfave/cli/v3"
 )
@@ -25,16 +28,19 @@ func main() {
 			},
 		},
 		Commands: []*cli.Command{
-			//registrationDigestCmd,
 			BlsPubkeyRegistrationHashCmd,
 			operatorDetailsCmd,
 			updateEcdsaSignerCmd,
-			//			lagrange.LagrangeCmd,
+
+			// AVS specific commands
+			altlayer.AltLayerCmd,
+			automata.AutomataCmd,
+			brevis.BrevisCmd,
 			eoracle.EOracleCmd,
 			eigenda.EigenDACmd,
+			hyperlane.HyperlaneCmd,
+			lagrangezk.LagrangeZKCmd,
 			witness.WitnessCmd,
-			brevis.BrevisCmd,
-			altlayer.AltLayerCmd,
 		},
 	}
 

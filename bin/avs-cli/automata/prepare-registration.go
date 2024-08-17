@@ -1,4 +1,4 @@
-package eigenda
+package automata
 
 import (
 	"context"
@@ -8,10 +8,10 @@ import (
 	"github.com/urfave/cli/v3"
 )
 
-var PrepareRegistrationCmd = &cli.Command{
+var AutomataPrepareRegistrationCmd = &cli.Command{
 	Name:   "prepare-registration",
 	Usage:  "(Node Operator) gather all inputs required to register for avs",
-	Action: handlePrepareRegistration,
+	Action: handleAutomataPrepareRegistration,
 	Flags: []cli.Flag{
 		&cli.IntFlag{
 			Name:     "operator-id",
@@ -28,27 +28,19 @@ var PrepareRegistrationCmd = &cli.Command{
 			Usage:    "password for encrypted keystore file",
 			Required: true,
 		},
-		&cli.IntSliceFlag{
-			Name:     "quorums",
-			Usage:    "which quorums to register for i.e. 0,1",
-			Required: true,
-		},
-		&cli.StringFlag{
-			Name:     "socket",
-			Usage:    "eigenda socket",
-			Required: true,
-		},
 	},
 }
 
-func handlePrepareRegistration(ctx context.Context, cli *cli.Command) error {
+func handleAutomataPrepareRegistration(ctx context.Context, cli *cli.Command) error {
 
 	// parse cli input
 	operatorID := cli.Int("operator-id")
 	blsKeyFile := cli.String("bls-keystore")
 	blsKeyPassword := cli.String("bls-password")
-	quorums := cli.IntSlice("quorums")
-	socket := cli.String("socket")
+
+	// automata does not make use inputs in the call to `registerOperator`
+	quorums := []int64{0}
+	socket := "Not Needed"
 
 	// decrypt and load bls key from keystore
 	ks := keystore.NewKeystoreV3()
@@ -63,5 +55,5 @@ func handlePrepareRegistration(ctx context.Context, cli *cli.Command) error {
 		return fmt.Errorf("looking up operator address: %w", err)
 	}
 
-	return eigendaAPI.PrepareRegistration(operator, keyPair, socket, quorums)
+	return automataAPI.PrepareRegistration(operator, keyPair, socket, quorums)
 }

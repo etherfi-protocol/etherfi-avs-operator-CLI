@@ -1,4 +1,4 @@
-package brevis
+package lagrangezk
 
 import (
 	"context"
@@ -6,19 +6,19 @@ import (
 	"os"
 
 	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/avs/brevis"
+	lagrangezk "github.com/etherfi-protocol/etherfi-avs-operator-tool/src/avs/lagrangeZK"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/config"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/urfave/cli/v3"
 )
 
-var brevisAPI *brevis.API
+var lagrangeZKAPI *lagrangezk.API
 var etherfiAPI *etherfi.API
 
-var BrevisCmd = &cli.Command{
-	Name:   "brevis",
-	Usage:  "various actions related to managing Brevis operators",
-	Before: prepareBrevisCmd,
+var LagrangeZKCmd = &cli.Command{
+	Name:   "lagrangeZK",
+	Usage:  "various actions related to managing Lagrange ZK Coprocessor operators",
+	Before: prepareLagrangeZKCmd,
 	Commands: []*cli.Command{
 		PrepareRegistrationCmd,
 		RegisterCmd,
@@ -26,7 +26,7 @@ var BrevisCmd = &cli.Command{
 }
 
 // run before any subcommand executes
-func prepareBrevisCmd(ctx context.Context, cmd *cli.Command) error {
+func prepareLagrangeZKCmd(ctx context.Context, cmd *cli.Command) error {
 	// try to load RPC_URL from env or flags
 	rpcURL := os.Getenv("RPC_URL")
 	if cmd.String("rpc-url") != "" {
@@ -40,7 +40,7 @@ func prepareBrevisCmd(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("dialing RPC: %w", err)
 	}
 
-	// load all required addresses for this chain
+	// load all required addresses for this chain and bind applicable contracts
 	cfg, err := config.AutodetectConfig(rpcClient)
 	if err != nil {
 		return fmt.Errorf("loading config: %w", err)
@@ -48,7 +48,7 @@ func prepareBrevisCmd(ctx context.Context, cmd *cli.Command) error {
 
 	// make globally accessible by all sub commands
 	etherfiAPI = etherfi.New(cfg, rpcClient)
-	brevisAPI = brevis.New(cfg, rpcClient)
+	lagrangeZKAPI = lagrangezk.New(cfg, rpcClient)
 
 	return nil
 }

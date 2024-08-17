@@ -1,4 +1,4 @@
-package brevis
+package automata
 
 import (
 	"context"
@@ -6,27 +6,27 @@ import (
 	"os"
 
 	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/avs/brevis"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/avs/automata"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/config"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/urfave/cli/v3"
 )
 
-var brevisAPI *brevis.API
+var automataAPI *automata.API
 var etherfiAPI *etherfi.API
 
-var BrevisCmd = &cli.Command{
-	Name:   "brevis",
-	Usage:  "various actions related to managing Brevis operators",
-	Before: prepareBrevisCmd,
+var AutomataCmd = &cli.Command{
+	Name:   "automata",
+	Usage:  "various actions related to managing Automata operators",
+	Before: prepareAutomataCmd,
 	Commands: []*cli.Command{
-		PrepareRegistrationCmd,
-		RegisterCmd,
+		AutomataPrepareRegistrationCmd,
+		AutomataRegisterCmd,
 	},
 }
 
 // run before any subcommand executes
-func prepareBrevisCmd(ctx context.Context, cmd *cli.Command) error {
+func prepareAutomataCmd(ctx context.Context, cmd *cli.Command) error {
 	// try to load RPC_URL from env or flags
 	rpcURL := os.Getenv("RPC_URL")
 	if cmd.String("rpc-url") != "" {
@@ -48,7 +48,7 @@ func prepareBrevisCmd(ctx context.Context, cmd *cli.Command) error {
 
 	// make globally accessible by all sub commands
 	etherfiAPI = etherfi.New(cfg, rpcClient)
-	brevisAPI = brevis.New(cfg, rpcClient)
+	automataAPI = automata.New(cfg, rpcClient)
 
 	return nil
 }

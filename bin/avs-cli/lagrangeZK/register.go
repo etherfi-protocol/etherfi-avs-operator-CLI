@@ -1,4 +1,4 @@
-package eigenda
+package lagrangezk
 
 import (
 	"context"
@@ -7,13 +7,13 @@ import (
 	"os"
 
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/avs/eigenda"
+	lagrangezk "github.com/etherfi-protocol/etherfi-avs-operator-tool/src/avs/lagrangeZK"
 	"github.com/urfave/cli/v3"
 )
 
 var RegisterCmd = &cli.Command{
 	Name:   "register",
-	Usage:  "(Admin) Register target operator to the AVS",
+	Usage:  "(Admin) Register target operator to LagrangeZK Coprocessor AVS",
 	Action: handleRegister,
 	Flags: []cli.Flag{
 		&cli.StringFlag{
@@ -30,7 +30,7 @@ func handleRegister(ctx context.Context, cli *cli.Command) error {
 	inputFilepath := cli.String("registration-input")
 
 	// read input file with required registration data
-	var input eigenda.RegistrationInfo
+	var input lagrangezk.RegistrationInfo
 	buf, err := os.ReadFile(inputFilepath)
 	if err != nil {
 		return fmt.Errorf("reading input file: %w", err)
@@ -40,9 +40,6 @@ func handleRegister(ctx context.Context, cli *cli.Command) error {
 	}
 	if input.OperatorID == 0 {
 		return fmt.Errorf("invalid registration input, missing operatorID")
-	}
-	if input.Socket == "" {
-		return fmt.Errorf("invalid registration input, missing socket")
 	}
 
 	// look up operator contract associated with this id
@@ -57,5 +54,5 @@ func handleRegister(ctx context.Context, cli *cli.Command) error {
 		return fmt.Errorf("invalid private key: %w", err)
 	}
 
-	return eigendaAPI.RegisterOperator(operator, input, signingKey)
+	return lagrangeZKAPI.RegisterOperator(operator, input, signingKey)
 }

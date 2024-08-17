@@ -79,7 +79,9 @@ func (a *API) GenerateAndSignRegistrationDigest(operator *etherfi.Operator, serv
 	}
 	keyAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
 	if keyAddress != ecdsaSigner {
+		color.HiYellow("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 		color.HiYellow("WARNING: configured signing key does not match the current ecdsaSigner for operator")
+		color.HiYellow("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 		fmt.Printf("signer: %s, ecdsaSigner: %s\n\n", keyAddress, ecdsaSigner)
 	}
 

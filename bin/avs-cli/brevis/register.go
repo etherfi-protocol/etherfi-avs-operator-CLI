@@ -11,10 +11,10 @@ import (
 	"github.com/urfave/cli/v3"
 )
 
-var BrevisRegisterCmd = &cli.Command{
+var RegisterCmd = &cli.Command{
 	Name:   "register",
-	Usage:  "(Admin) Register target operator to Brevis AVS",
-	Action: handleBrevisRegister,
+	Usage:  "(Admin) Register target operator to the AVS",
+	Action: handleRegister,
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:     "registration-input",
@@ -24,12 +24,12 @@ var BrevisRegisterCmd = &cli.Command{
 	},
 }
 
-func handleBrevisRegister(ctx context.Context, cli *cli.Command) error {
+func handleRegister(ctx context.Context, cli *cli.Command) error {
 
 	// parse cli params
 	inputFilepath := cli.String("registration-input")
 
-	// read input file with required eigenDA data
+	// read input file with required registration data
 	var input brevis.RegistrationInfo
 	buf, err := os.ReadFile(inputFilepath)
 	if err != nil {

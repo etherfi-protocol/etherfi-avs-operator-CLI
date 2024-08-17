@@ -22,8 +22,8 @@ var EigenDACmd = &cli.Command{
 	Usage:  "various actions related to managing eigenDA operators",
 	Before: prepareEigendaCmd,
 	Commands: []*cli.Command{
-		EigenDAPrepareRegistrationCmd,
-		EigenDARegisterCmd,
+		PrepareRegistrationCmd,
+		RegisterCmd,
 	},
 }
 

@@ -8,10 +8,10 @@ import (
 	"github.com/urfave/cli/v3"
 )
 
-var BrevisPrepareRegistrationCmd = &cli.Command{
+var PrepareRegistrationCmd = &cli.Command{
 	Name:   "prepare-registration",
 	Usage:  "(Node Operator) gather all inputs required to register for avs",
-	Action: handleBrevisPrepareRegistration,
+	Action: handlePrepareRegistration,
 	Flags: []cli.Flag{
 		&cli.IntFlag{
 			Name:     "operator-id",
@@ -41,7 +41,7 @@ var BrevisPrepareRegistrationCmd = &cli.Command{
 	},
 }
 
-func handleBrevisPrepareRegistration(ctx context.Context, cli *cli.Command) error {
+func handlePrepareRegistration(ctx context.Context, cli *cli.Command) error {
 
 	// parse cli input
 	operatorID := cli.Int("operator-id")
