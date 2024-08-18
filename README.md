@@ -18,7 +18,7 @@ make build
 # AVS Registration
 
 ### Prerequisites
-- Etherereum RPC endpoint to send transactions.
+- Ethereum RPC endpoint to send transactions.
 
 
 ## Step 1: Request ether.fi team to be registered as a Delegated AVS operator
@@ -33,6 +33,7 @@ You will be assigned an operatorID and an operator smart contract that is regist
 * [eOracle](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
 * [Brevis](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
 * [Lagrange ZK Coprocessor](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#lagrange-zk-coprocessor)
+* [AltLayer MACH](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#altlayermach)
 * [Automata Multi-Prover](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#automata-multi-prover)
 * [Hyperlane](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#hyperlane)
 
@@ -70,7 +71,7 @@ Please use the same value as `operator_private_key` in your L1 + L2 config files
 ## Ether.fi Admin Flow
 
 1. Request WitnessChain team to whitelist target Operator contract
-2. Recieve prepared registration json file from target node operator
+2. Receive prepared registration json file from target node operator
 3. Register the operator contract with witness chain
 
            ./avs-cli witness-chain register --registration-input witness-input.json --rpc-url $RPC_URL
@@ -126,7 +127,7 @@ Be sure to save the `public_key` hex string that will be returned as part of the
 
 ## Ether.fi Admin Flow
 
-1. Recieve prepared registration json file from target node operator
+1. Receive prepared registration json file from target node operator
 2. Register the operator contract with eigenda
 
            ./avs-cli eigenda register --registration-input eigenda-input.json
@@ -151,7 +152,7 @@ Be sure to save the `public_key` hex string that will be returned as part of the
 
 ## Ether.fi Admin Flow
 
-1. Recieve prepared registration json file from target node operator
+1. Receive prepared registration json file from target node operator
 2. Brevis operates with a strict limit on operator numbers. Prior to registering a new operator, you must organize a time with the brevis team
 where they will briefly update the limits. After you get confirmation that they have updated the limits, immediately perform the below registration
 3. Register the operator contract with brevis
@@ -179,7 +180,7 @@ where they will briefly update the limits. After you get confirmation that they 
 
 ## Ether.fi Admin Flow
 
-1. Recieve prepared registration json file from target node operator
+1. Receive prepared registration json file from target node operator
 2. Register the operator contract with eoracle
 
            ./avs-cli eoracle register --registration-input eoracle-input.json
@@ -188,6 +189,31 @@ where they will briefly update the limits. After you get confirmation that they 
 
 3. Ask the eOracle team to manually set the alias address from the input to be associated with the target operator
 4. Once the eOracle has confirmed set the alias address, you may proceed to tell the node operator to begin running the node software
+
+---
+
+# AltLayer MACH
+
+## Operator Flow
+
+1. generate and encrypt a BLS keystore using the [EigenLayer CLI](https://docs.eigenlayer.xyz/eigenlayer/operator-guides/operator-installation#create-and-list-keys)
+2. Determine which `quorums` and `socket` you wish to register for
+3. Sign digest establishing ownership of your newly generated BLS key
+
+           ./avs-cli altlayer prepare-registration --operator-id {operator_id} --bls-keystore {path_to_keystore} --bls-password {password} --quorums {0,1} --socket {socket}
+
+4. Send the result of the previous command to the ether.fi team via `restaking@ether.fi`
+5. Wait for confirmation from the ether.fi team that your registration is complete
+6. Follow the [AltLayer Operator Guide](https://docs.altlayer.io/altlayer-documentation/altlayer-facilitated-actively-validated-services/altlayer-mach-avs/operator-guide) skipping the `Opt-in and out of MACH AVS` sections. The `Opt-in` was already handling by the steps above. The `OPERATOR_ECDSA_ADDRESS` is `ecdsaSigner` of ether.fi operator contract you are registering with.
+
+## Ether.fi Admin Flow
+
+1. Receive prepared registration json file from target node operator
+2. Register the operator contract with altlayer
+
+           ./avs-cli altlayer register --registration-input eoracle-input.json
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
 
 ---
 

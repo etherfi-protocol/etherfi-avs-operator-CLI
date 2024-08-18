@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/altlayer"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/automata"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/brevis"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/eigenda"
@@ -32,6 +33,7 @@ func main() {
 			updateEcdsaSignerCmd,
 
 			// AVS specific commands
+			altlayer.AltLayerCmd,
 			automata.AutomataCmd,
 			brevis.BrevisCmd,
 			eoracle.EOracleCmd,
