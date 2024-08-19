@@ -60,9 +60,11 @@ In order to run the witnesschain node software you will need to register a watch
 
 ### registering watchtower on L2
 
-1. Follow the steps at https://docs.witnesschain.com/rollup-watchtower-network-live/for-the-node-operators/watchtower-setup/mainnet-setup#step-3.3-registering-the-watchtowers-on-witnesschain-mainnet-l2
+1. Follow the steps at https://docs.witnesschain.com/rollup-watchtower-network-live/for-the-node-operators/watchtower-setup/mainnet-setup#step-3-register-the-operator-on-the-witness-chain-watchtower-network
 
-Generate a separate ECDSA key you control for the value of `operator_private_key`, and request the witnesschain team to whitelist this address on their L2
+Generate a separate ECDSA key you control for the value of `operator_private_key`, and request the witnesschain team to whitelist this address on their L2.
+Be sure to explicitly set `"eth_rpc_url": ""` (set it to empty value) in your config file so that the cli only registers the watchtower on the L2
+
 
 2. Notify the ether.fi team that you have completed registration and begin to run witnesschain node software.
 Please use the same value as `operator_private_key` in your L1 + L2 config files.
