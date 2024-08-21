@@ -30,7 +30,7 @@ You will be assigned an operatorID and an operator smart contract that is regist
 ## Step 2: Follow the instructions for the specific AVS you are registering for
 * [Witness Chain](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
 * [EigenDA](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#eigenda)
-* [eOracle](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
+* [eOracle](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#eoracle)
 * [Brevis](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
 * [Lagrange ZK Coprocessor](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#lagrange-zk-coprocessor)
 * [AltLayer MACH](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#altlayermach)
