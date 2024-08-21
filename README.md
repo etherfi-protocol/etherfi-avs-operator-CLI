@@ -96,7 +96,7 @@ Please use the same value as `operator_private_key` in your L1 + L2 config files
 Be sure to save the `public_key` hex string that will be returned as part of the above command
 2. Run the following command and send the output to the ether.fi team via `restaking@ether.fi`
 
-           ./avs-cli lagrangeZK prepare-registration --operator-id {operator_id} --public-key {pubkey_hex}
+           ./avs-cli lagrangeZK prepare-registration --operator-id {operator_id} --pubkey {pubkey_hex}
 
 3. Wait for confirmation from the ether.fi team that your registration is complete
 4. Proceed to run the lagrange zk coprocessor node software
