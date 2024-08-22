@@ -275,7 +275,7 @@ and note the address of the key you generated
 
 ## Operator Flow
 
-1. Follow the instructions provided in the [ARPA EigenLayer Onboarding Docs](https://github.com/ARPA-Network/BLS-TSS-Network/blob/main/docs/eigenlayer-onboarding.md)to run the `node-client` on Base Mainnet. Stop when you reach the **Register to ARPA Network by your Node account** step
+1. Follow the instructions provided in the [ARPA EigenLayer Onboarding Docs](https://github.com/ARPA-Network/BLS-TSS-Network/blob/main/docs/eigenlayer-onboarding.md) to run the `node-client` on Base Mainnet. Stop when you reach the **Register to ARPA Network by your Node account** step
 3. Keep the `node-client` running, go to the log and search the log for the keyword "public_key" (or "DKGKeyGenerated") and copy the DKG public key value
 4. Run the following command:
 
