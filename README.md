@@ -23,7 +23,7 @@ make build
 
 ## Step 1: Request ether.fi team to be registered as a Delegated AVS operator
 
-You will be assigned an operatorID and an operator smart contract that is registered with eigenlayeer
+You will be assigned an operatorID and an operator smart contract that is registered with eigenlayer
 - `operatorId`: AVS operator ID assigned by ether.fi team.
 - `operatorAddress`: Eigenlayer operator address, which is managed by ether.fi team.
 
@@ -36,6 +36,7 @@ You will be assigned an operatorID and an operator smart contract that is regist
 * [AltLayer MACH](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#altlayermach)
 * [Automata Multi-Prover](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#automata-multi-prover)
 * [Hyperlane](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#hyperlane)
+* [ARPA](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#arpa)
 
 ---
 
@@ -235,7 +236,7 @@ where they will briefly update the limits. After you get confirmation that they 
 
 ## Ether.fi Admin Flow
 
-1. Recieve prepared registration json file from target node operator
+1. Receive prepared registration json file from target node operator
 2. Ensure target operator contract is whitelisted by automata team (Whitelisting was requested for operators 1-12)
 3. Register the operator contract with automata
 
@@ -261,10 +262,37 @@ and note the address of the key you generated
 
 ## Ether.fi Admin Flow
 
-1. Recieve prepared registration json file from target node operator
+1. Receive prepared registration json file from target node operator
 2. Register the operator contract with Hyperlane
 
            ./avs-cli hyperlane register --registration-input hyperlane-input.json
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
+
+---
+
+# ARPA
+
+## Operator Flow
+
+1. Follow the instructions provided in the [ARPA EigenLayer Onboarding Docs](https://github.com/ARPA-Network/BLS-TSS-Network/blob/main/docs/eigenlayer-onboarding.md) to run the `node-client` on Base Mainnet. Stop when you reach the **Register to ARPA Network by your Node account** step
+3. Keep the `node-client` running, go to the log and search the log for the keyword "public_key" (or "DKGKeyGenerated") and copy the DKG public key value
+4. Run the following command:
+
+           ./avs-cli arpa prepare-registration --operator-id {operator_id} --dkg-public-key {dkg_public_key}
+
+6. Send the following information to the ether.fi team via `restaking@ether.fi`
+  - The output of the above `prepare-registration` command
+  - The address of the ECDSA account used as the Node Account in step 1
+
+5. Continue to run the `node-client` software
+
+## Ether.fi Admin Flow
+
+1. Receive prepared registration json file from target node operator
+2. Register the operator contract with ARPA
+
+           ./avs-cli arpa register --registration-input arpa-input.json
 
            // submit resulting output as a gnosis TX via AVS admin gnosis
 
