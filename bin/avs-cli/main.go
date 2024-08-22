@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/altlayer"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/arpa"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/automata"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/brevis"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/eigenda"
@@ -34,6 +35,7 @@ func main() {
 
 			// AVS specific commands
 			altlayer.AltLayerCmd,
+			arpa.ARPACmd,
 			automata.AutomataCmd,
 			brevis.BrevisCmd,
 			eoracle.EOracleCmd,
