@@ -42,17 +42,17 @@ func New(cfg config.Config, rpcClient *ethclient.Client) *API {
 
 // Info that node operator must supply to the ether.fi admin for registration
 type RegistrationInfo struct {
-	OperatorID int64
-	AvsSigner  common.Address
+	OperatorID   int64
+	DKGPublicKey []byte
 }
 
 // PrepareRegistration aggregates all required info from the node operator that
 // the ether.fi admin will need to register them to the AVS
-func (a *API) PrepareRegistration(operator *etherfi.Operator, avsSigner common.Address) error {
+func (a *API) PrepareRegistration(operator *etherfi.Operator, dkgPublicKey []byte) error {
 
 	ri := RegistrationInfo{
-		OperatorID: operator.ID,
-		AvsSigner:  avsSigner,
+		OperatorID:   operator.ID,
+		DKGPublicKey: dkgPublicKey,
 	}
 
 	return utils.ExportJSON("arpa-prepare-registration", operator.ID, ri)
@@ -80,7 +80,7 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo
 	if err != nil {
 		return fmt.Errorf("fetching abi: %w", err)
 	}
-	input, err := nodeRegistryABI.Pack("nodeRegister", , operator.Address, sigWithSaltAndExpiry)
+	input, err := nodeRegistryABI.Pack("nodeRegister", info.DKGPublicKey, true, operator.Address, sigWithSaltAndExpiry)
 	if err != nil {
 		return fmt.Errorf("packing input: %w", err)
 	}
