@@ -4,10 +4,9 @@ import (
 	"crypto/sha256"
 	"testing"
 
-	eigenbn254 "github.com/Layr-Labs/eigensdk-go/crypto/bn254"
+	"github.com/Layr-Labs/eigenda/core/bn254"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/keystore"
 	"github.com/stretchr/testify/assert"
-
-	"github.com/etherfi-protocol/etherfi-avs-operator-tool/keystore"
 )
 
 func TestNewAVSSigner(t *testing.T) {
@@ -25,7 +24,7 @@ func TestNewAVSSigner(t *testing.T) {
 	// Prepare message
 	msg := "hello world"
 	hash := sha256.Sum256([]byte(msg))
-	g1MsgHash := eigenbn254.MapToCurve(hash)
+	g1MsgHash := bn254.MapToCurve(hash)
 
 	// Sign and verify
 	signature, err := signer.Sign(g1MsgHash)
@@ -38,7 +37,7 @@ func TestNewAVSSigner(t *testing.T) {
 
 	wrongMsg := "another message"
 	hash = sha256.Sum256([]byte(wrongMsg))
-	g1MsgHash = eigenbn254.MapToCurve(hash)
+	g1MsgHash = bn254.MapToCurve(hash)
 
 	isValid, err = signer.Verify(g1MsgHash, signature)
 	assert.Nil(t, err)

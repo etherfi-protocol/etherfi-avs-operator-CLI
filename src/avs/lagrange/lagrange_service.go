@@ -29,15 +29,6 @@ var (
 	_ = abi.ConvertType
 )
 
-// IBLSKeyCheckerBLSKeyWithProof is an auto generated low-level Go binding around an user-defined struct.
-type IBLSKeyCheckerBLSKeyWithProof struct {
-	BlsG1PublicKeys [][2]*big.Int
-	AggG2PublicKey  [2][2]*big.Int
-	Signature       [2]*big.Int
-	Salt            [32]byte
-	Expiry          *big.Int
-}
-
 // ISignatureUtilsSignatureWithSaltAndExpiry is an auto generated low-level Go binding around an user-defined struct.
 type ISignatureUtilsSignatureWithSaltAndExpiry struct {
 	Signature []byte
