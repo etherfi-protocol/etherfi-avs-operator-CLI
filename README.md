@@ -33,6 +33,7 @@ You will be assigned an operatorID and an operator smart contract that is regist
 * [eOracle](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
 * [Brevis](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
 * [Lagrange ZK Coprocessor](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#lagrange-zk-coprocessor)
+* [Lagrange State Committees](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#lagrange-state-committees)
 * [AltLayer MACH](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#altlayermach)
 * [Automata Multi-Prover](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#automata-multi-prover)
 * [Hyperlane](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#hyperlane)
@@ -108,6 +109,30 @@ Be sure to save the `public_key` hex string that will be returned as part of the
 3. Register the operator contract with lagrange ZK Coprocessor
 
            ./avs-cli lagrangeZK register --registration-input lagrangeZK-input.json
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
+
+---
+
+# Lagrange State Committees
+
+## Operator Flow
+
+1. Generate a new BLS and ECSDA key via the lagrange tooling https://docs.lagrange.dev/state-committees/run-node/commands
+2. Run the following command and send the output to the ether.fi team via `restaking@ether.fi`
+
+           ./avs-cli lagrangeSC prepare-registration --operator-id {operator_id} --bls-keystore {path_to_keystore} --bls-password {encryption_password} --signer-address {address_of_generated_ecdsa_key}
+
+3. Wait for confirmation from the ether.fi team that your registration is complete
+4. Proceed to run the lagrange state committee node software
+
+## Ether.fi Admin Flow
+
+1. Recieve prepared registration json file from target node operator
+2. Ensure target operator contract is whitelisted by lagrange team (Whitelisting was requested for operators 1-12)
+3. Register the operator contract with lagrange state committees
+
+           ./avs-cli lagrangeSC register --registration-input lagrangeSC-input.json
 
            // submit resulting output as a gnosis TX via AVS admin gnosis
 

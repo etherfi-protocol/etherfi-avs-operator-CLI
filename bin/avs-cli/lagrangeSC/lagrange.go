@@ -1,4 +1,4 @@
-package lagrange
+package lagrangesc
 
 import (
 	"context"
@@ -9,18 +9,18 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/avs/lagrange"
+	lagrangesc "github.com/etherfi-protocol/etherfi-avs-operator-tool/src/avs/lagrangeSC"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/config"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/keystore"
 	"github.com/urfave/cli/v3"
 )
 
-var lagrangeAPI *lagrange.API
+var lagrangeAPI *lagrangesc.API
 var etherfiAPI *etherfi.API
 
-var LagrangeCmd = &cli.Command{
-	Name:   "lagrange",
+var LagrangeSCCmd = &cli.Command{
+	Name:   "lagrangeSC",
 	Usage:  "various actions related to managing Lagrange operators",
 	Before: prepareCmd,
 	Commands: []*cli.Command{
@@ -52,7 +52,7 @@ func prepareCmd(ctx context.Context, cmd *cli.Command) error {
 
 	// make globally accessible by all sub commands
 	etherfiAPI = etherfi.New(cfg, rpcClient)
-	lagrangeAPI = lagrange.New(cfg, rpcClient)
+	lagrangeAPI = lagrangesc.New(cfg, rpcClient)
 
 	return nil
 }
@@ -128,7 +128,7 @@ func handleRegister(ctx context.Context, cli *cli.Command) error {
 	inputFilepath := cli.String("registration-input")
 
 	// read input file with required registration data
-	var input lagrange.RegistrationInfo
+	var input lagrangesc.RegistrationInfo
 	buf, err := os.ReadFile(inputFilepath)
 	if err != nil {
 		return fmt.Errorf("reading input file: %w", err)

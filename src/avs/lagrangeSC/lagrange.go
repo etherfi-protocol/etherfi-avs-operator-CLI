@@ -1,4 +1,4 @@
-package lagrange
+package lagrangesc
 
 import (
 	"crypto/ecdsa"
