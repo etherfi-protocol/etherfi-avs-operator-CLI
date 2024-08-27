@@ -1,7 +1,7 @@
 // Code generated - DO NOT EDIT.
 // This file is a generated binding and any manual changes will be lost.
 
-package lagrange
+package lagrangesc
 
 import (
 	"errors"
@@ -28,15 +28,6 @@ var (
 	_ = event.NewSubscription
 	_ = abi.ConvertType
 )
-
-// IBLSKeyCheckerBLSKeyWithProof is an auto generated low-level Go binding around an user-defined struct.
-type IBLSKeyCheckerBLSKeyWithProof struct {
-	BlsG1PublicKeys [][2]*big.Int
-	AggG2PublicKey  [2][2]*big.Int
-	Signature       [2]*big.Int
-	Salt            [32]byte
-	Expiry          *big.Int
-}
 
 // ISignatureUtilsSignatureWithSaltAndExpiry is an auto generated low-level Go binding around an user-defined struct.
 type ISignatureUtilsSignatureWithSaltAndExpiry struct {

@@ -55,7 +55,8 @@ type Config struct {
 	HyperlaneServiceManagerAddress common.Address
 
 	// Lagrange State Committee
-	LagrangeServiceAddress common.Address
+	LagrangeServiceAddress   common.Address
+	LagrangeCommitteeAddress common.Address
 
 	// Lagrange ZK Coprocessor
 	LagrangeZKMRServiceManagerAddress common.Address
@@ -91,6 +92,7 @@ var Mainnet = Config{
 	HyperlaneStakeRegistryAddress:       common.HexToAddress("0x272CF0BB70D3B4f79414E0823B426d2EaFd48910"),
 	HyperlaneServiceManagerAddress:      common.HexToAddress("0xe8E59c6C8B56F2c178f63BCFC4ce5e5e2359c8fc"),
 	LagrangeServiceAddress:              common.HexToAddress("0x35F4f28A8d3Ff20EEd10e087e8F96Ea2641E6AA2"),
+	LagrangeCommitteeAddress:            common.HexToAddress("0xECc22f3EcD0EFC8aD77A78ad9469eFbc44E746F5"),
 	LagrangeZKMRServiceManagerAddress:   common.HexToAddress("0x22CAc0e6A1465F043428e8AeF737b3cb09D0eEDa"),
 	LagrangeZKMRStakeRegistryAddress:    common.HexToAddress("0x8dcdCc50Cc00Fe898b037bF61cCf3bf9ba46f15C"),
 	WitnessChainOperatorRegistryAddress: common.HexToAddress("0xEf1a89841fd189ba28e780A977ca70eb1A5e985D"),
