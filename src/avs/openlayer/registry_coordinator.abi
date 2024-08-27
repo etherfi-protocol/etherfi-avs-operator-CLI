@@ -1073,6 +1073,11 @@
                 "internalType": "struct ISignatureUtils.SignatureWithSaltAndExpiry",
                 "name": "operatorSignature",
                 "type": "tuple"
+            },
+            {
+                "internalType": "address",
+                "name": "operatorSignatureAddr",
+                "type": "address"
             }
         ],
         "name": "registerOperator",

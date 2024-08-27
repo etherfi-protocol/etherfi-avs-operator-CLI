@@ -120,7 +120,7 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo
 	if err != nil {
 		return fmt.Errorf("fetching abi: %w", err)
 	}
-	calldata, err := coordinatorABI.Pack("registerOperator", quorums, info.Socket, pubkeyParams, sigParams)
+	calldata, err := coordinatorABI.Pack("registerOperator", quorums, info.Socket, pubkeyParams, sigParams, operator.Address)
 	if err != nil {
 		return fmt.Errorf("packing input: %w", err)
 	}
