@@ -18,7 +18,7 @@ import (
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/utils"
 )
 
-// API handle for all core Brevis functionality
+// API handle for all core functionality
 type API struct {
 	Client *ethclient.Client
 
