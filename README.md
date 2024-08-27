@@ -23,20 +23,21 @@ make build
 
 ## Step 1: Request ether.fi team to be registered as a Delegated AVS operator
 
-You will be assigned an operatorID and an operator smart contract that is registered with eigenlayeer
+You will be assigned an operatorID and an operator smart contract that is registered with eigenlayer
 - `operatorId`: AVS operator ID assigned by ether.fi team.
 - `operatorAddress`: Eigenlayer operator address, which is managed by ether.fi team.
 
 ## Step 2: Follow the instructions for the specific AVS you are registering for
 * [Witness Chain](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
 * [EigenDA](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#eigenda)
-* [eOracle](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
-* [Brevis](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
+* [eOracle](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#eoracle)
+* [Brevis](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#brevis)
 * [Lagrange ZK Coprocessor](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#lagrange-zk-coprocessor)
 * [Lagrange State Committees](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#lagrange-state-committees)
-* [AltLayer MACH](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#altlayermach)
+* [AltLayer MACH](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#altlayer-mach)
 * [Automata Multi-Prover](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#automata-multi-prover)
 * [Hyperlane](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#hyperlane)
+* [ARPA](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#arpa)
 
 ---
 
@@ -97,7 +98,7 @@ Please use the same value as `operator_private_key` in your L1 + L2 config files
 Be sure to save the `public_key` hex string that will be returned as part of the above command
 2. Run the following command and send the output to the ether.fi team via `restaking@ether.fi`
 
-           ./avs-cli lagrangeZK prepare-registration --operator-id {operator_id} --public-key {pubkey_hex}
+           ./avs-cli lagrangeZK prepare-registration --operator-id {operator_id} --pubkey {pubkey_hex}
 
 3. Wait for confirmation from the ether.fi team that your registration is complete
 4. Proceed to run the lagrange zk coprocessor node software
@@ -260,7 +261,7 @@ where they will briefly update the limits. After you get confirmation that they 
 
 ## Ether.fi Admin Flow
 
-1. Recieve prepared registration json file from target node operator
+1. Receive prepared registration json file from target node operator
 2. Ensure target operator contract is whitelisted by automata team (Whitelisting was requested for operators 1-12)
 3. Register the operator contract with automata
 
@@ -286,10 +287,37 @@ and note the address of the key you generated
 
 ## Ether.fi Admin Flow
 
-1. Recieve prepared registration json file from target node operator
+1. Receive prepared registration json file from target node operator
 2. Register the operator contract with Hyperlane
 
            ./avs-cli hyperlane register --registration-input hyperlane-input.json
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
+
+---
+
+# ARPA
+
+## Operator Flow
+
+1. Follow the instructions provided in the [ARPA EigenLayer Onboarding Docs](https://github.com/ARPA-Network/BLS-TSS-Network/blob/main/docs/eigenlayer-onboarding.md) to run the `node-client` on Base Mainnet. Stop when you reach the **Register to ARPA Network by your Node account** step
+3. Keep the `node-client` running, go to the log and search the log for the keyword "public_key" (or "DKGKeyGenerated") and copy the DKG public key value
+4. Run the following command:
+
+           ./avs-cli arpa prepare-registration --operator-id {operator_id} --dkg-public-key {dkg_public_key}
+
+6. Send the following information to the ether.fi team via `restaking@ether.fi`
+  - The output of the above `prepare-registration` command
+  - The address of the ECDSA account used as the Node Account in step 1
+
+5. Continue to run the `node-client` software
+
+## Ether.fi Admin Flow
+
+1. Receive prepared registration json file from target node operator
+2. Register the operator contract with ARPA
+
+           ./avs-cli arpa register --registration-input arpa-input.json
 
            // submit resulting output as a gnosis TX via AVS admin gnosis
 

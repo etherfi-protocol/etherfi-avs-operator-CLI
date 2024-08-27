@@ -30,6 +30,10 @@ type Config struct {
 	AltLayerRegistryCoordinatorAddress common.Address
 	AltLayerServiceManagerAddress      common.Address
 
+	//ARPA
+	ARPANodeRegistryAddress   common.Address
+	ARPAServiceManagerAddress common.Address
+
 	// Automata
 	AutomataRegistryCoordinatorAddress common.Address
 	AutomataServiceManagerAddress      common.Address
@@ -75,6 +79,8 @@ var Mainnet = Config{
 
 	AltLayerRegistryCoordinatorAddress:  common.HexToAddress("0x561be1AB42170a19f31645F774e6e3862B2139AA"),
 	AltLayerServiceManagerAddress:       common.HexToAddress("0x71a77037870169d47aad6c2C9360861A4C0df2bF"),
+	ARPANodeRegistryAddress:             common.HexToAddress("0x58e39879374901e17A790af039DC9Ac06baCf25B"),
+	ARPAServiceManagerAddress:           common.HexToAddress("0x1DE75EaAb2df55d467494A172652579E6FA4540E"),
 	AutomataRegistryCoordinatorAddress:  common.HexToAddress("0x414696E4F7f06273973E89bfD3499e8666D63Bd4"),
 	AutomataServiceManagerAddress:       common.HexToAddress("0xe5445838c475a2980e6a88054ff1514230b83aeb"),
 	BrevisRegistryCoordinatorAddress:    common.HexToAddress("0x434621cfd8BcDbe8839a33c85aE2B2893a4d596C"),
@@ -105,6 +111,8 @@ var Holesky = Config{
 
 	AltLayerRegistryCoordinatorAddress:  common.HexToAddress("0x1eA7D160d325B289bF981e0D7aB6Bf3261a0FFf2"),
 	AltLayerServiceManagerAddress:       common.HexToAddress("0xae9a4497dee2540daf489beddb0706128a99ec63"),
+	ARPANodeRegistryAddress:             common.HexToAddress("0x76416A37BfDCb188a48C01a145D1b8d5794a98bD"),
+	ARPAServiceManagerAddress:           common.HexToAddress("0xd36b6e5eee8311d7bffb2f3bb33301a1ab7de101"),
 	AutomataRegistryCoordinatorAddress:  common.HexToAddress("0x62c715575cE3Ad7C5a43aA325b881c70564f2215"),
 	AutomataServiceManagerAddress:       common.HexToAddress("0x4665Af665df5703445645D243f0FD63eD3b9D132"),
 	BrevisRegistryCoordinatorAddress:    common.HexToAddress("0x0dB4ceE042705d47Ef6C0818E82776359c3A80Ca"),
