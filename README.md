@@ -38,6 +38,7 @@ You will be assigned an operatorID and an operator smart contract that is regist
 * [Automata Multi-Prover](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#automata-multi-prover)
 * [Hyperlane](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#hyperlane)
 * [ARPA](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#arpa)
+* [Openlayer](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#openlayer)
 
 ---
 
@@ -322,6 +323,33 @@ and note the address of the key you generated
            // submit resulting output as a gnosis TX via AVS admin gnosis
 
 ---
+
+# Openlayer
+
+## Operator Flow
+
+1. generate a new BLS keystore and ECDSA key using the openlayer tooling https://openlayer.gitbook.io/openlayer/for-node-operators#generating-keys
+2. Determine which `quorums` and `socket` you wish to register for
+3. Sign digest establishing ownership of your newly generated BLS key
+
+           ./avs-cli openlayer prepare-registration --operator-id {operator_id} --bls-keystore {path_to_keystore} --bls-password {password} --quorums {0,1} --socket {socket}
+
+4. Send the result of the previous command to the ether.fi team via `restaking@ether.fi`
+5. Wait for confirmation from the ether.fi team that your registration is complete
+6. Proceed to run the openlayer node software
+
+## Ether.fi Admin Flow
+
+1. Receive prepared registration json file from target node operator
+2. Register the operator contract with openlayer
+
+           ./avs-cli openlayer register --registration-input openlayer-input.json
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
+
+---
+
+
 
 # Adding a new AVS to the CLI
 

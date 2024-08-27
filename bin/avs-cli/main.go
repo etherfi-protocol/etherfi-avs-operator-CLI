@@ -14,6 +14,7 @@ import (
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/hyperlane"
 	lagrangesc "github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/lagrangeSC"
 	lagrangezk "github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/lagrangeZK"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/openlayer"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/witness-chain"
 	"github.com/urfave/cli/v3"
 )
@@ -39,11 +40,12 @@ func main() {
 			arpa.ARPACmd,
 			automata.AutomataCmd,
 			brevis.BrevisCmd,
-			eoracle.EOracleCmd,
 			eigenda.EigenDACmd,
+			eoracle.EOracleCmd,
 			hyperlane.HyperlaneCmd,
 			lagrangesc.LagrangeSCCmd,
 			lagrangezk.LagrangeZKCmd,
+			openlayer.OpenlayerCmd,
 			witness.WitnessCmd,
 		},
 	}
