@@ -1,5 +1,6 @@
 package lagrangesc
 
+/*
 import (
 	"crypto/ecdsa"
 	"crypto/rand"
@@ -123,3 +124,4 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo
 	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("lagrangeSC-register-operator-%d", operator.ID))
 	return utils.ExportJSON("lagrangeSC-register-gnosis", operator.ID, batch)
 }
+*/
