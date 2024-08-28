@@ -1,5 +1,6 @@
 package lagrangesc
 
+/*
 import (
 	"context"
 	"encoding/json"
@@ -160,3 +161,4 @@ func handleRegister(ctx context.Context, cli *cli.Command) error {
 
 	return lagrangeAPI.RegisterOperator(operator, input, signingKey)
 }
+*/
