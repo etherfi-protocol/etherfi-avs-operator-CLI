@@ -62,6 +62,10 @@ type Config struct {
 	LagrangeZKMRServiceManagerAddress common.Address
 	LagrangeZKMRStakeRegistryAddress  common.Address
 
+	// Openlayer
+	OpenlayerRegistryCoordinatorAddress common.Address
+	OpenlayerServiceManagerAddress      common.Address
+
 	// Witnesschain
 	WitnessChainOperatorRegistryAddress common.Address
 	WitnessChainWitnessHubAddress       common.Address
@@ -95,6 +99,8 @@ var Mainnet = Config{
 	LagrangeCommitteeAddress:            common.HexToAddress("0xECc22f3EcD0EFC8aD77A78ad9469eFbc44E746F5"),
 	LagrangeZKMRServiceManagerAddress:   common.HexToAddress("0x22CAc0e6A1465F043428e8AeF737b3cb09D0eEDa"),
 	LagrangeZKMRStakeRegistryAddress:    common.HexToAddress("0x8dcdCc50Cc00Fe898b037bF61cCf3bf9ba46f15C"),
+	OpenlayerRegistryCoordinatorAddress: common.HexToAddress("0x7dd7320044013f7f49B1b6D67aED10726fe6e62b"),
+	OpenlayerServiceManagerAddress:      common.HexToAddress("0xF7fcff55d5FDAf2C3Bbeb140Be5e62a2c7D26Db3"),
 	WitnessChainOperatorRegistryAddress: common.HexToAddress("0xEf1a89841fd189ba28e780A977ca70eb1A5e985D"),
 	WitnessChainWitnessHubAddress:       common.HexToAddress("0xD25c2c5802198CB8541987b73A8db4c9BCaE5cC7"),
 }
