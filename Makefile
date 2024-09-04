@@ -1,14 +1,8 @@
-.PHONY: build, test, mocks
-
+.PHONY: build, test
 build:
 	@echo "Building..."
-	@go build -o avs-cli ./bin/avs-cli/
+	@go build -o avs-cli ./cmd/avs-cli/
 
 test:
 	@echo "Testing..."
 	@go test -v ./...
-
-mocks:
-	@echo "Generating mocks..."
-	@mockery --recursive --output ./mocks --name BLSAvsSigner
-

@@ -1,4 +1,6 @@
-module github.com/etherfi-protocol/etherfi-avs-operator-tool
+module github.com/a41-official/mantle-eigenlayer-operator-cli
+
+replace github.com/a41-official/mantle-eigenlayer-operator-cli => /Users/zoe/go/src/github.com/a41-official/mantle-eigenlayer-operator-cli
 
 go 1.22.0
 
