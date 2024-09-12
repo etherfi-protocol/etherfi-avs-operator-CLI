@@ -1,19 +1,20 @@
 package eigenda
 
 import (
-	"crypto/ecdsa"
+	"context"
 	"fmt"
+	"math/big"
 
-	"github.com/a41-official/mantle-eigenlayer-operator-cli/pkg/config"
-	"github.com/a41-official/mantle-eigenlayer-operator-cli/pkg/eigenlayer"
-	"github.com/a41-official/mantle-eigenlayer-operator-cli/pkg/gnosis"
-	"github.com/a41-official/mantle-eigenlayer-operator-cli/pkg/types"
-	"github.com/a41-official/mantle-eigenlayer-operator-cli/pkg/utils"
-	"github.com/a41-official/mantle-eigenlayer-operator-cli/pkg/utils/signer"
 	"github.com/consensys/gnark-crypto/ecc/bn254"
 	"github.com/consensys/gnark-crypto/ecc/bn254/fp"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/mantle-lsp/mantle-avs-operator-CLI/contracts/safeglobal"
+	"github.com/mantle-lsp/mantle-avs-operator-CLI/pkg/config"
+	"github.com/mantle-lsp/mantle-avs-operator-CLI/pkg/eigenlayer"
+	"github.com/mantle-lsp/mantle-avs-operator-CLI/pkg/gnosis"
+	"github.com/mantle-lsp/mantle-avs-operator-CLI/pkg/types"
+	"github.com/mantle-lsp/mantle-avs-operator-CLI/pkg/utils"
 
 	// need to alias because eigenlayer has a package name that doesn't match the filepath
 	registryCoordinator "github.com/Layr-Labs/eigenda/contracts/bindings/RegistryCoordinator"
@@ -21,28 +22,27 @@ import (
 )
 
 // API handle for all core EigenDA functionality
-type API struct {
-	Client *ethclient.Client
-
+type EigenDA struct {
+	Client                     *ethclient.Client
 	RegistryCoordinatorAddress common.Address
 	RegistryCoordinator        *registryCoordinator.ContractRegistryCoordinator
 	ServiceManagerAddress      common.Address
-	AvsOperatorManagerAddress  common.Address
 
-	EigenlayerAPI *eigenlayer.API
+	EigenLayer *eigenlayer.EigenLayer
+	SafeGlobal *gnosis.SafeGlobal
 }
 
-func New(cfg config.Config, rpcClient *ethclient.Client) *API {
+func New(cfg config.Config, rpcClient *ethclient.Client) *EigenDA {
 
 	registryCoordinator, _ := registryCoordinator.NewContractRegistryCoordinator(cfg.EigenDARegistryCoordinatorAddress, rpcClient)
 
-	return &API{
+	return &EigenDA{
 		Client:                     rpcClient,
 		RegistryCoordinator:        registryCoordinator,
 		RegistryCoordinatorAddress: cfg.EigenDARegistryCoordinatorAddress,
 		ServiceManagerAddress:      cfg.EigenDAServiceManagerAddress,
-		AvsOperatorManagerAddress:  cfg.AvsOperatorManagerAddress,
-		EigenlayerAPI:              eigenlayer.New(cfg, rpcClient),
+		EigenLayer:                 eigenlayer.New(cfg, rpcClient),
+		SafeGlobal:                 gnosis.New(cfg, rpcClient),
 	}
 }
 
@@ -54,7 +54,7 @@ type RegistrationInfo struct {
 	BLSPubkeyRegistrationParams *types.BLSPubkeyRegistrationParams
 }
 
-func (a *API) PrepareRegistration(operator common.Address, blsKey *bls.KeyPair, socket string, quorums []int64) error {
+func (a *EigenDA) PrepareRegistration(operator common.Address, blsKey *bls.KeyPair, socket string, quorums []int64) error {
 	// compute hash to sign with bls key
 	// the hash is converted to a G1 point on the curve before it is returned
 	g1Point, err := a.RegistryCoordinator.PubkeyRegistrationMessageHash(nil, operator)
@@ -68,20 +68,10 @@ func (a *API) PrepareRegistration(operator common.Address, blsKey *bls.KeyPair, 
 		Y: *new(fp.Element).SetBigInt(g1Point.Y),
 	}
 
-	// sign the registration hash (G1 Point) with the bls key to prove ownership of key
-	blsSigner := signer.NewBLSSigner(blsKey)
-	g1Sig, err := blsSigner.Sign(g1MsgToSign)
-	if err != nil {
-		return fmt.Errorf("signing pubkey registration hash: %w", err)
-	}
-	signedParams := new(types.BLSPubkeyRegistrationParams)
-	signedParams.Load(blsKey.GetPubKeyG1().G1Affine, blsKey.GetPubKeyG2().G2Affine, g1Sig)
+	g1Sig := blsKey.SignHashedToCurveMessage(g1MsgToSign)
 
-	// sanity check on the bls signature
-	isValid, err := blsSigner.Verify(g1MsgToSign, g1Sig)
-	if !isValid || err != nil {
-		return fmt.Errorf("failed to verify g1 signature: %w", err)
-	}
+	signedParams := new(types.BLSPubkeyRegistrationParams)
+	signedParams.Load(blsKey.GetPubKeyG1().G1Affine, blsKey.GetPubKeyG2().G2Affine, g1Sig.G1Affine)
 
 	ri := RegistrationInfo{
 		Operator:                    operator,
@@ -92,10 +82,10 @@ func (a *API) PrepareRegistration(operator common.Address, blsKey *bls.KeyPair, 
 	return utils.ExportJSON("eigenda-prepare-registration", operator, ri)
 }
 
-func (a *API) RegisterOperator(operator common.Address, info RegistrationInfo, signerKey *ecdsa.PrivateKey) error {
+func (a *EigenDA) RegisterOperator(operator common.Address, info RegistrationInfo) error {
 
 	// generate and sign registration hash to be signed by admin ecdsa key
-	sigWithSaltAndExpiry, err := a.EigenlayerAPI.GenerateAndSignRegistrationDigest(operator, a.ServiceManagerAddress, signerKey)
+	sigWithSaltAndExpiry, err := a.EigenLayer.GenerateAndSignRegistrationDigest(operator, a.ServiceManagerAddress)
 	if err != nil {
 		return fmt.Errorf("signing registration digest: %w", err)
 	}
@@ -105,8 +95,9 @@ func (a *API) RegisterOperator(operator common.Address, info RegistrationInfo, s
 	for i, v := range info.Quorums {
 		quorums[i] = byte(v)
 	}
+
 	sigParams := registryCoordinator.ISignatureUtilsSignatureWithSaltAndExpiry{
-		Signature: sigWithSaltAndExpiry.Signature,
+		Signature: nil, //signature is signed in safe wallet
 		Salt:      sigWithSaltAndExpiry.Salt,
 		Expiry:    sigWithSaltAndExpiry.Expiry,
 	}
@@ -127,7 +118,32 @@ func (a *API) RegisterOperator(operator common.Address, info RegistrationInfo, s
 		return fmt.Errorf("packing input: %w", err)
 	}
 
+	signMessageLibABI, err := safeglobal.SignMessageLibMetaData.GetAbi()
+	if err != nil {
+		return fmt.Errorf("fetching abi: %w", err)
+	}
+
+	signCalldata, err := signMessageLibABI.Pack("signMessage", sigWithSaltAndExpiry.Signature)
+	if err != nil {
+		return fmt.Errorf("packing input: %w", err)
+	}
+
+	chainID, _ := a.Client.ChainID(context.Background())
+
 	// output in gnosis compatible format
-	batch := gnosis.NewSingleTxBatch(calldata, a.AvsOperatorManagerAddress, fmt.Sprintf("eigenda-register-operator-%s", operator))
+	batch := gnosis.NewSingleTxBatch(calldata, chainID, fmt.Sprintf("eigenda-register-operator-%s", operator))
+
+	batch.AddTransaction(gnosis.SubTransaction{
+		Target: a.SafeGlobal.SignMessageLibAddress,
+		Value:  big.NewInt(0),
+		Data:   signCalldata,
+	})
+
+	batch.AddTransaction(gnosis.SubTransaction{
+		Target: a.RegistryCoordinatorAddress,
+		Value:  big.NewInt(0),
+		Data:   calldata,
+	})
+
 	return utils.ExportJSON("eigenda-register-gnosis", operator, batch)
 }

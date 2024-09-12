@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/a41-official/mantle-eigenlayer-operator-cli/pkg/keystore"
+	"github.com/Layr-Labs/eigensdk-go/crypto/bls"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/urfave/cli/v3"
 )
@@ -51,9 +51,7 @@ func handlePrepareRegistration(ctx context.Context, cli *cli.Command) error {
 	quorums := cli.IntSlice("quorums")
 	socket := cli.String("socket")
 
-	// decrypt and load bls key from keystore
-	ks := keystore.NewKeystoreV3()
-	keyPair, err := ks.LoadBLS(blsKeyFile, blsKeyPassword)
+	keyPair, err := bls.ReadPrivateKeyFromFile(blsKeyFile, blsKeyPassword)
 	if err != nil {
 		return fmt.Errorf("loading bls keystore: %w", err)
 	}

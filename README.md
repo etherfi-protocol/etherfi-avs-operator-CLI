@@ -1,4 +1,4 @@
-# mantle-eigenlayer-operator-cli
+# mantle-avs-operator-cli
 ## Build
 
 ```bash
@@ -25,7 +25,7 @@ make build
 
 ## Step 2: Follow the instructions for the specific AVS you are registering for
 
-* [EigenDA](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#eigenda)
+* [EigenDA](https://github.com/mantle-lsp/mantle-avs-operator-CLI?tab=readme-ov-file#eigenda)
 ---
 
 # EigenDA

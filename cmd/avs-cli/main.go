@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/a41-official/mantle-eigenlayer-operator-cli/cmd/avs-cli/eigenda"
+	"github.com/mantle-lsp/mantle-avs-operator-CLI/cmd/avs-cli/eigenda"
+
 	"github.com/urfave/cli/v3"
 )
 

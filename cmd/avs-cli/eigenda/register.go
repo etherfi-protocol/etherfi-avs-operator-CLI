@@ -6,9 +6,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/a41-official/mantle-eigenlayer-operator-cli/pkg/avs/eigenda"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/mantle-lsp/mantle-avs-operator-CLI/pkg/avs/eigenda"
 	"github.com/urfave/cli/v3"
 )
 
@@ -48,11 +47,5 @@ func handleRegister(ctx context.Context, cli *cli.Command) error {
 
 	operator := input.Operator
 
-	// load eip-1271 admin signing key
-	signingKey, err := crypto.HexToECDSA(os.Getenv("ADMIN_1271_SIGNING_KEY"))
-	if err != nil {
-		return fmt.Errorf("invalid private key: %w", err)
-	}
-
-	return eigendaAPI.RegisterOperator(operator, input, signingKey)
+	return eigendaAPI.RegisterOperator(operator, input)
 }

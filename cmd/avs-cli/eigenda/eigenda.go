@@ -5,15 +5,14 @@ import (
 	"fmt"
 	"os"
 
-	// need to alias because eigenlayer has a package name that doesn't match the filepath
-
-	"github.com/a41-official/mantle-eigenlayer-operator-cli/pkg/avs/eigenda"
-	"github.com/a41-official/mantle-eigenlayer-operator-cli/pkg/config"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/mantle-lsp/mantle-avs-operator-CLI/pkg/avs/eigenda"
+	"github.com/mantle-lsp/mantle-avs-operator-CLI/pkg/config"
+
 	"github.com/urfave/cli/v3"
 )
 
-var eigendaAPI *eigenda.API
+var eigendaAPI *eigenda.EigenDA
 var EigenDACmd = &cli.Command{
 	Name:   "eigenda",
 	Usage:  "various actions related to managing eigenDA operators",

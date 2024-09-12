@@ -52,19 +52,13 @@ func (b *GnosisBatch) PrettyPrint() string {
 	return string(buf)
 }
 
-func NewSingleTxBatch(data []byte, target common.Address, name string) *GnosisBatch {
+func NewSingleTxBatch(data []byte, chainID *big.Int, name string) *GnosisBatch {
 
 	batch := GnosisBatch{
 		Version: "1.0",
-		ChainId: "1",
+		ChainId: chainID.String(),
 		Meta:    GnosisMetadata{Name: name},
 	}
-
-	batch.AddTransaction(SubTransaction{
-		Target: target,
-		Value:  big.NewInt(0),
-		Data:   data,
-	})
 
 	return &batch
 }
