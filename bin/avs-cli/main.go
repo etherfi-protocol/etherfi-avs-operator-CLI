@@ -12,6 +12,7 @@ import (
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/eigenda"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/eoracle"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/hyperlane"
+	lagrangesc "github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/lagrangeSC"
 	lagrangezk "github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/lagrangeZK"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/openlayer"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/witness-chain"
@@ -42,7 +43,7 @@ func main() {
 			eigenda.EigenDACmd,
 			eoracle.EOracleCmd,
 			hyperlane.HyperlaneCmd,
-			//lagrangesc.LagrangeSCCmd,
+			lagrangesc.LagrangeSCCmd,
 			lagrangezk.LagrangeZKCmd,
 			openlayer.OpenlayerCmd,
 			witness.WitnessCmd,
