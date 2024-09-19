@@ -151,7 +151,7 @@ func (a *API) SubscribeToChains(operator *etherfi.Operator, chainIDs []int64) er
 			return fmt.Errorf("wrapping call for admin: %w", err)
 		}
 
-		tx := gnosis.SubTransaction{Target: a.AvsOperatorManagerAddress, Data: adminCall}
+		tx := gnosis.SubTransaction{Target: a.AvsOperatorManagerAddress, Value: big.NewInt(0), Data: adminCall}
 		batch.AddTransaction(tx)
 	}
 
