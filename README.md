@@ -33,10 +33,10 @@ make build
 ## Operator Flow
 
 1. generate a new BLS keystore using the eigenlayer tooling https://docs.eigenlayer.xyz/eigenlayer/operator-guides/operator-installation#create-keys
-2. Determine which `quorums` and `socket` you wish to register for
+2. Determine which `quorums` and `socket` you wish to register for. Currently, the mantle only supports quorum=0.
 3. Sign digest establishing ownership of your newly generated BLS key
 
-           ./avs-cli eigenda prepare-registration --operator-address {operator_address} --bls-keystore {path_to_keystore} --bls-password {password} --quorums {0,1} --socket {socket}
+           ./avs-cli eigenda prepare-registration --operator-address {operator_address} --bls-keystore {path_to_keystore} --bls-password {password} --quorums {0} --socket {socket}
 
 4. Send the result of the previous command to the mantle team 
 5. Wait for confirmation from the mantle team that your registration is complete
