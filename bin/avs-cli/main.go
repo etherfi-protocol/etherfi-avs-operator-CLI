@@ -9,6 +9,7 @@ import (
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/arpa"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/automata"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/brevis"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/cybermach"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/eigenda"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/eoracle"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/hyperlane"
@@ -40,6 +41,7 @@ func main() {
 			arpa.ARPACmd,
 			automata.AutomataCmd,
 			brevis.BrevisCmd,
+			cybermach.CyberMachCmd,
 			eigenda.EigenDACmd,
 			eoracle.EOracleCmd,
 			hyperlane.HyperlaneCmd,

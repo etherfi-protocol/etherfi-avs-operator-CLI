@@ -42,6 +42,10 @@ type Config struct {
 	BrevisRegistryCoordinatorAddress common.Address
 	BrevisServiceManagerAddress      common.Address
 
+	// CyberMACH
+	CyberMachRegistryCoordinatorAddress common.Address
+	CyberMachServiceManagerAddress      common.Address
+
 	// EigenDA
 	EigenDARegistryCoordinatorAddress common.Address
 	EigenDAServiceManagerAddress      common.Address
@@ -89,6 +93,8 @@ var Mainnet = Config{
 	AutomataServiceManagerAddress:       common.HexToAddress("0xe5445838c475a2980e6a88054ff1514230b83aeb"),
 	BrevisRegistryCoordinatorAddress:    common.HexToAddress("0x434621cfd8BcDbe8839a33c85aE2B2893a4d596C"),
 	BrevisServiceManagerAddress:         common.HexToAddress("0x9FC952BdCbB7Daca7d420fA55b942405B073A89d"),
+	CyberMachRegistryCoordinatorAddress: common.HexToAddress("0x118610D207A32f10F4f7C3a1FEFac5b3327c2bad"),
+	CyberMachServiceManagerAddress:      common.HexToAddress("0x1F2c296448f692af840843d993fFC0546619Dcdb"),
 	EigenDARegistryCoordinatorAddress:   common.HexToAddress("0x0BAAc79acD45A023E19345c352d8a7a83C4e5656"),
 	EigenDAServiceManagerAddress:        common.HexToAddress("0x870679E138bCdf293b7Ff14dD44b70FC97e12fc0"),
 	EOracleRegistryCoordinatorAddress:   common.HexToAddress("0x757E6f572AfD8E111bD913d35314B5472C051cA8"),
