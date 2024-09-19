@@ -19,6 +19,12 @@ import (
 var lagrangeAPI *lagrangesc.API
 var etherfiAPI *etherfi.API
 
+const (
+	OptimismChainID = 10
+	BaseChainID     = 8453
+	ArbitrumChainID = 42161
+)
+
 var LagrangeSCCmd = &cli.Command{
 	Name:   "lagrangeSC",
 	Usage:  "various actions related to managing Lagrange operators",
@@ -26,6 +32,7 @@ var LagrangeSCCmd = &cli.Command{
 	Commands: []*cli.Command{
 		PrepareRegistrationCmd,
 		RegisterCmd,
+		SubscribeCmd,
 	},
 }
 
@@ -159,4 +166,51 @@ func handleRegister(ctx context.Context, cli *cli.Command) error {
 	}
 
 	return lagrangeAPI.RegisterOperator(operator, input, signingKey)
+}
+
+var SubscribeCmd = &cli.Command{
+	Name:   "subscribe",
+	Usage:  "(Admin) Subscribe the target operator to specified chains",
+	Action: handleSubscribe,
+	Flags: []cli.Flag{
+		&cli.StringFlag{
+			Name:     "registration-input",
+			Usage:    "path to registration file created by prepare-registration command",
+			Required: true,
+		},
+		&cli.IntSliceFlag{
+			Name:     "chain-ids",
+			Usage:    "which chainIDs to subscribe to. Defaults to all supported chains",
+			Value:    []int64{OptimismChainID, BaseChainID, ArbitrumChainID},
+			Required: false,
+		},
+	},
+}
+
+func handleSubscribe(ctx context.Context, cli *cli.Command) error {
+
+	// parse cli params
+	inputFilepath := cli.String("registration-input")
+	chainIDs := cli.IntSlice("chain-ids")
+
+	// read input file with required registration data
+	var input lagrangesc.RegistrationInfo
+	buf, err := os.ReadFile(inputFilepath)
+	if err != nil {
+		return fmt.Errorf("reading input file: %w", err)
+	}
+	if err := json.Unmarshal(buf, &input); err != nil {
+		return fmt.Errorf("parsing registration input: %w", err)
+	}
+	if input.OperatorID == 0 {
+		return fmt.Errorf("invalid registration input, missing operatorID")
+	}
+
+	// look up operator contract associated with this id
+	operator, err := etherfiAPI.LookupOperatorByID(input.OperatorID)
+	if err != nil {
+		return fmt.Errorf("looking up operator address: %w", err)
+	}
+
+	return lagrangeAPI.SubscribeToChains(operator, chainIDs)
 }
