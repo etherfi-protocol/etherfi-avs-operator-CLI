@@ -1,4 +1,4 @@
-package lagrangesc
+package cybermach
 
 import (
 	"context"
@@ -6,33 +6,25 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
-	lagrangesc "github.com/etherfi-protocol/etherfi-avs-operator-tool/src/avs/lagrangeSC"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/avs/cybermach"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/config"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/keystore"
 	"github.com/urfave/cli/v3"
 )
 
-var lagrangeAPI *lagrangesc.API
+var cyberMachAPI *cybermach.API
 var etherfiAPI *etherfi.API
 
-const (
-	OptimismChainID = 10
-	BaseChainID     = 8453
-	ArbitrumChainID = 42161
-)
-
-var LagrangeSCCmd = &cli.Command{
-	Name:   "lagrangeSC",
-	Usage:  "various actions related to managing Lagrange operators",
+var CyberMachCmd = &cli.Command{
+	Name:   "cybermach",
+	Usage:  "various actions related to managing cybermach operators",
 	Before: prepareCmd,
 	Commands: []*cli.Command{
 		PrepareRegistrationCmd,
 		RegisterCmd,
-		SubscribeCmd,
 	},
 }
 
@@ -51,7 +43,7 @@ func prepareCmd(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("dialing RPC: %w", err)
 	}
 
-	// load all required addresses for this chain and bind applicable contracts
+	// load all required addresses for this chain
 	cfg, err := config.AutodetectConfig(rpcClient)
 	if err != nil {
 		return fmt.Errorf("loading config: %w", err)
@@ -59,7 +51,7 @@ func prepareCmd(ctx context.Context, cmd *cli.Command) error {
 
 	// make globally accessible by all sub commands
 	etherfiAPI = etherfi.New(cfg, rpcClient)
-	lagrangeAPI = lagrangesc.New(cfg, rpcClient)
+	cyberMachAPI = cybermach.New(cfg, rpcClient)
 
 	return nil
 }
@@ -75,11 +67,6 @@ var PrepareRegistrationCmd = &cli.Command{
 			Required: true,
 		},
 		&cli.StringFlag{
-			Name:     "signer-address",
-			Usage:    "Address of lagrange specific ecdsa signing key",
-			Required: true,
-		},
-		&cli.StringFlag{
 			Name:     "bls-keystore",
 			Usage:    "path to bls keystore file",
 			Required: true,
@@ -89,6 +76,16 @@ var PrepareRegistrationCmd = &cli.Command{
 			Usage:    "password for encrypted keystore file",
 			Required: true,
 		},
+		&cli.IntSliceFlag{
+			Name:     "quorums",
+			Usage:    "which quorums to register for i.e. 0,1",
+			Required: true,
+		},
+		&cli.StringFlag{
+			Name:     "socket",
+			Usage:    "altlayer socket",
+			Required: true,
+		},
 	},
 }
 
@@ -96,15 +93,10 @@ func handlePrepareRegistration(ctx context.Context, cli *cli.Command) error {
 
 	// parse cli input
 	operatorID := cli.Int("operator-id")
-	signerAddress := common.HexToAddress(cli.String("signer-address"))
 	blsKeyFile := cli.String("bls-keystore")
 	blsKeyPassword := cli.String("bls-password")
-
-	// look up operator contract associated with this id
-	operator, err := etherfiAPI.LookupOperatorByID(operatorID)
-	if err != nil {
-		return fmt.Errorf("looking up operator address: %w", err)
-	}
+	quorums := cli.IntSlice("quorums")
+	socket := cli.String("socket")
 
 	// decrypt and load bls key from keystore
 	ks := keystore.NewKeystoreV3()
@@ -113,12 +105,18 @@ func handlePrepareRegistration(ctx context.Context, cli *cli.Command) error {
 		return fmt.Errorf("loading bls keystore: %w", err)
 	}
 
-	return lagrangeAPI.PrepareRegistration(operator, signerAddress, keyPair)
+	// look up operator contract associated with this id
+	operator, err := etherfiAPI.LookupOperatorByID(operatorID)
+	if err != nil {
+		return fmt.Errorf("looking up operator address: %w", err)
+	}
+
+	return cyberMachAPI.PrepareRegistration(operator, keyPair, socket, quorums)
 }
 
 var RegisterCmd = &cli.Command{
 	Name:   "register",
-	Usage:  "(Admin) Register target operator to the AVS",
+	Usage:  "(Admin) Register target operator to AVS",
 	Action: handleRegister,
 	Flags: []cli.Flag{
 		&cli.StringFlag{
@@ -134,8 +132,8 @@ func handleRegister(ctx context.Context, cli *cli.Command) error {
 	// parse cli params
 	inputFilepath := cli.String("registration-input")
 
-	// read input file with required registration data
-	var input lagrangesc.RegistrationInfo
+	// read input file with required eigenDA data
+	var input cybermach.RegistrationInfo
 	buf, err := os.ReadFile(inputFilepath)
 	if err != nil {
 		return fmt.Errorf("reading input file: %w", err)
@@ -146,11 +144,8 @@ func handleRegister(ctx context.Context, cli *cli.Command) error {
 	if input.OperatorID == 0 {
 		return fmt.Errorf("invalid registration input, missing operatorID")
 	}
-	if input.SignerAddress == common.HexToAddress("0x00") {
-		return fmt.Errorf("invalid registration input, missing SignerAddress")
-	}
-	if input.BLSKeyWithProof == nil {
-		return fmt.Errorf("invalid registration input, missing BLSKeyWithProof")
+	if input.Socket == "" {
+		return fmt.Errorf("invalid registration input, missing socket")
 	}
 
 	// look up operator contract associated with this id
@@ -165,52 +160,5 @@ func handleRegister(ctx context.Context, cli *cli.Command) error {
 		return fmt.Errorf("invalid private key: %w", err)
 	}
 
-	return lagrangeAPI.RegisterOperator(operator, input, signingKey)
-}
-
-var SubscribeCmd = &cli.Command{
-	Name:   "subscribe",
-	Usage:  "(Admin) Subscribe the target operator to specified chains",
-	Action: handleSubscribe,
-	Flags: []cli.Flag{
-		&cli.StringFlag{
-			Name:     "registration-input",
-			Usage:    "path to registration file created by prepare-registration command",
-			Required: true,
-		},
-		&cli.IntSliceFlag{
-			Name:     "chain-ids",
-			Usage:    "which chainIDs to subscribe to. Defaults to all supported chains",
-			Value:    []int64{OptimismChainID, BaseChainID, ArbitrumChainID},
-			Required: false,
-		},
-	},
-}
-
-func handleSubscribe(ctx context.Context, cli *cli.Command) error {
-
-	// parse cli params
-	inputFilepath := cli.String("registration-input")
-	chainIDs := cli.IntSlice("chain-ids")
-
-	// read input file with required registration data
-	var input lagrangesc.RegistrationInfo
-	buf, err := os.ReadFile(inputFilepath)
-	if err != nil {
-		return fmt.Errorf("reading input file: %w", err)
-	}
-	if err := json.Unmarshal(buf, &input); err != nil {
-		return fmt.Errorf("parsing registration input: %w", err)
-	}
-	if input.OperatorID == 0 {
-		return fmt.Errorf("invalid registration input, missing operatorID")
-	}
-
-	// look up operator contract associated with this id
-	operator, err := etherfiAPI.LookupOperatorByID(input.OperatorID)
-	if err != nil {
-		return fmt.Errorf("looking up operator address: %w", err)
-	}
-
-	return lagrangeAPI.SubscribeToChains(operator, chainIDs)
+	return cyberMachAPI.RegisterOperator(operator, input, signingKey)
 }

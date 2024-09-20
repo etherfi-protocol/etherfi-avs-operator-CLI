@@ -35,6 +35,7 @@ You will be assigned an operatorID and an operator smart contract that is regist
 * [Lagrange ZK Coprocessor](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#lagrange-zk-coprocessor)
 * [Lagrange State Committees](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#lagrange-state-committees)
 * [AltLayer MACH](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#altlayer-mach)
+* [Cyber MACH](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#cyber-mach)
 * [Automata Multi-Prover](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#automata-multi-prover)
 * [Hyperlane](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#hyperlane)
 * [ARPA](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#arpa)
@@ -135,6 +136,12 @@ Be sure to save the `public_key` hex string that will be returned as part of the
 3. Register the operator contract with lagrange state committees
 
            ./avs-cli lagrangeSC register --registration-input lagrangeSC-input.json
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
+
+4. Subscribe the operator to target chains so that the operator can recieve workloads
+
+           ./avs-cli lagrangeSC subscribe --registration-input lagrangeSC-input.json
 
            // submit resulting output as a gnosis TX via AVS admin gnosis
 
@@ -240,7 +247,32 @@ where they will briefly update the limits. After you get confirmation that they 
 1. Receive prepared registration json file from target node operator
 2. Register the operator contract with altlayer
 
-           ./avs-cli altlayer register --registration-input eoracle-input.json
+           ./avs-cli altlayer register --registration-input input.json
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
+
+---
+
+# Cyber MACH
+
+## Operator Flow
+
+1. generate an encrypted BLS key and ECDSA key as described [here](https://docs.altlayer.io/altlayer-documentation/altlayer-facilitated-actively-validated-services/cyber-mach-avs-for-cyber-l2/operator-guide#key-generation-and-wallet-funding)
+2. Determine which `quorums` and `socket` you wish to register for
+3. Sign digest establishing ownership of your newly generated BLS key
+
+           ./avs-cli cybermach prepare-registration --operator-id {operator_id} --bls-keystore {path_to_keystore} --bls-password {password} --quorums {0} --socket {socket}
+
+4. Send the result of the previous command to the ether.fi team via `restaking@ether.fi`
+5. Wait for confirmation from the ether.fi team that your registration is complete
+6. Follow the [Cyber MACH Operator Guide](https://docs.altlayer.io/altlayer-documentation/altlayer-facilitated-actively-validated-services/cyber-mach-avs-for-cyber-l2/operator-guide#running-mach-avs)
+
+## Ether.fi Admin Flow
+
+1. Receive prepared registration json file from target node operator
+2. Register the operator contract with cybermach
+
+           ./avs-cli cybermach register --registration-input input.json
 
            // submit resulting output as a gnosis TX via AVS admin gnosis
 

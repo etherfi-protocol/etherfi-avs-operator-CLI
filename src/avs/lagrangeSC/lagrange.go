@@ -123,3 +123,38 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo
 	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("lagrangeSC-register-operator-%d", operator.ID))
 	return utils.ExportJSON("lagrangeSC-register-gnosis", operator.ID, batch)
 }
+
+func (a *API) SubscribeToChains(operator *etherfi.Operator, chainIDs []int64) error {
+
+	batch := &gnosis.GnosisBatch{
+		Version: "1.0",
+		ChainId: "1",
+		Meta: gnosis.GnosisMetadata{
+			Name: "lagrangeSC subscribe",
+		},
+	}
+
+	for _, cid := range chainIDs {
+		// manually pack tx data since we are submitting via gnosis instead of directly
+		lagrangeServiceABI, err := LagrangeServiceMetaData.GetAbi()
+		if err != nil {
+			return fmt.Errorf("fetching abi: %w", err)
+		}
+		calldata, err := lagrangeServiceABI.Pack("subscribe", uint32(cid))
+		if err != nil {
+			return fmt.Errorf("packing input: %w", err)
+		}
+
+		// wrap the inner call to be forwarded via AvsOperatorManager
+		adminCall, err := utils.PackForwardCallForAdmin(operator.ID, calldata, a.LagrangeServiceAddress)
+		if err != nil {
+			return fmt.Errorf("wrapping call for admin: %w", err)
+		}
+
+		tx := gnosis.SubTransaction{Target: a.AvsOperatorManagerAddress, Value: big.NewInt(0), Data: adminCall}
+		batch.AddTransaction(tx)
+	}
+
+	// output in gnosis compatible format
+	return utils.ExportJSON("lagrangeSC-subscribe-gnosis", operator.ID, batch)
+}
