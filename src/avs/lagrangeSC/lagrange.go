@@ -3,7 +3,6 @@ package lagrangesc
 import (
 	"crypto/ecdsa"
 	"crypto/rand"
-	"encoding/hex"
 	"fmt"
 	"math/big"
 	"time"
@@ -71,8 +70,6 @@ func (a *API) PrepareRegistration(operator *etherfi.Operator, signerAddr common.
 	blsPrivKey := blsKey.PrivKey.Text(16)
 	blsPrivKeys := []string{blsPrivKey}
 
-	fmt.Printf("pubkey: %s\n", hex.EncodeToString(blsKey.PubKey.Serialize()))
-
 	g1Pubkeys, g2Pubkey, sig, err := lagrangeutils.GenerateBLSSignature(keyWithProofDigest[:], blsPrivKeys...)
 	if err != nil {
 		fmt.Errorf("generating aggregate BLS signature: %w", err)
@@ -104,17 +101,6 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo
 		Signature: sigWithSaltAndExpiry.Signature,
 		Salt:      sigWithSaltAndExpiry.Salt,
 		Expiry:    sigWithSaltAndExpiry.Expiry,
-	}
-
-	for _, x := range info.BLSKeyWithProof.BlsG1PublicKeys {
-		for _, y := range x {
-			fmt.Printf("%s\n", y.Text(16))
-		}
-	}
-	for _, x := range info.BLSKeyWithProof.AggG2PublicKey {
-		for _, y := range x {
-			fmt.Printf("%s\n", y.Text(16))
-		}
 	}
 
 	// manually pack tx data since we are submitting via gnosis instead of directly
@@ -174,19 +160,6 @@ func (a *API) SubscribeToChains(operator *etherfi.Operator, chainIDs []int64) er
 }
 
 func (a *API) UpdateBLSPubkey(operator *etherfi.Operator, info RegistrationInfo) error {
-
-	fmt.Println("G1")
-	for _, x := range info.BLSKeyWithProof.BlsG1PublicKeys {
-		for _, y := range x {
-			fmt.Printf("%s\n", y.Text(16))
-		}
-	}
-	fmt.Println("G2")
-	for _, x := range info.BLSKeyWithProof.AggG2PublicKey {
-		for _, y := range x {
-			fmt.Printf("%s\n", y.Text(16))
-		}
-	}
 
 	keyIndex := uint32(0)
 
