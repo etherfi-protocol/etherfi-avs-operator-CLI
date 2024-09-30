@@ -3,6 +3,7 @@ package lagrangesc
 import (
 	"crypto/ecdsa"
 	"crypto/rand"
+	"encoding/hex"
 	"fmt"
 	"math/big"
 	"time"
@@ -67,8 +68,10 @@ func (a *API) PrepareRegistration(operator *etherfi.Operator, signerAddr common.
 	}
 
 	// Lagrange library wants the private keys as a hex string
-	blsPrivKey := blsKey.PrivKey.Text(2)
+	blsPrivKey := blsKey.PrivKey.Text(16)
 	blsPrivKeys := []string{blsPrivKey}
+
+	fmt.Printf("pubkey: %s\n", hex.EncodeToString(blsKey.PubKey.Serialize()))
 
 	g1Pubkeys, g2Pubkey, sig, err := lagrangeutils.GenerateBLSSignature(keyWithProofDigest[:], blsPrivKeys...)
 	if err != nil {
@@ -101,6 +104,17 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo
 		Signature: sigWithSaltAndExpiry.Signature,
 		Salt:      sigWithSaltAndExpiry.Salt,
 		Expiry:    sigWithSaltAndExpiry.Expiry,
+	}
+
+	for _, x := range info.BLSKeyWithProof.BlsG1PublicKeys {
+		for _, y := range x {
+			fmt.Printf("%s\n", y.Text(16))
+		}
+	}
+	for _, x := range info.BLSKeyWithProof.AggG2PublicKey {
+		for _, y := range x {
+			fmt.Printf("%s\n", y.Text(16))
+		}
 	}
 
 	// manually pack tx data since we are submitting via gnosis instead of directly
@@ -157,4 +171,42 @@ func (a *API) SubscribeToChains(operator *etherfi.Operator, chainIDs []int64) er
 
 	// output in gnosis compatible format
 	return utils.ExportJSON("lagrangeSC-subscribe-gnosis", operator.ID, batch)
+}
+
+func (a *API) UpdateBLSPubkey(operator *etherfi.Operator, info RegistrationInfo) error {
+
+	fmt.Println("G1")
+	for _, x := range info.BLSKeyWithProof.BlsG1PublicKeys {
+		for _, y := range x {
+			fmt.Printf("%s\n", y.Text(16))
+		}
+	}
+	fmt.Println("G2")
+	for _, x := range info.BLSKeyWithProof.AggG2PublicKey {
+		for _, y := range x {
+			fmt.Printf("%s\n", y.Text(16))
+		}
+	}
+
+	keyIndex := uint32(0)
+
+	// manually pack tx data since we are submitting via gnosis instead of directly
+	lagrangeServiceABI, err := LagrangeServiceMetaData.GetAbi()
+	if err != nil {
+		return fmt.Errorf("fetching abi: %w", err)
+	}
+	calldata, err := lagrangeServiceABI.Pack("updateBlsPubKey", keyIndex, info.BLSKeyWithProof)
+	if err != nil {
+		return fmt.Errorf("packing input: %w", err)
+	}
+
+	// wrap the inner call to be forwarded via AvsOperatorManager
+	adminCall, err := utils.PackForwardCallForAdmin(operator.ID, calldata, a.LagrangeServiceAddress)
+	if err != nil {
+		return fmt.Errorf("wrapping call for admin: %w", err)
+	}
+
+	// output in gnosis compatible format
+	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("lagrangeSC-update-bls-pubkey-%d", operator.ID))
+	return utils.ExportJSON("lagrangeSC-update-bls-pubkey-gnosis", operator.ID, batch)
 }
