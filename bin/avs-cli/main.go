@@ -33,6 +33,8 @@ func main() {
 		},
 		Commands: []*cli.Command{
 			BlsPubkeyRegistrationHashCmd,
+			RegistrationStatusCmd,
+			StakedropAddressCmd,
 			operatorDetailsCmd,
 			updateEcdsaSignerCmd,
 
