@@ -7,7 +7,7 @@ import (
 	"math/big"
 	"os"
 
-	ethereum "github.com/ethereum/go-ethereum"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -60,48 +60,29 @@ func (a *API) Register(operator *etherfi.Operator, dkgPublicKey []byte, inputSig
 		return fmt.Errorf("invalid private key: %w", err)
 	}
 
-	// pack input for `nodeRegister` call
-	nodeRegistryABI, err := NodeRegistryMetaData.GetAbi()
-	if err != nil {
-		return fmt.Errorf("fetching abi: %w", err)
-	}
-	input, err := nodeRegistryABI.Pack("nodeRegister", dkgPublicKey, true, operator.Address, inputSignature)
-	if err != nil {
-		return fmt.Errorf("packing input: %w", err)
-	}
-
-	// get the nonce and the gas values for the transaction
-	fromAddress := crypto.PubkeyToAddress(signingKey.PublicKey)
-	nonce, err := a.Client.PendingNonceAt(context.Background(), fromAddress)
-	if err != nil {
-		return fmt.Errorf("fetching nonce: %w", err)
-	}
-	gasPrice, err := a.Client.SuggestGasPrice(context.Background())
-	if err != nil {
-		return fmt.Errorf("fetching gas price: %w", err)
-	}
-	gasLimit, err := a.Client.EstimateGas(context.Background(), ethereum.CallMsg{
-		To:   &a.NodeRegistryAddress,
-		Data: input,
-	})
-	if err != nil {
-		return fmt.Errorf("estimating gas: %w", err)
-	}
-	// add 10% buffer to the gas limit
-	finalGasLimit := gasLimit + (gasLimit / 10)
-
-	// sign and send the transaction
-	tx := types.NewTransaction(nonce, a.NodeRegistryAddress, big.NewInt(0), finalGasLimit, gasPrice, input)
-	signedTx, err := types.SignTx(tx, types.NewEIP155Signer(big.NewInt(1)), signingKey)
-	if err != nil {
-		return fmt.Errorf("signing transaction: %w", err)
-	}
-	err = a.Client.SendTransaction(context.Background(), signedTx)
-	if err != nil {
-		return fmt.Errorf("sending transaction: %w", err)
+	// TODO: replace with the custom signer once we build it
+	SignerFn := func(address common.Address, tx *types.Transaction) (*types.Transaction, error) {
+		signer := types.LatestSignerForChainID(big.NewInt(1))
+		signedTx, err := types.SignTx(tx, signer, signingKey)
+		if err != nil {
+			return nil, err
+		}
+		return signedTx, nil
 	}
 
-	txHash := signedTx.Hash().Hex()
+	transactOpts := &bind.TransactOpts{
+		From:    crypto.PubkeyToAddress(signingKey.PublicKey),
+		Signer:  SignerFn,
+		Context: context.Background(),
+	}
+
+	transaction, err := a.NodeRegistry.NodeRegister(transactOpts, dkgPublicKey, true, operator.Address, inputSignature)
+	if err != nil {
+		fmt.Printf("Error details: %v\n", err)
+		return fmt.Errorf("registering node: %w", err)
+	}
+
+	txHash := transaction.Hash().Hex()
 	etherscanURL := fmt.Sprintf("https://etherscan.io/tx/%s", txHash)
 	fmt.Printf("Registration sent successfully.\nView it on Etherscan: %s\n", etherscanURL)
 
