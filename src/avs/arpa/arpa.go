@@ -1,15 +1,20 @@
 package arpa
 
 import (
+	"context"
 	"crypto/ecdsa"
 	"fmt"
+	"math/big"
+	"os"
 
+	ethereum "github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/config"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/eigenlayer"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
-	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/gnosis"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/utils"
 )
 
@@ -46,21 +51,65 @@ type RegistrationInfo struct {
 	DKGPublicKey []byte
 }
 
-// PrepareRegistration aggregates all required info from the node operator that
-// the ether.fi admin will need to register them to the AVS
-func (a *API) PrepareRegistration(operator *etherfi.Operator, dkgPublicKey []byte) error {
+// Register is called by the node operator with their Node Account to register with ARPA
+func (a *API) Register(operator *etherfi.Operator, dkgPublicKey []byte, inputSignature ISignatureUtilsSignatureWithSaltAndExpiry) error {
 
-	ri := RegistrationInfo{
-		OperatorID:   operator.ID,
-		DKGPublicKey: dkgPublicKey,
+	// registration will be signed the node operator with their `Node Account`
+	signingKey, err := crypto.HexToECDSA(os.Getenv("PRIVATE_KEY"))
+	if err != nil {
+		return fmt.Errorf("invalid private key: %w", err)
 	}
 
-	return utils.ExportJSON("arpa-prepare-registration", operator.ID, ri)
+	// pack input for `nodeRegister` call
+	nodeRegistryABI, err := NodeRegistryMetaData.GetAbi()
+	if err != nil {
+		return fmt.Errorf("fetching abi: %w", err)
+	}
+	input, err := nodeRegistryABI.Pack("nodeRegister", dkgPublicKey, true, operator.Address, inputSignature)
+	if err != nil {
+		return fmt.Errorf("packing input: %w", err)
+	}
+
+	// get the nonce and the gas values for the transaction
+	fromAddress := crypto.PubkeyToAddress(signingKey.PublicKey)
+	nonce, err := a.Client.PendingNonceAt(context.Background(), fromAddress)
+	if err != nil {
+		return fmt.Errorf("fetching nonce: %w", err)
+	}
+	gasPrice, err := a.Client.SuggestGasPrice(context.Background())
+	if err != nil {
+		return fmt.Errorf("fetching gas price: %w", err)
+	}
+	gasLimit, err := a.Client.EstimateGas(context.Background(), ethereum.CallMsg{
+		To:   &a.NodeRegistryAddress,
+		Data: input,
+	})
+	if err != nil {
+		return fmt.Errorf("estimating gas: %w", err)
+	}
+	// add 10% buffer to the gas limit
+	finalGasLimit := gasLimit + (gasLimit / 10)
+
+	// sign and send the transaction
+	tx := types.NewTransaction(nonce, a.NodeRegistryAddress, big.NewInt(0), finalGasLimit, gasPrice, input)
+	signedTx, err := types.SignTx(tx, types.NewEIP155Signer(big.NewInt(1)), signingKey)
+	if err != nil {
+		return fmt.Errorf("signing transaction: %w", err)
+	}
+	err = a.Client.SendTransaction(context.Background(), signedTx)
+	if err != nil {
+		return fmt.Errorf("sending transaction: %w", err)
+	}
+
+	txHash := signedTx.Hash().Hex()
+	etherscanURL := fmt.Sprintf("https://etherscan.io/tx/%s", txHash)
+	fmt.Printf("Registration sent successfully.\nView it on Etherscan: %s\n", etherscanURL)
+
+	return nil
 }
 
-// RegisterOperator is used by the ether.fi admin to register a node operator's AvsOperator
-// contract with the AVS.
-func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo, signingKey *ecdsa.PrivateKey) error {
+// GenerateAVSRegistrationSignature is used by the ether.fi admin to generate an AVS registration signature for a node operator.
+func (a *API) GenerateAVSRegistrationSignature(operator *etherfi.Operator, signingKey *ecdsa.PrivateKey) error {
 
 	// generate and sign registration hash with admin ecdsa key
 	signature, err := a.EigenlayerAPI.GenerateAndSignRegistrationDigest(operator, a.ServiceManagerAddress, signingKey)
@@ -75,23 +124,5 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo
 		Expiry:    signature.Expiry,
 	}
 
-	// manually pack tx data since we are submitting via gnosis instead of directly
-	nodeRegistryABI, err := NodeRegistryMetaData.GetAbi()
-	if err != nil {
-		return fmt.Errorf("fetching abi: %w", err)
-	}
-	input, err := nodeRegistryABI.Pack("nodeRegister", info.DKGPublicKey, true, operator.Address, sigWithSaltAndExpiry)
-	if err != nil {
-		return fmt.Errorf("packing input: %w", err)
-	}
-
-	// wrap the inner call to be forwarded via AvsOperatorManager
-	adminCall, err := utils.PackForwardCallForAdmin(operator.ID, input, a.NodeRegistryAddress)
-	if err != nil {
-		return fmt.Errorf("wrapping call for admin: %w", err)
-	}
-
-	// output in gnosis compatible format
-	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("arpa-register-%d", operator.ID))
-	return utils.ExportJSON("arpa-register-gnosis", operator.ID, batch)
+	return utils.ExportJSON("arpa-registration-signature", operator.ID, sigWithSaltAndExpiry)
 }
