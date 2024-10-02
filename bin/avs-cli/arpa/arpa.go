@@ -97,7 +97,7 @@ func handleRegistration(ctx context.Context, cli *cli.Command) error {
 	if err != nil {
 		return fmt.Errorf("invalid dkg-public-key: %v", err)
 	}
-	// read input file with required automata data
+	// read input file with provided registration signature
 	var inputSignature arpa.ISignatureUtilsSignatureWithSaltAndExpiry
 	buf, err := os.ReadFile(registrationInputPath)
 	if err != nil {

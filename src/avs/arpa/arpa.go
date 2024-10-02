@@ -51,7 +51,7 @@ type RegistrationInfo struct {
 	DKGPublicKey []byte
 }
 
-// Register is called by the node operator with their Node Account to register with ARPA
+// Register is called by the node operator with their `Node Account` to register with ARPA
 func (a *API) Register(operator *etherfi.Operator, dkgPublicKey []byte, inputSignature ISignatureUtilsSignatureWithSaltAndExpiry) error {
 
 	// registration will be signed the node operator with their `Node Account`
@@ -108,7 +108,7 @@ func (a *API) Register(operator *etherfi.Operator, dkgPublicKey []byte, inputSig
 	return nil
 }
 
-// GenerateAVSRegistrationSignature is used by the ether.fi admin to generate an AVS registration signature for a node operator.
+// GenerateAVSRegistrationSignature is used by the ether.fi admin to generate an AVS registration signature for a node operator
 func (a *API) GenerateAVSRegistrationSignature(operator *etherfi.Operator, signingKey *ecdsa.PrivateKey) error {
 
 	// generate and sign registration hash with admin ecdsa key

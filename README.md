@@ -333,7 +333,7 @@ and note the address of the key you generated
 
 ## Operator Flow
 
-1. Follow the instructions provided in the [ARPA EigenLayer Onboarding Docs](https://github.com/ARPA-Network/BLS-TSS-Network/blob/main/docs/eigenlayer-onboarding.md) to run the `node-client`. The Node account will be an ECDSA key controlled by your team to submit tasks to ETH Mainnet, OP Mainnet, Base Mainnet, and Redstone Mainnet. Stop at the **Register to ARPA Network using your Node account** step
+1. Follow the instructions provided in the [ARPA EigenLayer Onboarding Docs](https://github.com/ARPA-Network/BLS-TSS-Network/blob/main/docs/eigenlayer-onboarding.md) to run the `node-client`. The Node Account will be an ECDSA key controlled by your team to submit tasks to ETH Mainnet, OP Mainnet, Base Mainnet, and Redstone Mainnet. Stop at the **Register to ARPA Network using your Node Account** step
 2. Open the log and search for the keyword "public_key" (or "DKGKeyGenerated") and store the DKG public key value for use later in the registration process
 3. Keep the `node-client` software running, and email the ether.fi team at `restaking@ether.fi` with your operator ID to request an ARPA AVS registration signature
 4. Receive the registration signature from the admin
