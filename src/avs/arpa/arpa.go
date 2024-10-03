@@ -1,16 +1,12 @@
 package arpa
 
 import (
-	"context"
 	"crypto/ecdsa"
 	"fmt"
 	"math/big"
-	"os"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/config"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/eigenlayer"
@@ -51,32 +47,16 @@ type RegistrationInfo struct {
 	DKGPublicKey []byte
 }
 
-// Register is called by the node operator with their `Node Account` to register with ARPA
-func (a *API) Register(operator *etherfi.Operator, dkgPublicKey []byte, inputSignature ISignatureUtilsSignatureWithSaltAndExpiry) error {
+// Register is called by the node operator with their ECDSA key to register with ARPA
+func (a *API) Register(operator *etherfi.Operator, dkgPublicKey []byte, inputSignature ISignatureUtilsSignatureWithSaltAndExpiry, signingKey *ecdsa.PrivateKey) error {
 
-	// registration will be signed the node operator with their `Node Account`
-	signingKey, err := crypto.HexToECDSA(os.Getenv("PRIVATE_KEY"))
+	transactor, err := bind.NewKeyedTransactorWithChainID(signingKey, big.NewInt(1))
 	if err != nil {
-		return fmt.Errorf("invalid private key: %w", err)
+		return fmt.Errorf("creating signer from key: %w", err)
 	}
 
-	// TODO: replace with the custom signer once we build it
-	SignerFn := func(address common.Address, tx *types.Transaction) (*types.Transaction, error) {
-		signer := types.LatestSignerForChainID(big.NewInt(1))
-		signedTx, err := types.SignTx(tx, signer, signingKey)
-		if err != nil {
-			return nil, err
-		}
-		return signedTx, nil
-	}
-
-	transactOpts := &bind.TransactOpts{
-		From:    crypto.PubkeyToAddress(signingKey.PublicKey),
-		Signer:  SignerFn,
-		Context: context.Background(),
-	}
-
-	transaction, err := a.NodeRegistry.NodeRegister(transactOpts, dkgPublicKey, true, operator.Address, inputSignature)
+	// call `NodeRegister` with the msg.sender as the operator's `Node Account`
+	transaction, err := a.NodeRegistry.NodeRegister(transactor, dkgPublicKey, true, operator.Address, inputSignature)
 	if err != nil {
 		fmt.Printf("Error details: %v\n", err)
 		return fmt.Errorf("registering node: %w", err)

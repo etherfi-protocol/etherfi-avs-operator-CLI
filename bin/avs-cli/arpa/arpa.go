@@ -92,11 +92,13 @@ func handleRegistration(ctx context.Context, cli *cli.Command) error {
 	if err != nil {
 		return fmt.Errorf("looking up operator address: %w", err)
 	}
+
 	// Convert hex string back to bytes
 	dkgPublicKey, err := hex.DecodeString(dkgPublicKeyHex)
 	if err != nil {
 		return fmt.Errorf("invalid dkg-public-key: %v", err)
 	}
+
 	// read input file with provided registration signature
 	var inputSignature arpa.ISignatureUtilsSignatureWithSaltAndExpiry
 	buf, err := os.ReadFile(registrationInputPath)
@@ -107,7 +109,7 @@ func handleRegistration(ctx context.Context, cli *cli.Command) error {
 		return fmt.Errorf("parsing registration signature: %w", err)
 	}
 	if len(inputSignature.Signature) == 0 {
-		return fmt.Errorf("invalid registration , missing signature")
+		return fmt.Errorf("invalid registration input, missing signature")
 	}
 	if bytes.Equal(inputSignature.Salt[:], make([]byte, 32)) {
 		return fmt.Errorf("invalid registration input, missing salt")
@@ -116,7 +118,13 @@ func handleRegistration(ctx context.Context, cli *cli.Command) error {
 		return fmt.Errorf("invalid registration input, missing expiry")
 	}
 
-	return arpaAPI.Register(operator, dkgPublicKey, inputSignature)
+	// load `Node Account` private key
+	signingKey, err := crypto.HexToECDSA(os.Getenv("PRIVATE_KEY"))
+	if err != nil {
+		return fmt.Errorf("invalid private key: %w", err)
+	}
+
+	return arpaAPI.Register(operator, dkgPublicKey, inputSignature, signingKey)
 }
 
 var GenerationRegisterSignatureCmd = &cli.Command{
