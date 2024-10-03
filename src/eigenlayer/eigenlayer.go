@@ -63,7 +63,7 @@ func (a *API) GenerateAndSignRegistrationDigest(operator *etherfi.Operator, serv
 	if _, err := rand.Read(salt); err != nil {
 		return nil, fmt.Errorf("generating random salt: %w", err)
 	}
-	// TODO: revisit what we want the expiration to be
+	// TODO: revisit what we want the expiration to be (currently 7 days)
 	expiry := new(big.Int).SetInt64(time.Now().Add(24 * time.Hour * 7).Unix())
 
 	hash, err := a.GenerateRegistrationDigest(operator, [32]byte(salt), expiry, serviceManager)

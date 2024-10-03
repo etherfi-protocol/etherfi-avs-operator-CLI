@@ -333,26 +333,24 @@ and note the address of the key you generated
 
 ## Operator Flow
 
-1. Follow the instructions provided in the [ARPA EigenLayer Onboarding Docs](https://github.com/ARPA-Network/BLS-TSS-Network/blob/main/docs/eigenlayer-onboarding.md) to run the `node-client` on Base Mainnet. Stop when you reach the **Register to ARPA Network by your Node account** step
-3. Keep the `node-client` running, go to the log and search the log for the keyword "public_key" (or "DKGKeyGenerated") and copy the DKG public key value
-4. Run the following command:
+1. Follow the instructions provided in the [ARPA EigenLayer Onboarding Docs](https://github.com/ARPA-Network/BLS-TSS-Network/blob/main/docs/eigenlayer-onboarding.md) to run the `node-client`. The Node Account will be an ECDSA key controlled by your team to submit tasks to ETH Mainnet, OP Mainnet, Base Mainnet, and Redstone Mainnet. Stop at the **Register to ARPA Network using your Node Account** step
+2. Open the log and search for the keyword "public_key" (or "DKGKeyGenerated") and store the DKG public key value for use later in the registration process
+3. Keep the `node-client` software running, and email the ether.fi team at `restaking@ether.fi` with your operator ID to request an ARPA AVS registration signature
+4. Receive the registration signature from the admin
+5. Set the `.env` with a mainnet RPC URL for `RPC_URL` and your Node Account (the account that interacts with ARPA) ECDSA key for `PRIVATE_KEY`:
 
-           ./avs-cli arpa prepare-registration --operator-id {operator_id} --dkg-public-key {dkg_public_key}
+      ./avs-cli arpa register --operator-id {operator_id} --dkg-public-key {dkg_public_key} --registration-signature {arpa-registration-signature}
 
-6. Send the following information to the ether.fi team via `restaking@ether.fi`
-  - The output of the above `prepare-registration` command
-  - The address of the ECDSA account used as the Node Account in step 1
-
-5. Continue to run the `node-client` software
+6. Continue to run the `node-client` software
 
 ## Ether.fi Admin Flow
 
-1. Receive prepared registration json file from target node operator
-2. Register the operator contract with ARPA
+1. Receive an ARPA AVS registration request
+2. Generate an AVS registration signature for the given operator:
 
-           ./avs-cli arpa register --registration-input arpa-input.json
+      ./avs-cli arpa generate-registration-signature --operator-id {operator_id}
 
-           // submit resulting output as a gnosis TX via AVS admin gnosis
+      // return result to the AVS operator for them to execute
 
 ---
 
