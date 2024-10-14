@@ -146,3 +146,26 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo
 	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("eigenda-register-operator-%d", operator.ID))
 	return utils.ExportJSON("eigenda-register-gnosis", operator.ID, batch)
 }
+
+func (a *API) UpdateSocket(operator *etherfi.Operator, socket string, signerKey *ecdsa.PrivateKey) error {
+
+	// manually pack tx data since we are submitting via gnosis instead of directly
+	coordinatorABI, err := registryCoordinator.ContractRegistryCoordinatorMetaData.GetAbi()
+	if err != nil {
+		return fmt.Errorf("fetching abi: %w", err)
+	}
+	calldata, err := coordinatorABI.Pack("updateSocket", socket)
+	if err != nil {
+		return fmt.Errorf("packing input: %w", err)
+	}
+
+	// wrap the inner call to be forwarded via AvsOperatorManager
+	adminCall, err := utils.PackForwardCallForAdmin(operator.ID, calldata, a.RegistryCoordinatorAddress)
+	if err != nil {
+		return fmt.Errorf("wrapping call for admin: %w", err)
+	}
+
+	// output in gnosis compatible format
+	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("eigenda-update-socket-%d", operator.ID))
+	return utils.ExportJSON("eigenda-update-socket", operator.ID, batch)
+}
