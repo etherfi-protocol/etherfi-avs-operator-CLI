@@ -25,6 +25,7 @@ var EigenDACmd = &cli.Command{
 		PrepareRegistrationCmd,
 		RegisterCmd,
 		UpdateSocketCmd,
+		StatusCmd,
 	},
 }
 

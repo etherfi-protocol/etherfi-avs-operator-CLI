@@ -2,10 +2,12 @@ package eigenda
 
 import (
 	"crypto/ecdsa"
+	"encoding/hex"
 	"fmt"
 
 	"github.com/consensys/gnark-crypto/ecc/bn254"
 	"github.com/consensys/gnark-crypto/ecc/bn254/fp"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/config"
@@ -120,7 +122,9 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo
 		Salt:      sigWithSaltAndExpiry.Salt,
 		Expiry:    sigWithSaltAndExpiry.Expiry,
 	}
-	pubkeyParams := registryCoordinator.IBLSApkRegistryPubkeyRegistrationParams{
+	// if just updating quorums, BLS params are ignored
+	var pubkeyParams registryCoordinator.IBLSApkRegistryPubkeyRegistrationParams
+	pubkeyParams = registryCoordinator.IBLSApkRegistryPubkeyRegistrationParams{
 		PubkeyRegistrationSignature: registryCoordinator.BN254G1Point(info.BLSPubkeyRegistrationParams.Signature),
 		PubkeyG1:                    registryCoordinator.BN254G1Point(info.BLSPubkeyRegistrationParams.G1),
 		PubkeyG2:                    registryCoordinator.BN254G2Point(info.BLSPubkeyRegistrationParams.G2),
@@ -168,4 +172,35 @@ func (a *API) UpdateSocket(operator *etherfi.Operator, socket string, signerKey 
 	// output in gnosis compatible format
 	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("eigenda-update-socket-%d", operator.ID))
 	return utils.ExportJSON("eigenda-update-socket", operator.ID, batch)
+}
+
+func (a *API) Status(operator *etherfi.Operator) error {
+
+	// look up eigenlayer id
+	eigenOperatorID, err := a.RegistryCoordinator.GetOperatorId(&bind.CallOpts{}, operator.Address)
+	if err != nil {
+		return fmt.Errorf("fetching eigenlayerOperatorID: %w", err)
+	}
+
+	// find latest socket update which only exists an event
+	socketUpdates, err := a.RegistryCoordinator.FilterOperatorSocketUpdate(&bind.FilterOpts{}, [][32]byte{eigenOperatorID})
+	if err != nil {
+		return fmt.Errorf("fetching socket updates: %w", err)
+	}
+	var latestSocket string
+	for socketUpdates.Next() {
+		event := socketUpdates.Event
+		latestSocket = event.Socket
+	}
+
+	quorumBitmap, err := a.RegistryCoordinator.GetCurrentQuorumBitmap(&bind.CallOpts{}, eigenOperatorID)
+	if err != nil {
+		return fmt.Errorf("fetching eigenlayerOperatorID: %w", err)
+	}
+
+	fmt.Printf("eigenlayerOperatorID: 0x%s\n", hex.EncodeToString(eigenOperatorID[:]))
+	fmt.Printf("socket: %s\n", latestSocket)
+	fmt.Printf("quorumBitmap: %s\n", quorumBitmap.Text(2))
+
+	return nil
 }
