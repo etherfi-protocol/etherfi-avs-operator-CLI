@@ -363,7 +363,7 @@ and note the address of the key you generated
 2. Determine which `quorums` and `socket` you wish to register for
 3. Sign digest establishing ownership of your newly generated BLS key
 
-           ./avs-cli openlayer prepare-registration --operator-id {operator_id} --bls-keystore {path_to_keystore} --bls-password {password} --quorums {0} --socket {socket}
+           ./avs-cli openlayer prepare-registration --operator-id {operator_id} --bls-keystore {path_to_keystore} --bls-password {password} --signer-address {address_of_generated_ecdsa_key} --quorums {0} --socket {socket}
 
 4. Send the result of the previous command to the ether.fi team via `restaking@ether.fi`
 5. Wait for confirmation from the ether.fi team that your registration is complete

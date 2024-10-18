@@ -78,6 +78,11 @@ var PrepareRegistrationCmd = &cli.Command{
 			Usage:    "password for encrypted keystore file",
 			Required: true,
 		},
+		&cli.StringFlag{
+			Name:     "signer-address",
+			Usage:    "address of the generated signer ecdsa key",
+			Required: true,
+		},
 		&cli.IntSliceFlag{
 			Name:     "quorums",
 			Usage:    "which quorums to register for i.e. 0,1",
@@ -97,6 +102,7 @@ func handlePrepareRegistration(ctx context.Context, cli *cli.Command) error {
 	operatorID := cli.Int("operator-id")
 	blsKeyFile := cli.String("bls-keystore")
 	blsKeyPassword := cli.String("bls-password")
+	signerAddress := common.HexToAddress(cli.String("signer-address"))
 	quorums := cli.IntSlice("quorums")
 	socket := cli.String("socket")
 
@@ -113,7 +119,7 @@ func handlePrepareRegistration(ctx context.Context, cli *cli.Command) error {
 		return fmt.Errorf("looking up operator address: %w", err)
 	}
 
-	return openlayerAPI.PrepareRegistration(operator, keyPair, socket, quorums)
+	return openlayerAPI.PrepareRegistration(operator, keyPair, signerAddress, socket, quorums)
 }
 
 var RegisterCmd = &cli.Command{
@@ -148,6 +154,9 @@ func handleRegister(ctx context.Context, cli *cli.Command) error {
 	}
 	if input.Socket == "" {
 		return fmt.Errorf("invalid registration input, missing socket")
+	}
+	if input.SignerAddress == common.HexToAddress("0x0") {
+		return fmt.Errorf("invalid registration input, missing signerAddress")
 	}
 
 	// look up operator contract associated with this id

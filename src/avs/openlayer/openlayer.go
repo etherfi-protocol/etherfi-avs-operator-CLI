@@ -52,9 +52,10 @@ type RegistrationInfo struct {
 	Socket                      string
 	Quorums                     []int64
 	BLSPubkeyRegistrationParams *types.BLSPubkeyRegistrationParams
+	SignerAddress               common.Address
 }
 
-func (a *API) PrepareRegistration(operator *etherfi.Operator, blsKey *bls.KeyPair, socket string, quorums []int64) error {
+func (a *API) PrepareRegistration(operator *etherfi.Operator, blsKey *bls.KeyPair, signerAddress common.Address, socket string, quorums []int64) error {
 
 	// compute hash to sign with bls key
 	// the hash is converted to a G1 point on the curve before it is returned
@@ -89,6 +90,7 @@ func (a *API) PrepareRegistration(operator *etherfi.Operator, blsKey *bls.KeyPai
 		Socket:                      socket,
 		Quorums:                     quorums,
 		BLSPubkeyRegistrationParams: signedParams,
+		SignerAddress:               signerAddress,
 	}
 	return utils.ExportJSON("openlayer-prepare-registration", operator.ID, ri)
 }
@@ -122,7 +124,7 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo
 	if err != nil {
 		return fmt.Errorf("fetching abi: %w", err)
 	}
-	calldata, err := coordinatorABI.Pack("registerOperator", quorums, info.Socket, pubkeyParams, sigParams, operator.Address)
+	calldata, err := coordinatorABI.Pack("registerOperator", quorums, info.Socket, pubkeyParams, sigParams, info.SignerAddress)
 	if err != nil {
 		return fmt.Errorf("packing input: %w", err)
 	}
