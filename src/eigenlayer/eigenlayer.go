@@ -1,17 +1,23 @@
 package eigenlayer
 
 import (
+	"context"
 	"crypto/ecdsa"
 	"crypto/rand"
 	"fmt"
 	"math/big"
+	"net/http"
 	"time"
 
+	"github.com/Layr-Labs/eigenlayer-rewards-proofs/pkg/claimgen"
+	"github.com/Layr-Labs/eigenlayer-rewards-proofs/pkg/proofDataFetcher/httpProofDataFetcher"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/config"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/gnosis"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/utils"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/types"
 	"github.com/fatih/color"
@@ -20,8 +26,12 @@ import (
 type API struct {
 	Client *ethclient.Client
 
-	AvsDirectory        *AvsDirectory
-	AvsDirectoryAddress common.Address
+	AvsDirectory              *AvsDirectory
+	AvsDirectoryAddress       common.Address
+	AvsOperatorManagerAddress common.Address
+
+	RewardsCoordinator        *RewardsCoordinator
+	RewardsCoordinatorAddress common.Address
 
 	DelegationManager        *DelegationManager
 	DelegationManagerAddress common.Address
@@ -31,13 +41,17 @@ func New(cfg config.Config, rpcClient *ethclient.Client) *API {
 
 	avsDirectory, _ := NewAvsDirectory(cfg.AvsDirectoryAddress, rpcClient)
 	delegationManager, _ := NewDelegationManager(cfg.DelegationManagerAddress, rpcClient)
+	rewardsCoordinator, _ := NewRewardsCoordinator(cfg.EigenlayerRewardsCoordinatorAddress, rpcClient)
 
 	return &API{
-		Client:                   rpcClient,
-		AvsDirectory:             avsDirectory,
-		AvsDirectoryAddress:      cfg.AvsDirectoryAddress,
-		DelegationManager:        delegationManager,
-		DelegationManagerAddress: cfg.DelegationManagerAddress,
+		Client:                    rpcClient,
+		AvsDirectory:              avsDirectory,
+		AvsDirectoryAddress:       cfg.AvsDirectoryAddress,
+		AvsOperatorManagerAddress: cfg.AvsOperatorManagerAddress,
+		RewardsCoordinator:        rewardsCoordinator,
+		RewardsCoordinatorAddress: cfg.EigenlayerRewardsCoordinatorAddress,
+		DelegationManager:         delegationManager,
+		DelegationManagerAddress:  cfg.DelegationManagerAddress,
 	}
 }
 
@@ -96,4 +110,55 @@ func (a *API) GenerateAndSignRegistrationDigest(operator *etherfi.Operator, serv
 		Salt:      [32]byte(salt),
 		Expiry:    expiry,
 	}, nil
+}
+
+func (a *API) ClaimAvsOperatorRewards(operator *etherfi.Operator, rewardsRecipient common.Address, rewardTokens []common.Address) error {
+
+	// find the latest claimable root
+	latestClaimableRoot, err := a.RewardsCoordinator.GetCurrentClaimableDistributionRoot(&bind.CallOpts{})
+	if err != nil {
+		return fmt.Errorf("failed to get latest claimable root: %w", err)
+	}
+	rootIndex, err := a.RewardsCoordinator.GetRootIndexFromHash(&bind.CallOpts{}, latestClaimableRoot.Root)
+	if err != nil {
+		return fmt.Errorf("failed to get root index from hash: %w", err)
+	}
+
+	// TODO: hardcoded to mainnet ethereum for now
+	// fetch merkle tree using eigenSDK
+	df := httpProofDataFetcher.NewHttpProofDataFetcher(
+		"https://eigenlabs-rewards-mainnet-ethereum.s3.amazonaws.com", // ProofStoreBaseURL
+		"mainnet",  // Environment
+		"ethereum", // Network
+		http.DefaultClient,
+	)
+	claimDate := time.Unix(int64(latestClaimableRoot.RewardsCalculationEndTimestamp), 0).UTC().Format(time.DateOnly)
+	proofData, err := df.FetchClaimAmountsForDate(context.Background(), claimDate)
+	if err != nil {
+		return fmt.Errorf("failed to fetch claim amounts for date: %w", err)
+	}
+
+	// generate proofs
+	cg := claimgen.NewClaimgen(proofData.Distribution)
+	_, claim, err := cg.GenerateClaimProofForEarner(operator.Address, rewardTokens, rootIndex)
+	if err != nil {
+		return fmt.Errorf("failed to generate claim proof for earner: %w", err)
+	}
+
+	// manually pack tx data since we are forwarding the call via the etherfiNodesManager
+	rewardsCoordinatorABI, _ := RewardsCoordinatorMetaData.GetAbi()
+	claimCalldata, err := rewardsCoordinatorABI.Pack("processClaim", claim, rewardsRecipient)
+	if err != nil {
+		return fmt.Errorf("packing processClaim: %w", err)
+	}
+
+	// wrap the inner call to be forwarded via AvsOperatorManager
+	adminCall, err := utils.PackForwardCallForAdmin(operator.ID, claimCalldata, a.RewardsCoordinatorAddress)
+	if err != nil {
+		return fmt.Errorf("wrapping call for admin: %w", err)
+	}
+
+	// output in gnosis compatible format
+	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("avs-reward-claim-%d", operator.ID))
+	return utils.ExportJSON("avs-reward-claim", operator.ID, batch)
 }

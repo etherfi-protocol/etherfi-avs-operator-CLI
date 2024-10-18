@@ -19,6 +19,7 @@ type Config struct {
 
 	// additional Eigenlayer contracts
 	EigenlayerOperatorRegistryClaimAddress common.Address // for updating stakedrop claims for operator contracts
+	EigenlayerRewardsCoordinatorAddress    common.Address // for claiming AVS rewards
 
 	// strategies (how eigenlayer tracks different LRT's + beacon eth)
 	BeaconEthStrategyAddress common.Address
@@ -88,6 +89,7 @@ var Mainnet = Config{
 	WethStrategyAddress:      common.HexToAddress(""),
 
 	EigenlayerOperatorRegistryClaimAddress: common.HexToAddress("0x8bB56D1CBA6273478E9B4D79F89857ac8D766eb3"),
+	EigenlayerRewardsCoordinatorAddress:    common.HexToAddress("0x7750d328b314EfFa365A0402CcfD489B80B0adda"),
 
 	AvsOperatorManagerAddress: common.HexToAddress("0x2093Bbb221f1d8C7c932c32ee28Be6dEe4a37A6a"),
 

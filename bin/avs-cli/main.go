@@ -37,6 +37,7 @@ func main() {
 			StakedropAddressCmd,
 			operatorDetailsCmd,
 			updateEcdsaSignerCmd,
+			ClaimRewardsCmd,
 
 			// AVS specific commands
 			altlayer.AltLayerCmd,
