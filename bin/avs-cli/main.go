@@ -16,6 +16,7 @@ import (
 	lagrangesc "github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/lagrangeSC"
 	lagrangezk "github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/lagrangeZK"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/openlayer"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/unifi"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/witness-chain"
 	"github.com/urfave/cli/v3"
 )
@@ -51,6 +52,7 @@ func main() {
 			lagrangesc.LagrangeSCCmd,
 			lagrangezk.LagrangeZKCmd,
 			openlayer.OpenlayerCmd,
+			unifi.UniFiCmd,
 			witness.WitnessCmd,
 		},
 	}

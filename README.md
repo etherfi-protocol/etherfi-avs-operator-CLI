@@ -40,6 +40,7 @@ You will be assigned an operatorID and an operator smart contract that is regist
 * [Hyperlane](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#hyperlane)
 * [ARPA](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#arpa)
 * [Openlayer](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#openlayer)
+* [UniFi](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#unifi)
 
 ---
 
@@ -379,6 +380,17 @@ and note the address of the key you generated
 
 ---
 
+# UniFi
+
+## Ether.fi Admin Flow
+
+1. Register the operator contract with UniFi
+
+           ./avs-cli UniFi register --operator-id {operator_id}
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
+
+---
 
 
 # Adding a new AVS to the CLI
