@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/avs/openlayer"
@@ -25,6 +26,7 @@ var OpenlayerCmd = &cli.Command{
 	Commands: []*cli.Command{
 		PrepareRegistrationCmd,
 		RegisterCmd,
+		UpdateSignerCmd,
 	},
 }
 
@@ -76,6 +78,11 @@ var PrepareRegistrationCmd = &cli.Command{
 			Usage:    "password for encrypted keystore file",
 			Required: true,
 		},
+		&cli.StringFlag{
+			Name:     "signer-address",
+			Usage:    "address of the generated signer ecdsa key",
+			Required: true,
+		},
 		&cli.IntSliceFlag{
 			Name:     "quorums",
 			Usage:    "which quorums to register for i.e. 0,1",
@@ -95,6 +102,7 @@ func handlePrepareRegistration(ctx context.Context, cli *cli.Command) error {
 	operatorID := cli.Int("operator-id")
 	blsKeyFile := cli.String("bls-keystore")
 	blsKeyPassword := cli.String("bls-password")
+	signerAddress := common.HexToAddress(cli.String("signer-address"))
 	quorums := cli.IntSlice("quorums")
 	socket := cli.String("socket")
 
@@ -111,7 +119,7 @@ func handlePrepareRegistration(ctx context.Context, cli *cli.Command) error {
 		return fmt.Errorf("looking up operator address: %w", err)
 	}
 
-	return openlayerAPI.PrepareRegistration(operator, keyPair, socket, quorums)
+	return openlayerAPI.PrepareRegistration(operator, keyPair, signerAddress, socket, quorums)
 }
 
 var RegisterCmd = &cli.Command{
@@ -147,6 +155,9 @@ func handleRegister(ctx context.Context, cli *cli.Command) error {
 	if input.Socket == "" {
 		return fmt.Errorf("invalid registration input, missing socket")
 	}
+	if input.SignerAddress == common.HexToAddress("0x0") {
+		return fmt.Errorf("invalid registration input, missing signerAddress")
+	}
 
 	// look up operator contract associated with this id
 	operator, err := etherfiAPI.LookupOperatorByID(input.OperatorID)
@@ -161,4 +172,37 @@ func handleRegister(ctx context.Context, cli *cli.Command) error {
 	}
 
 	return openlayerAPI.RegisterOperator(operator, input, signingKey)
+}
+
+var UpdateSignerCmd = &cli.Command{
+	Name:   "update-signer",
+	Usage:  "(Admin) Update the signer address (this is within openlayer, unerelated to the EIP-1271 signer)",
+	Action: handleUpdateSigner,
+	Flags: []cli.Flag{
+		&cli.StringFlag{
+			Name:     "signer",
+			Usage:    "signer address",
+			Required: true,
+		},
+		&cli.IntFlag{
+			Name:     "operator-id",
+			Usage:    "operator ID",
+			Required: true,
+		},
+	},
+}
+
+func handleUpdateSigner(ctx context.Context, cli *cli.Command) error {
+
+	// parse cli params
+	signerAddr := common.HexToAddress(cli.String("signer"))
+	operatorID := cli.Int("operator-id")
+
+	// look up operator contract associated with this id
+	operator, err := etherfiAPI.LookupOperatorByID(operatorID)
+	if err != nil {
+		return fmt.Errorf("looking up operator address: %w", err)
+	}
+
+	return openlayerAPI.UpdateSignerAddress(operator, signerAddr)
 }

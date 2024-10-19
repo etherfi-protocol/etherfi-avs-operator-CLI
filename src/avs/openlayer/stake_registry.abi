@@ -1,0 +1,15 @@
+[
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "operatorSignAddr",
+                "type": "address"
+            }
+        ],
+        "name": "updateOperatorSignAddr",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
+]
