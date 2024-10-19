@@ -16,7 +16,7 @@ var UpdateSocketCmd = &cli.Command{
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:     "socket",
-			Usage:    "path to registration file created by prepare-registration command",
+			Usage:    "eigenda socket",
 			Required: true,
 		},
 		&cli.IntFlag{
