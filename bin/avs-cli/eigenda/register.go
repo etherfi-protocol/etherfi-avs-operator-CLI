@@ -59,3 +59,36 @@ func handleRegister(ctx context.Context, cli *cli.Command) error {
 
 	return eigendaAPI.RegisterOperator(operator, input, signingKey)
 }
+
+var DeregisterCmd = &cli.Command{
+	Name:   "deregister",
+	Usage:  "(Admin) Deregister operator from specified quorums",
+	Action: handleDeregister,
+	Flags: []cli.Flag{
+		&cli.IntSliceFlag{
+			Name:     "quorums",
+			Usage:    "which quorums to deregister from i.e. 0,1",
+			Required: true,
+		},
+		&cli.IntFlag{
+			Name:     "operator-id",
+			Usage:    "Operator ID",
+			Required: true,
+		},
+	},
+}
+
+func handleDeregister(ctx context.Context, cli *cli.Command) error {
+
+	// parse cli params
+	quorums := cli.IntSlice("quorums")
+	operatorID := cli.Int("operator-id")
+
+	// look up operator contract associated with this id
+	operator, err := etherfiAPI.LookupOperatorByID(operatorID)
+	if err != nil {
+		return fmt.Errorf("looking up operator address: %w", err)
+	}
+
+	return eigendaAPI.DeregisterOperator(operator, quorums)
+}

@@ -9,12 +9,13 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Layr-Labs/eigenlayer-rewards-proofs/pkg/claimgen"
-	"github.com/Layr-Labs/eigenlayer-rewards-proofs/pkg/proofDataFetcher/httpProofDataFetcher"
+	"github.com/etherfi-protocol/eigenlayer-rewards-proofs/pkg/claimgen"
+
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/etherfi-protocol/eigenlayer-rewards-proofs/pkg/proofDataFetcher/httpProofDataFetcher"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/config"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/gnosis"
@@ -112,7 +113,7 @@ func (a *API) GenerateAndSignRegistrationDigest(operator *etherfi.Operator, serv
 	}, nil
 }
 
-func (a *API) ClaimAvsOperatorRewards(operator *etherfi.Operator, rewardsRecipient common.Address, rewardTokens []common.Address) error {
+func (a *API) ClaimAvsOperatorRewards(operators []*etherfi.Operator, rewardsRecipient common.Address, rewardTokens []common.Address) error {
 
 	// find the latest claimable root
 	latestClaimableRoot, err := a.RewardsCoordinator.GetCurrentClaimableDistributionRoot(&bind.CallOpts{})
@@ -132,6 +133,7 @@ func (a *API) ClaimAvsOperatorRewards(operator *etherfi.Operator, rewardsRecipie
 		"ethereum", // Network
 		http.DefaultClient,
 	)
+
 	claimDate := time.Unix(int64(latestClaimableRoot.RewardsCalculationEndTimestamp), 0).UTC().Format(time.DateOnly)
 	proofData, err := df.FetchClaimAmountsForDate(context.Background(), claimDate)
 	if err != nil {
@@ -140,25 +142,38 @@ func (a *API) ClaimAvsOperatorRewards(operator *etherfi.Operator, rewardsRecipie
 
 	// generate proofs
 	cg := claimgen.NewClaimgen(proofData.Distribution)
-	_, claim, err := cg.GenerateClaimProofForEarner(operator.Address, rewardTokens, rootIndex)
-	if err != nil {
-		return fmt.Errorf("failed to generate claim proof for earner: %w", err)
-	}
-
-	// manually pack tx data since we are forwarding the call via the etherfiNodesManager
 	rewardsCoordinatorABI, _ := RewardsCoordinatorMetaData.GetAbi()
-	claimCalldata, err := rewardsCoordinatorABI.Pack("processClaim", claim, rewardsRecipient)
-	if err != nil {
-		return fmt.Errorf("packing processClaim: %w", err)
+	batch := gnosis.GnosisBatch{
+		Version: "1.0",
+		ChainId: "1",
+		Meta:    gnosis.GnosisMetadata{Name: "operator-rewards-claim-batch"},
 	}
 
-	// wrap the inner call to be forwarded via AvsOperatorManager
-	adminCall, err := utils.PackForwardCallForAdmin(operator.ID, claimCalldata, a.RewardsCoordinatorAddress)
-	if err != nil {
-		return fmt.Errorf("wrapping call for admin: %w", err)
+	for _, operator := range operators {
+		_, claim, err := cg.GenerateClaimProofForEarner(operator.Address, rewardTokens, rootIndex)
+		if err != nil {
+			return fmt.Errorf("failed to generate claim proof for earner: %w", err)
+		}
+
+		// manually pack tx data since we are forwarding the call via the etherfiNodesManager
+		claimCalldata, err := rewardsCoordinatorABI.Pack("processClaim", claim, rewardsRecipient)
+		if err != nil {
+			return fmt.Errorf("packing processClaim: %w", err)
+		}
+
+		// wrap the inner call to be forwarded via AvsOperatorManager
+		adminCall, err := utils.PackForwardCallForAdmin(operator.ID, claimCalldata, a.RewardsCoordinatorAddress)
+		if err != nil {
+			return fmt.Errorf("wrapping call for admin: %w", err)
+		}
+
+		// output in gnosis compatible format
+		batch.AddTransaction(gnosis.SubTransaction{
+			Target: a.AvsOperatorManagerAddress,
+			Value:  big.NewInt(0),
+			Data:   adminCall,
+		})
 	}
 
-	// output in gnosis compatible format
-	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("avs-reward-claim-%d", operator.ID))
-	return utils.ExportJSON("avs-reward-claim", operator.ID, batch)
+	return utils.ExportJSON("avs-operator-bulk-reward-claim", operators[0].ID, batch)
 }

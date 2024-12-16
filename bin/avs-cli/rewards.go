@@ -18,8 +18,8 @@ var ClaimRewardsCmd = &cli.Command{
 	Usage:  "(Admin) claim AVS rewards for target operator",
 	Action: handleClaimRewards,
 	Flags: []cli.Flag{
-		&cli.IntFlag{
-			Name:     "operator-id",
+		&cli.IntSliceFlag{
+			Name:     "operator-ids",
 			Usage:    "Operator ID",
 			Required: true,
 		},
@@ -40,7 +40,7 @@ var ClaimRewardsCmd = &cli.Command{
 func handleClaimRewards(ctx context.Context, cli *cli.Command) error {
 
 	// parse cli params
-	operatorID := cli.Int("operator-id")
+	operatorIDs := cli.IntSlice("operator-ids")
 	recipient := common.HexToAddress(cli.String("recipient"))
 	tokenStrs := cli.StringSlice("tokens")
 
@@ -48,8 +48,8 @@ func handleClaimRewards(ctx context.Context, cli *cli.Command) error {
 	for _, token := range tokenStrs {
 		tokens = append(tokens, common.HexToAddress(token))
 	}
-	if operatorID == 0 {
-		return fmt.Errorf("invalid operator-id")
+	if len(operatorIDs) == 0 {
+		return fmt.Errorf("invalid operator-ids")
 	}
 
 	// try to load RPC_URL from env or flags
@@ -71,13 +71,17 @@ func handleClaimRewards(ctx context.Context, cli *cli.Command) error {
 		return fmt.Errorf("loading config: %w", err)
 	}
 
-	// look up operator contract associated with this id
+	// look up operator contracts associated with these ids
 	etherfiAPI := etherfi.New(cfg, rpcClient)
-	operator, err := etherfiAPI.LookupOperatorByID(operatorID)
-	if err != nil {
-		return fmt.Errorf("looking up operator address: %w", err)
+	var operators []*etherfi.Operator
+	for _, id := range operatorIDs {
+		operator, err := etherfiAPI.LookupOperatorByID(id)
+		if err != nil {
+			return fmt.Errorf("looking up operator address: %w", err)
+		}
+		operators = append(operators, operator)
 	}
 
 	eigenlayerAPI := eigenlayer.New(cfg, rpcClient)
-	return eigenlayerAPI.ClaimAvsOperatorRewards(operator, recipient, tokens)
+	return eigenlayerAPI.ClaimAvsOperatorRewards(operators, recipient, tokens)
 }

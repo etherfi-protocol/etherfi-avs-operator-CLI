@@ -9,6 +9,7 @@ require (
 	github.com/Layr-Labs/eigensdk-go v0.1.10
 	github.com/consensys/gnark-crypto v0.13.0
 	github.com/ethereum/go-ethereum v1.14.8
+	github.com/etherfi-protocol/eigenlayer-rewards-proofs v0.0.0-20241128072408-b5cf37c3599d
 	github.com/fatih/color v1.17.0
 	github.com/stretchr/testify v1.9.0
 	github.com/urfave/cli/v3 v3.0.0-alpha9

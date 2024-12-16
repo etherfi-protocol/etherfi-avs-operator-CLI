@@ -151,6 +151,37 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo
 	return utils.ExportJSON("eigenda-register-gnosis", operator.ID, batch)
 }
 
+// DeregisterOperator removes the operator from the specified quorums. If this is all of their currently active quorums,
+// they are automatically deregistered from the AVS
+func (a *API) DeregisterOperator(operator *etherfi.Operator, quorums []int64) error {
+
+	// convert to types expected by contract call
+	byteQuorums := make([]byte, len(quorums))
+	for i, v := range quorums {
+		byteQuorums[i] = byte(v)
+	}
+
+	// manually pack tx data since we are submitting via gnosis instead of directly
+	coordinatorABI, err := registryCoordinator.ContractRegistryCoordinatorMetaData.GetAbi()
+	if err != nil {
+		return fmt.Errorf("fetching abi: %w", err)
+	}
+	calldata, err := coordinatorABI.Pack("deregisterOperator", byteQuorums)
+	if err != nil {
+		return fmt.Errorf("packing input: %w", err)
+	}
+
+	// wrap the inner call to be forwarded via AvsOperatorManager
+	adminCall, err := utils.PackForwardCallForAdmin(operator.ID, calldata, a.RegistryCoordinatorAddress)
+	if err != nil {
+		return fmt.Errorf("wrapping call for admin: %w", err)
+	}
+
+	// output in gnosis compatible format
+	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("eigenda-deregister-operator-%d", operator.ID))
+	return utils.ExportJSON("eigenda-deregister-gnosis", operator.ID, batch)
+}
+
 func (a *API) UpdateSocket(operator *etherfi.Operator, socket string, signerKey *ecdsa.PrivateKey) error {
 
 	// manually pack tx data since we are submitting via gnosis instead of directly
