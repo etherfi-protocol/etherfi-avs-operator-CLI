@@ -13,6 +13,7 @@ import (
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/cybermach"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/eigenda"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/eoracle"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/gasp"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/hyperlane"
 	lagrangesc "github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/lagrangeSC"
 	lagrangezk "github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/lagrangeZK"
@@ -51,6 +52,7 @@ func main() {
 			cybermach.CyberMachCmd,
 			eigenda.EigenDACmd,
 			eoracle.EOracleCmd,
+			gasp.GaspCmd,
 			hyperlane.HyperlaneCmd,
 			lagrangesc.LagrangeSCCmd,
 			lagrangezk.LagrangeZKCmd,
