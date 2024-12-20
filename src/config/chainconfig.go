@@ -30,6 +30,10 @@ type Config struct {
 
 	// AVS specific contracts
 
+	// AlignedLayer
+	AlignedLayerRegistryCoordinatorAddress common.Address
+	AlignedLayerServiceManagerAddress      common.Address
+
 	// AltLayer
 	AltLayerRegistryCoordinatorAddress common.Address
 	AltLayerServiceManagerAddress      common.Address
@@ -58,6 +62,10 @@ type Config struct {
 	EOracleRegistryCoordinatorAddress common.Address
 	EOracleServiceManagerAddress      common.Address
 
+	// Gasp
+	GaspRegistryCoordinatorAddress common.Address
+	GaspServiceManagerAddress      common.Address
+
 	// Hyperlane
 	HyperlaneStakeRegistryAddress  common.Address
 	HyperlaneServiceManagerAddress common.Address
@@ -74,6 +82,12 @@ type Config struct {
 	OpenlayerRegistryCoordinatorAddress common.Address
 	OpenlayerServiceManagerAddress      common.Address
 	OpenlayerStakeRegistryAddress       common.Address
+
+	// Predicate
+	PredicateServiceManagerAddress common.Address
+
+	// Ungate
+	UngateAVSGovernanceAddress common.Address
 
 	// UniFi
 	UniFiAvsManagerAddress common.Address
@@ -96,32 +110,38 @@ var Mainnet = Config{
 
 	AvsOperatorManagerAddress: common.HexToAddress("0x2093Bbb221f1d8C7c932c32ee28Be6dEe4a37A6a"),
 
-	AltLayerRegistryCoordinatorAddress:  common.HexToAddress("0x561be1AB42170a19f31645F774e6e3862B2139AA"),
-	AltLayerServiceManagerAddress:       common.HexToAddress("0x71a77037870169d47aad6c2C9360861A4C0df2bF"),
-	ARPANodeRegistryAddress:             common.HexToAddress("0x58e39879374901e17A790af039DC9Ac06baCf25B"),
-	ARPAServiceManagerAddress:           common.HexToAddress("0x1DE75EaAb2df55d467494A172652579E6FA4540E"),
-	AutomataRegistryCoordinatorAddress:  common.HexToAddress("0x414696E4F7f06273973E89bfD3499e8666D63Bd4"),
-	AutomataServiceManagerAddress:       common.HexToAddress("0xe5445838c475a2980e6a88054ff1514230b83aeb"),
-	BrevisRegistryCoordinatorAddress:    common.HexToAddress("0x434621cfd8BcDbe8839a33c85aE2B2893a4d596C"),
-	BrevisServiceManagerAddress:         common.HexToAddress("0x9FC952BdCbB7Daca7d420fA55b942405B073A89d"),
-	CyberMachRegistryCoordinatorAddress: common.HexToAddress("0x118610D207A32f10F4f7C3a1FEFac5b3327c2bad"),
-	CyberMachServiceManagerAddress:      common.HexToAddress("0x1F2c296448f692af840843d993fFC0546619Dcdb"),
-	EigenDARegistryCoordinatorAddress:   common.HexToAddress("0x0BAAc79acD45A023E19345c352d8a7a83C4e5656"),
-	EigenDAServiceManagerAddress:        common.HexToAddress("0x870679E138bCdf293b7Ff14dD44b70FC97e12fc0"),
-	EOracleRegistryCoordinatorAddress:   common.HexToAddress("0x757E6f572AfD8E111bD913d35314B5472C051cA8"),
-	EOracleServiceManagerAddress:        common.HexToAddress("0x23221c5bB90C7c57ecc1E75513e2E4257673F0ef"),
-	HyperlaneStakeRegistryAddress:       common.HexToAddress("0x272CF0BB70D3B4f79414E0823B426d2EaFd48910"),
-	HyperlaneServiceManagerAddress:      common.HexToAddress("0xe8E59c6C8B56F2c178f63BCFC4ce5e5e2359c8fc"),
-	LagrangeServiceAddress:              common.HexToAddress("0x35F4f28A8d3Ff20EEd10e087e8F96Ea2641E6AA2"),
-	LagrangeCommitteeAddress:            common.HexToAddress("0xECc22f3EcD0EFC8aD77A78ad9469eFbc44E746F5"),
-	LagrangeZKMRServiceManagerAddress:   common.HexToAddress("0x22CAc0e6A1465F043428e8AeF737b3cb09D0eEDa"),
-	LagrangeZKMRStakeRegistryAddress:    common.HexToAddress("0x8dcdCc50Cc00Fe898b037bF61cCf3bf9ba46f15C"),
-	OpenlayerRegistryCoordinatorAddress: common.HexToAddress("0x7dd7320044013f7f49B1b6D67aED10726fe6e62b"),
-	OpenlayerServiceManagerAddress:      common.HexToAddress("0xF7fcff55d5FDAf2C3Bbeb140Be5e62a2c7D26Db3"),
-	OpenlayerStakeRegistryAddress:       common.HexToAddress("0x8702C01EAbC9E5E376ACaB9358383DBDdCdDF018"),
-	UniFiAvsManagerAddress:              common.HexToAddress("0x2d86E90ED40a034C753931eE31b1bD5E1970113d"),
-	WitnessChainOperatorRegistryAddress: common.HexToAddress("0xEf1a89841fd189ba28e780A977ca70eb1A5e985D"),
-	WitnessChainWitnessHubAddress:       common.HexToAddress("0xD25c2c5802198CB8541987b73A8db4c9BCaE5cC7"),
+	AlignedLayerRegistryCoordinatorAddress: common.HexToAddress("0xA8CC0749b4409c3c47012323E625aEcBA92f64b9"),
+	AlignedLayerServiceManagerAddress:      common.HexToAddress("0xeF2A435e5EE44B2041100EF8cbC8ae035166606c"),
+	AltLayerRegistryCoordinatorAddress:     common.HexToAddress("0x561be1AB42170a19f31645F774e6e3862B2139AA"),
+	AltLayerServiceManagerAddress:          common.HexToAddress("0x71a77037870169d47aad6c2C9360861A4C0df2bF"),
+	ARPANodeRegistryAddress:                common.HexToAddress("0x58e39879374901e17A790af039DC9Ac06baCf25B"),
+	ARPAServiceManagerAddress:              common.HexToAddress("0x1DE75EaAb2df55d467494A172652579E6FA4540E"),
+	AutomataRegistryCoordinatorAddress:     common.HexToAddress("0x414696E4F7f06273973E89bfD3499e8666D63Bd4"),
+	AutomataServiceManagerAddress:          common.HexToAddress("0xe5445838c475a2980e6a88054ff1514230b83aeb"),
+	BrevisRegistryCoordinatorAddress:       common.HexToAddress("0x434621cfd8BcDbe8839a33c85aE2B2893a4d596C"),
+	BrevisServiceManagerAddress:            common.HexToAddress("0x9FC952BdCbB7Daca7d420fA55b942405B073A89d"),
+	CyberMachRegistryCoordinatorAddress:    common.HexToAddress("0x118610D207A32f10F4f7C3a1FEFac5b3327c2bad"),
+	CyberMachServiceManagerAddress:         common.HexToAddress("0x1F2c296448f692af840843d993fFC0546619Dcdb"),
+	EigenDARegistryCoordinatorAddress:      common.HexToAddress("0x0BAAc79acD45A023E19345c352d8a7a83C4e5656"),
+	EigenDAServiceManagerAddress:           common.HexToAddress("0x870679E138bCdf293b7Ff14dD44b70FC97e12fc0"),
+	EOracleRegistryCoordinatorAddress:      common.HexToAddress("0x757E6f572AfD8E111bD913d35314B5472C051cA8"),
+	EOracleServiceManagerAddress:           common.HexToAddress("0x23221c5bB90C7c57ecc1E75513e2E4257673F0ef"),
+	GaspRegistryCoordinatorAddress:         common.HexToAddress("0x9A986296d45C327dAa5998519AE1B3757F1e6Ba1"),
+	GaspServiceManagerAddress:              common.HexToAddress("0x3aDdEb54ddd43Eb40235eC32DfA7928F28A44bb5"),
+	HyperlaneStakeRegistryAddress:          common.HexToAddress("0x272CF0BB70D3B4f79414E0823B426d2EaFd48910"),
+	HyperlaneServiceManagerAddress:         common.HexToAddress("0xe8E59c6C8B56F2c178f63BCFC4ce5e5e2359c8fc"),
+	LagrangeServiceAddress:                 common.HexToAddress("0x35F4f28A8d3Ff20EEd10e087e8F96Ea2641E6AA2"),
+	LagrangeCommitteeAddress:               common.HexToAddress("0xECc22f3EcD0EFC8aD77A78ad9469eFbc44E746F5"),
+	LagrangeZKMRServiceManagerAddress:      common.HexToAddress("0x22CAc0e6A1465F043428e8AeF737b3cb09D0eEDa"),
+	LagrangeZKMRStakeRegistryAddress:       common.HexToAddress("0x8dcdCc50Cc00Fe898b037bF61cCf3bf9ba46f15C"),
+	OpenlayerRegistryCoordinatorAddress:    common.HexToAddress("0x7dd7320044013f7f49B1b6D67aED10726fe6e62b"),
+	OpenlayerServiceManagerAddress:         common.HexToAddress("0xF7fcff55d5FDAf2C3Bbeb140Be5e62a2c7D26Db3"),
+	OpenlayerStakeRegistryAddress:          common.HexToAddress("0x8702C01EAbC9E5E376ACaB9358383DBDdCdDF018"),
+	PredicateServiceManagerAddress:         common.HexToAddress("0xfd6A45621DDfeBF94C082e60E0De92aA305a97a1"),
+	UngateAVSGovernanceAddress:             common.HexToAddress("0xB3e069FD6dDA251AcBDE09eDa547e0AB207016ee"),
+	UniFiAvsManagerAddress:                 common.HexToAddress("0x2d86E90ED40a034C753931eE31b1bD5E1970113d"),
+	WitnessChainOperatorRegistryAddress:    common.HexToAddress("0xEf1a89841fd189ba28e780A977ca70eb1A5e985D"),
+	WitnessChainWitnessHubAddress:          common.HexToAddress("0xD25c2c5802198CB8541987b73A8db4c9BCaE5cC7"),
 }
 
 var Holesky = Config{
