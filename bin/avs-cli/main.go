@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/alignedlayer"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/altlayer"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/arpa"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/automata"
@@ -16,6 +17,7 @@ import (
 	lagrangesc "github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/lagrangeSC"
 	lagrangezk "github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/lagrangeZK"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/openlayer"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/predicate"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/unifi"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/witness-chain"
 	"github.com/urfave/cli/v3"
@@ -41,6 +43,7 @@ func main() {
 			ClaimRewardsCmd,
 
 			// AVS specific commands
+			alignedlayer.AlignedLayerCmd,
 			altlayer.AltLayerCmd,
 			arpa.ARPACmd,
 			automata.AutomataCmd,
@@ -52,6 +55,7 @@ func main() {
 			lagrangesc.LagrangeSCCmd,
 			lagrangezk.LagrangeZKCmd,
 			openlayer.OpenlayerCmd,
+			predicate.PredicateCmd,
 			unifi.UniFiCmd,
 			witness.WitnessCmd,
 		},
