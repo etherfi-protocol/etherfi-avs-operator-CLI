@@ -11,7 +11,6 @@ import (
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/gnosis"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/utils"
-	"github.com/etherfi-protocol/etherfi-avs-operator-tool/types"
 )
 
 // API handle for all core Automata functionality
@@ -40,9 +39,8 @@ func New(cfg config.Config, rpcClient *ethclient.Client) *API {
 
 // Info that node operator must supply to the ether.fi admin for registration
 type RegistrationInfo struct {
-	OperatorID                  int64
-	AvsSigner                   common.Address
-	BLSPubkeyRegistrationParams *types.BLSPubkeyRegistrationParams
+	OperatorID int64
+	AvsSigner  common.Address
 }
 
 func (a *API) PrepareRegistration(operator *etherfi.Operator, avsSigner common.Address) error {

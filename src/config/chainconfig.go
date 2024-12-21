@@ -137,7 +137,7 @@ var Mainnet = Config{
 	OpenlayerRegistryCoordinatorAddress:    common.HexToAddress("0x7dd7320044013f7f49B1b6D67aED10726fe6e62b"),
 	OpenlayerServiceManagerAddress:         common.HexToAddress("0xF7fcff55d5FDAf2C3Bbeb140Be5e62a2c7D26Db3"),
 	OpenlayerStakeRegistryAddress:          common.HexToAddress("0x8702C01EAbC9E5E376ACaB9358383DBDdCdDF018"),
-	PredicateServiceManagerAddress:         common.HexToAddress("0xfd6A45621DDfeBF94C082e60E0De92aA305a97a1"),
+	PredicateServiceManagerAddress:         common.HexToAddress("0xaCB91045B8bBa06f9026e1A30855B6C4A1c5BaC6"),
 	UngateAVSGovernanceAddress:             common.HexToAddress("0xB3e069FD6dDA251AcBDE09eDa547e0AB207016ee"),
 	UniFiAvsManagerAddress:                 common.HexToAddress("0x2d86E90ED40a034C753931eE31b1bD5E1970113d"),
 	WitnessChainOperatorRegistryAddress:    common.HexToAddress("0xEf1a89841fd189ba28e780A977ca70eb1A5e985D"),

@@ -51,9 +51,9 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, othenticOperatorData 
 	blsPubkey[3], _ = new(big.Int).SetString(othenticOperatorData.BlsKey[3][2:], 16)
 
 	// othentic cli stores pubkey as 2 "0x" prefixed hex strings representing a G1 point
-	var blsSignature [2]*big.Int
-	blsSignature[0], _ = new(big.Int).SetString(othenticOperatorData.BlsRegistrationSignature[0][2:], 16)
-	blsSignature[1], _ = new(big.Int).SetString(othenticOperatorData.BlsRegistrationSignature[1][2:], 16)
+	var blsSignature BLSAuthLibrarySignature // I'm not sure why they put this in a struct... but not the pubkey
+	blsSignature.Signature[0], _ = new(big.Int).SetString(othenticOperatorData.BlsRegistrationSignature[0][2:], 16)
+	blsSignature.Signature[1], _ = new(big.Int).SetString(othenticOperatorData.BlsRegistrationSignature[1][2:], 16)
 
 	// generate and sign registration hash to be signed by admin ecdsa key
 	sigWithSaltAndExpiry, err := a.EigenlayerAPI.GenerateAndSignRegistrationDigest(operator, a.ServiceManagerAddress, signerKey)
