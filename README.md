@@ -440,7 +440,7 @@ and note the address of the key you generated
 4. Receive the registration signature from the admin
 5. Set the `.env` with a mainnet RPC URL for `RPC_URL` and your Node Account (the account that interacts with ARPA) ECDSA key for `PRIVATE_KEY`:
 
-      ./avs-cli arpa register-node --operator-id {operator_id} --dkg-public-key {dkg_public_key} --registration-signature {arpa-registration-signature}
+              ./avs-cli arpa register-node --operator-id {operator_id} --dkg-public-key {dkg_public_key} --registration-signature {arpa-registration-signature}
 
 6. Continue to run the `node-client` software
 
@@ -449,9 +449,9 @@ and note the address of the key you generated
 1. Receive an ARPA AVS registration request
 2. Generate an AVS registration signature for the given operator:
 
-      ./avs-cli arpa generate-registration-signature --operator-id {operator_id}
+              ./avs-cli arpa generate-registration-signature --operator-id {operator_id}
 
-      // return result to the AVS operator for them to execute
+              // return result to the AVS operator for them to execute
 
 ---
 
