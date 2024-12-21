@@ -28,19 +28,119 @@ You will be assigned an operatorID and an operator smart contract that is regist
 - `operatorAddress`: Eigenlayer operator address, which is managed by ether.fi team.
 
 ## Step 2: Follow the instructions for the specific AVS you are registering for
-* [Witness Chain](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
+* [Aligned Layer](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#aligned-layer)
+* [AltLayer MACH](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#altlayer-mach)
+* [ARPA](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#arpa)
+* [Automata Multi-Prover](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#automata-multi-prover)
+* [Brevis](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#brevis)
+* [Cyber MACH](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#cyber-mach)
 * [EigenDA](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#eigenda)
 * [eOracle](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#eoracle)
-* [Brevis](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#brevis)
-* [Lagrange ZK Coprocessor](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#lagrange-zk-coprocessor)
-* [Lagrange State Committees](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#lagrange-state-committees)
-* [AltLayer MACH](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#altlayer-mach)
-* [Cyber MACH](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#cyber-mach)
-* [Automata Multi-Prover](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#automata-multi-prover)
+* [gasp](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#gasp)
 * [Hyperlane](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#hyperlane)
-* [ARPA](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#arpa)
+* [Lagrange State Committees](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#lagrange-state-committees)
+* [Lagrange ZK Coprocessor](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#lagrange-zk-coprocessor)
 * [Openlayer](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#openlayer)
+* [Predicate](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#predicate)
+* [Ungate](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#ungate)
 * [UniFi](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#unifi)
+* [Witness Chain](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
+
+---
+
+# Aligned Layer
+
+## Operator Flow
+
+1. generate a new BLS keystore using the eigenlayer tooling https://docs.eigenlayer.xyz/eigenlayer/operator-guides/operator-installation#create-keys
+2. Determine which `quorums` and `socket` you wish to register for
+3. Sign digest establishing ownership of your newly generated BLS key
+
+           ./avs-cli alignedlayer prepare-registration --operator-id {operator_id} --bls-keystore {path_to_keystore} --bls-password {password} --quorums {quorums} --socket {socket}
+
+4. Send the result of the previous command to the ether.fi team via `restaking@ether.fi`
+5. Wait for confirmation from the ether.fi team that your registration is complete
+6. Proceed to run the node software
+
+## Ether.fi Admin Flow
+
+1. Receive prepared registration json file from target node operator
+2. Register the operator contract
+
+           ./avs-cli alignedlayer register --registration-input input.json
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
+
+
+---
+
+# Gasp
+
+## Operator Flow
+
+1. generate a new BLS keystore using the eigenlayer tooling https://docs.eigenlayer.xyz/eigenlayer/operator-guides/operator-installation#create-keys
+2. Determine which `quorums` and `socket` you wish to register for
+3. Sign digest establishing ownership of your newly generated BLS key
+
+           ./avs-cli gasp prepare-registration --operator-id {operator_id} --bls-keystore {path_to_keystore} --bls-password {password} --quorums {quorums} --socket {socket}
+
+4. Send the result of the previous command to the ether.fi team via `restaking@ether.fi`
+5. Wait for confirmation from the ether.fi team that your registration is complete
+6. Proceed to run the node software
+
+## Ether.fi Admin Flow
+
+1. Receive prepared registration json file from target node operator
+2. Register the operator contract
+
+           ./avs-cli gasp register --registration-input input.json
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
+
+---
+
+# Predicate
+
+## Operator Flow
+
+1. Generate a new ECDSA key using [EigenLayer CLI](https://docs.eigenlayer.xyz/eigenlayer/operator-guides/operator-installation#create-and-list-keys)
+and note the address of the key you generated
+2. Run the following command and send the output to the ether.fi team via `restaking@ether.fi`
+
+           ./avs-cli predicate prepare-registration --operator-id {operator_id} --avs-signer {address_of_generated_ecdsa_key}
+
+3. Wait for confirmation from the ether.fi team that your registration is complete
+4. Proceed to run the hyperlane node software
+
+
+## Ether.fi Admin Flow
+
+1. Receive prepared registration json file from target node operator
+2. Register the operator contract
+
+           ./avs-cli predicate register --registration-input input.json
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
+
+---
+
+# Ungate
+
+## Operator Flow
+
+1. generate a bls key and signature using Othentic's tooling https://github.com/Othentic-Labs/othentic-eip1271-operator-registration-script?tab=readme-ov-file#generate-avs-bls-public-key--auth-signature
+2. Send the resulting json artifact from the previous command to the ether.fi team via `restaking@ether.fi`
+5. Wait for confirmation from the ether.fi team that your registration is complete
+6. Proceed to run the node software
+
+## Ether.fi Admin Flow
+
+1. Receive prepared registration json file from target node operator
+2. Register the operator contract
+
+           ./avs-cli alignedlayer register --registration-input input.json
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
 
 ---
 
