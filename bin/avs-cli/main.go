@@ -19,6 +19,7 @@ import (
 	lagrangezk "github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/lagrangeZK"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/openlayer"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/predicate"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/ungate"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/unifi"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/witness-chain"
 	"github.com/urfave/cli/v3"
@@ -58,6 +59,7 @@ func main() {
 			lagrangezk.LagrangeZKCmd,
 			openlayer.OpenlayerCmd,
 			predicate.PredicateCmd,
+			ungate.UngateCmd,
 			unifi.UniFiCmd,
 			witness.WitnessCmd,
 		},
