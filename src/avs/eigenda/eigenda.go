@@ -2,10 +2,12 @@ package eigenda
 
 import (
 	"crypto/ecdsa"
+	"encoding/hex"
 	"fmt"
 
 	"github.com/consensys/gnark-crypto/ecc/bn254"
 	"github.com/consensys/gnark-crypto/ecc/bn254/fp"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/config"
@@ -120,7 +122,9 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo
 		Salt:      sigWithSaltAndExpiry.Salt,
 		Expiry:    sigWithSaltAndExpiry.Expiry,
 	}
-	pubkeyParams := registryCoordinator.IBLSApkRegistryPubkeyRegistrationParams{
+	// if just updating quorums, BLS params are ignored
+	var pubkeyParams registryCoordinator.IBLSApkRegistryPubkeyRegistrationParams
+	pubkeyParams = registryCoordinator.IBLSApkRegistryPubkeyRegistrationParams{
 		PubkeyRegistrationSignature: registryCoordinator.BN254G1Point(info.BLSPubkeyRegistrationParams.Signature),
 		PubkeyG1:                    registryCoordinator.BN254G1Point(info.BLSPubkeyRegistrationParams.G1),
 		PubkeyG2:                    registryCoordinator.BN254G2Point(info.BLSPubkeyRegistrationParams.G2),
@@ -145,4 +149,89 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo
 	// output in gnosis compatible format
 	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("eigenda-register-operator-%d", operator.ID))
 	return utils.ExportJSON("eigenda-register-gnosis", operator.ID, batch)
+}
+
+// DeregisterOperator removes the operator from the specified quorums. If this is all of their currently active quorums,
+// they are automatically deregistered from the AVS
+func (a *API) DeregisterOperator(operator *etherfi.Operator, quorums []int64) error {
+
+	// convert to types expected by contract call
+	byteQuorums := make([]byte, len(quorums))
+	for i, v := range quorums {
+		byteQuorums[i] = byte(v)
+	}
+
+	// manually pack tx data since we are submitting via gnosis instead of directly
+	coordinatorABI, err := registryCoordinator.ContractRegistryCoordinatorMetaData.GetAbi()
+	if err != nil {
+		return fmt.Errorf("fetching abi: %w", err)
+	}
+	calldata, err := coordinatorABI.Pack("deregisterOperator", byteQuorums)
+	if err != nil {
+		return fmt.Errorf("packing input: %w", err)
+	}
+
+	// wrap the inner call to be forwarded via AvsOperatorManager
+	adminCall, err := utils.PackForwardCallForAdmin(operator.ID, calldata, a.RegistryCoordinatorAddress)
+	if err != nil {
+		return fmt.Errorf("wrapping call for admin: %w", err)
+	}
+
+	// output in gnosis compatible format
+	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("eigenda-deregister-operator-%d", operator.ID))
+	return utils.ExportJSON("eigenda-deregister-gnosis", operator.ID, batch)
+}
+
+func (a *API) UpdateSocket(operator *etherfi.Operator, socket string, signerKey *ecdsa.PrivateKey) error {
+
+	// manually pack tx data since we are submitting via gnosis instead of directly
+	coordinatorABI, err := registryCoordinator.ContractRegistryCoordinatorMetaData.GetAbi()
+	if err != nil {
+		return fmt.Errorf("fetching abi: %w", err)
+	}
+	calldata, err := coordinatorABI.Pack("updateSocket", socket)
+	if err != nil {
+		return fmt.Errorf("packing input: %w", err)
+	}
+
+	// wrap the inner call to be forwarded via AvsOperatorManager
+	adminCall, err := utils.PackForwardCallForAdmin(operator.ID, calldata, a.RegistryCoordinatorAddress)
+	if err != nil {
+		return fmt.Errorf("wrapping call for admin: %w", err)
+	}
+
+	// output in gnosis compatible format
+	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("eigenda-update-socket-%d", operator.ID))
+	return utils.ExportJSON("eigenda-update-socket", operator.ID, batch)
+}
+
+func (a *API) Status(operator *etherfi.Operator) error {
+
+	// look up eigenlayer id
+	eigenOperatorID, err := a.RegistryCoordinator.GetOperatorId(&bind.CallOpts{}, operator.Address)
+	if err != nil {
+		return fmt.Errorf("fetching eigenlayerOperatorID: %w", err)
+	}
+
+	// find latest socket update which only exists an event
+	socketUpdates, err := a.RegistryCoordinator.FilterOperatorSocketUpdate(&bind.FilterOpts{}, [][32]byte{eigenOperatorID})
+	if err != nil {
+		return fmt.Errorf("fetching socket updates: %w", err)
+	}
+	var latestSocket string
+	for socketUpdates.Next() {
+		event := socketUpdates.Event
+		latestSocket = event.Socket
+	}
+
+	quorumBitmap, err := a.RegistryCoordinator.GetCurrentQuorumBitmap(&bind.CallOpts{}, eigenOperatorID)
+	if err != nil {
+		return fmt.Errorf("fetching eigenlayerOperatorID: %w", err)
+	}
+
+	fmt.Printf("eigenlayerOperatorID: 0x%s\n", hex.EncodeToString(eigenOperatorID[:]))
+	fmt.Printf("socket: %s\n", latestSocket)
+	fmt.Printf("quorumBitmap: %s\n", quorumBitmap.Text(2))
+
+	return nil
 }

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/alignedlayer"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/altlayer"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/arpa"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/automata"
@@ -12,10 +13,14 @@ import (
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/cybermach"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/eigenda"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/eoracle"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/gasp"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/hyperlane"
 	lagrangesc "github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/lagrangeSC"
 	lagrangezk "github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/lagrangeZK"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/openlayer"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/predicate"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/ungate"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/unifi"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/witness-chain"
 	"github.com/urfave/cli/v3"
 )
@@ -37,8 +42,10 @@ func main() {
 			StakedropAddressCmd,
 			operatorDetailsCmd,
 			updateEcdsaSignerCmd,
+			ClaimRewardsCmd,
 
 			// AVS specific commands
+			alignedlayer.AlignedLayerCmd,
 			altlayer.AltLayerCmd,
 			arpa.ARPACmd,
 			automata.AutomataCmd,
@@ -46,10 +53,14 @@ func main() {
 			cybermach.CyberMachCmd,
 			eigenda.EigenDACmd,
 			eoracle.EOracleCmd,
+			gasp.GaspCmd,
 			hyperlane.HyperlaneCmd,
 			lagrangesc.LagrangeSCCmd,
 			lagrangezk.LagrangeZKCmd,
 			openlayer.OpenlayerCmd,
+			predicate.PredicateCmd,
+			ungate.UngateCmd,
+			unifi.UniFiCmd,
 			witness.WitnessCmd,
 		},
 	}

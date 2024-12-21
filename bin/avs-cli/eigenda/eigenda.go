@@ -24,6 +24,9 @@ var EigenDACmd = &cli.Command{
 	Commands: []*cli.Command{
 		PrepareRegistrationCmd,
 		RegisterCmd,
+		DeregisterCmd,
+		UpdateSocketCmd,
+		StatusCmd,
 	},
 }
 

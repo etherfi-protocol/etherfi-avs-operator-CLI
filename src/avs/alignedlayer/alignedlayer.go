@@ -1,4 +1,4 @@
-package openlayer
+package alignedlayer
 
 import (
 	"crypto/ecdsa"
@@ -18,13 +18,12 @@ import (
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/types"
 )
 
-// API handle for all core Openlayer functionality
+// API handle for all core AlignedLayer functionality
 type API struct {
 	Client *ethclient.Client
 
 	RegistryCoordinatorAddress common.Address
 	RegistryCoordinator        *RegistryCoordinator
-	StakeRegistryAddress       common.Address
 	ServiceManagerAddress      common.Address
 	AvsOperatorManagerAddress  common.Address
 
@@ -33,14 +32,13 @@ type API struct {
 
 func New(cfg config.Config, rpcClient *ethclient.Client) *API {
 
-	registryCoordinator, _ := NewRegistryCoordinator(cfg.OpenlayerRegistryCoordinatorAddress, rpcClient)
+	registryCoordinator, _ := NewRegistryCoordinator(cfg.AlignedLayerRegistryCoordinatorAddress, rpcClient)
 
 	return &API{
 		Client:                     rpcClient,
 		RegistryCoordinator:        registryCoordinator,
-		RegistryCoordinatorAddress: cfg.OpenlayerRegistryCoordinatorAddress,
-		StakeRegistryAddress:       cfg.OpenlayerStakeRegistryAddress,
-		ServiceManagerAddress:      cfg.OpenlayerServiceManagerAddress,
+		RegistryCoordinatorAddress: cfg.AlignedLayerRegistryCoordinatorAddress,
+		ServiceManagerAddress:      cfg.AlignedLayerServiceManagerAddress,
 		AvsOperatorManagerAddress:  cfg.AvsOperatorManagerAddress,
 		EigenlayerAPI:              eigenlayer.New(cfg, rpcClient),
 	}
@@ -52,10 +50,9 @@ type RegistrationInfo struct {
 	Socket                      string
 	Quorums                     []int64
 	BLSPubkeyRegistrationParams *types.BLSPubkeyRegistrationParams
-	SignerAddress               common.Address
 }
 
-func (a *API) PrepareRegistration(operator *etherfi.Operator, blsKey *bls.KeyPair, signerAddress common.Address, socket string, quorums []int64) error {
+func (a *API) PrepareRegistration(operator *etherfi.Operator, blsKey *bls.KeyPair, socket string, quorums []int64) error {
 
 	// compute hash to sign with bls key
 	// the hash is converted to a G1 point on the curve before it is returned
@@ -90,9 +87,8 @@ func (a *API) PrepareRegistration(operator *etherfi.Operator, blsKey *bls.KeyPai
 		Socket:                      socket,
 		Quorums:                     quorums,
 		BLSPubkeyRegistrationParams: signedParams,
-		SignerAddress:               signerAddress,
 	}
-	return utils.ExportJSON("openlayer-prepare-registration", operator.ID, ri)
+	return utils.ExportJSON("alignedLayer-prepare-registration", operator.ID, ri)
 }
 
 func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo, signerKey *ecdsa.PrivateKey) error {
@@ -124,7 +120,7 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo
 	if err != nil {
 		return fmt.Errorf("fetching abi: %w", err)
 	}
-	calldata, err := coordinatorABI.Pack("registerOperator", quorums, info.Socket, pubkeyParams, sigParams, info.SignerAddress)
+	calldata, err := coordinatorABI.Pack("registerOperator", quorums, info.Socket, pubkeyParams, sigParams)
 	if err != nil {
 		return fmt.Errorf("packing input: %w", err)
 	}
@@ -136,29 +132,6 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo
 	}
 
 	// output in gnosis compatible format
-	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("openlayer-register-operator-%d", operator.ID))
-	return utils.ExportJSON("openlayer-register-gnosis", operator.ID, batch)
-}
-
-func (a *API) UpdateSignerAddress(operator *etherfi.Operator, signerAddr common.Address) error {
-
-	// manually pack tx data since we are submitting via gnosis instead of directly
-	stakeRegistryABI, err := StakeRegistryMetaData.GetAbi()
-	if err != nil {
-		return fmt.Errorf("fetching abi: %w", err)
-	}
-	calldata, err := stakeRegistryABI.Pack("updateOperatorSignAddr", signerAddr)
-	if err != nil {
-		return fmt.Errorf("packing input: %w", err)
-	}
-
-	// wrap the inner call to be forwarded via AvsOperatorManager
-	adminCall, err := utils.PackForwardCallForAdmin(operator.ID, calldata, a.StakeRegistryAddress)
-	if err != nil {
-		return fmt.Errorf("wrapping call for admin: %w", err)
-	}
-
-	// output in gnosis compatible format
-	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("openlayer-update-signer-address-%d", operator.ID))
-	return utils.ExportJSON("openlayer-update-signer-address-gnosis", operator.ID, batch)
+	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("alignedLayer-register-operator-%d", operator.ID))
+	return utils.ExportJSON("alignedLayer-register-gnosis", operator.ID, batch)
 }

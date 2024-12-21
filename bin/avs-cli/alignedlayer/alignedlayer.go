@@ -1,4 +1,4 @@
-package openlayer
+package alignedlayer
 
 import (
 	"context"
@@ -6,32 +6,30 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/avs/openlayer"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/avs/alignedlayer"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/config"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/keystore"
 	"github.com/urfave/cli/v3"
 )
 
-var openlayerAPI *openlayer.API
+var alignedLayerAPI *alignedlayer.API
 var etherfiAPI *etherfi.API
 
-var OpenlayerCmd = &cli.Command{
-	Name:   "openlayer",
-	Usage:  "various actions related to managing Openlayer operators",
-	Before: prepareOpenlayerCmd,
+var AlignedLayerCmd = &cli.Command{
+	Name:   "alignedlayer",
+	Usage:  "various actions related to managing alignedlayer operators",
+	Before: prepareCmd,
 	Commands: []*cli.Command{
 		PrepareRegistrationCmd,
 		RegisterCmd,
-		UpdateSignerCmd,
 	},
 }
 
 // run before any subcommand executes
-func prepareOpenlayerCmd(ctx context.Context, cmd *cli.Command) error {
+func prepareCmd(ctx context.Context, cmd *cli.Command) error {
 	// try to load RPC_URL from env or flags
 	rpcURL := os.Getenv("RPC_URL")
 	if cmd.String("rpc-url") != "" {
@@ -53,7 +51,7 @@ func prepareOpenlayerCmd(ctx context.Context, cmd *cli.Command) error {
 
 	// make globally accessible by all sub commands
 	etherfiAPI = etherfi.New(cfg, rpcClient)
-	openlayerAPI = openlayer.New(cfg, rpcClient)
+	alignedLayerAPI = alignedlayer.New(cfg, rpcClient)
 
 	return nil
 }
@@ -78,14 +76,9 @@ var PrepareRegistrationCmd = &cli.Command{
 			Usage:    "password for encrypted keystore file",
 			Required: true,
 		},
-		&cli.StringFlag{
-			Name:     "signer-address",
-			Usage:    "address of the generated signer ecdsa key",
-			Required: true,
-		},
 		&cli.IntSliceFlag{
 			Name:     "quorums",
-			Usage:    "which quorums to register for i.e. 0,1",
+			Usage:    "which quorums to register for",
 			Required: true,
 		},
 		&cli.StringFlag{
@@ -102,7 +95,6 @@ func handlePrepareRegistration(ctx context.Context, cli *cli.Command) error {
 	operatorID := cli.Int("operator-id")
 	blsKeyFile := cli.String("bls-keystore")
 	blsKeyPassword := cli.String("bls-password")
-	signerAddress := common.HexToAddress(cli.String("signer-address"))
 	quorums := cli.IntSlice("quorums")
 	socket := cli.String("socket")
 
@@ -119,12 +111,12 @@ func handlePrepareRegistration(ctx context.Context, cli *cli.Command) error {
 		return fmt.Errorf("looking up operator address: %w", err)
 	}
 
-	return openlayerAPI.PrepareRegistration(operator, keyPair, signerAddress, socket, quorums)
+	return alignedLayerAPI.PrepareRegistration(operator, keyPair, socket, quorums)
 }
 
 var RegisterCmd = &cli.Command{
 	Name:   "register",
-	Usage:  "(Admin) Register target operator to the AVS",
+	Usage:  "(Admin) Register target operator to AVS",
 	Action: handleRegister,
 	Flags: []cli.Flag{
 		&cli.StringFlag{
@@ -140,8 +132,8 @@ func handleRegister(ctx context.Context, cli *cli.Command) error {
 	// parse cli params
 	inputFilepath := cli.String("registration-input")
 
-	// read input file with required registration data
-	var input openlayer.RegistrationInfo
+	// read input file with required data
+	var input alignedlayer.RegistrationInfo
 	buf, err := os.ReadFile(inputFilepath)
 	if err != nil {
 		return fmt.Errorf("reading input file: %w", err)
@@ -154,9 +146,6 @@ func handleRegister(ctx context.Context, cli *cli.Command) error {
 	}
 	if input.Socket == "" {
 		return fmt.Errorf("invalid registration input, missing socket")
-	}
-	if input.SignerAddress == common.HexToAddress("0x0") {
-		return fmt.Errorf("invalid registration input, missing signerAddress")
 	}
 
 	// look up operator contract associated with this id
@@ -171,38 +160,5 @@ func handleRegister(ctx context.Context, cli *cli.Command) error {
 		return fmt.Errorf("invalid private key: %w", err)
 	}
 
-	return openlayerAPI.RegisterOperator(operator, input, signingKey)
-}
-
-var UpdateSignerCmd = &cli.Command{
-	Name:   "update-signer",
-	Usage:  "(Admin) Update the signer address (this is within openlayer, unerelated to the EIP-1271 signer)",
-	Action: handleUpdateSigner,
-	Flags: []cli.Flag{
-		&cli.StringFlag{
-			Name:     "signer",
-			Usage:    "signer address",
-			Required: true,
-		},
-		&cli.IntFlag{
-			Name:     "operator-id",
-			Usage:    "operator ID",
-			Required: true,
-		},
-	},
-}
-
-func handleUpdateSigner(ctx context.Context, cli *cli.Command) error {
-
-	// parse cli params
-	signerAddr := common.HexToAddress(cli.String("signer"))
-	operatorID := cli.Int("operator-id")
-
-	// look up operator contract associated with this id
-	operator, err := etherfiAPI.LookupOperatorByID(operatorID)
-	if err != nil {
-		return fmt.Errorf("looking up operator address: %w", err)
-	}
-
-	return openlayerAPI.UpdateSignerAddress(operator, signerAddr)
+	return alignedLayerAPI.RegisterOperator(operator, input, signingKey)
 }
