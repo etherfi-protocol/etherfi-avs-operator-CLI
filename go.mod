@@ -5,7 +5,6 @@ go 1.22.0
 require (
 	github.com/Lagrange-Labs/client-cli v1.0.1
 	github.com/Layr-Labs/eigenda v0.8.1
-	github.com/Layr-Labs/eigenlayer-rewards-proofs v0.2.13
 	github.com/Layr-Labs/eigensdk-go v0.1.10
 	github.com/consensys/gnark-crypto v0.13.0
 	github.com/ethereum/go-ethereum v1.14.8
@@ -18,6 +17,7 @@ require (
 require (
 	github.com/Lagrange-Labs/lagrange-node v1.0.1 // indirect
 	github.com/Layr-Labs/eigenlayer-contracts v0.4.1-holesky-pepe.0.20240813143901-00fc4b95e9c1 // indirect
+	github.com/Layr-Labs/eigenlayer-rewards-proofs v0.2.13 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/bits-and-blooms/bitset v1.13.0 // indirect
@@ -76,13 +76,13 @@ require (
 	github.com/xrash/smetrics v0.0.0-20240312152122-5f08fbb34913 // indirect
 	github.com/yusufpapurcu/wmi v1.2.3 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/crypto v0.25.0 // indirect
+	golang.org/x/crypto v0.31.0 // indirect
 	golang.org/x/exp v0.0.0-20240707233637-46b078467d37 // indirect
 	golang.org/x/net v0.27.0 // indirect
-	golang.org/x/sync v0.7.0 // indirect
-	golang.org/x/sys v0.22.0 // indirect
-	golang.org/x/term v0.22.0 // indirect
-	golang.org/x/text v0.16.0 // indirect
+	golang.org/x/sync v0.10.0 // indirect
+	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/term v0.27.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	rsc.io/tmplfunc v0.0.3 // indirect
