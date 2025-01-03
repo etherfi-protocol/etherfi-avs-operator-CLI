@@ -25,6 +25,7 @@ var PredicateCmd = &cli.Command{
 	Commands: []*cli.Command{
 		PrepareRegistrationCmd,
 		RegisterCmd,
+		RotateSigningKeyCmd,
 	},
 }
 
@@ -136,4 +137,53 @@ func handleRegister(ctx context.Context, cli *cli.Command) error {
 	}
 
 	return predicateAPI.RegisterOperator(operator, input, signingKey)
+}
+
+var RotateSigningKeyCmd = &cli.Command{
+	Name:   "rotate-signing-key",
+	Usage:  "(Admin) Rotate the predicate signing key for an operator",
+	Action: handleRotateSigningKey,
+	Flags: []cli.Flag{
+		&cli.IntFlag{
+			Name:     "operator-id",
+			Usage:    "Operator ID",
+			Required: true,
+		},
+		&cli.StringFlag{
+			Name:     "old-signer",
+			Usage:    "Address of current predicate specific ecdsa signing key",
+			Required: true,
+		},
+		&cli.StringFlag{
+			Name:     "new-signer",
+			Usage:    "Address of new predicate specific ecdsa signing key",
+			Required: true,
+		},
+	},
+}
+
+func handleRotateSigningKey(ctx context.Context, cli *cli.Command) error {
+
+	// parse cli input
+	operatorID := cli.Int("operator-id")
+	oldSignerAddress := common.HexToAddress(cli.String("old-signer"))
+	newSignerAddress := common.HexToAddress(cli.String("new-signer"))
+
+	if operatorID == 0 {
+		return fmt.Errorf("invalid input, missing operator-id")
+	}
+	if oldSignerAddress == common.HexToAddress("0x00") {
+		return fmt.Errorf("invalid input, missing old-signer")
+	}
+	if newSignerAddress == common.HexToAddress("0x00") {
+		return fmt.Errorf("invalid input, missing new-signer")
+	}
+
+	// look up operator contract associated with this id
+	operator, err := etherfiAPI.LookupOperatorByID(operatorID)
+	if err != nil {
+		return fmt.Errorf("looking up operator address: %w", err)
+	}
+
+	return predicateAPI.RotateSigningKey(operator, oldSignerAddress, newSignerAddress)
 }
