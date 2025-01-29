@@ -1,6 +1,7 @@
 package symbiotic
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
@@ -18,6 +19,29 @@ func TestNetworkStats(t *testing.T) {
 	}
 
 	api := New(&cfg, rpcClient)
-	api.NetworkStats(cfg.CapXNetwork, cfg.SymbioticVaults[config.WSTETH_VAULT].Delegator)
+
+	for name, vault := range cfg.SymbioticVaults {
+		fmt.Printf("Vault: %s\n", name)
+		for networkAddr, networkName := range cfg.SymbioticNetworks {
+			fmt.Printf("Network: %s\n", networkName)
+			api.NetworkStats(networkAddr, vault.Delegator)
+		}
+	}
+
+	//api.NetworkStats(cfg.CapXNetwork, cfg.SymbioticVaults[config.WSTETH_VAULT].Delegator)
+}
+
+func TestVaultTable(t *testing.T) {
+	cfg := config.Mainnet
+	rpcClient, err := ethclient.Dial(os.Getenv("RPC_URL"))
+
+	if err != nil {
+		t.Fatalf("failed to dial RPC: %v", err)
+	}
+
+	api := New(&cfg, rpcClient)
+
+	n := "wstETH"
+	api.PrintVaultTable(cfg.SymbioticVaults[n], n)
 
 }
