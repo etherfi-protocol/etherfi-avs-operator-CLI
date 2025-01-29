@@ -8,8 +8,21 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
+type SymbioticVaultType int
+
+const (
+	UNKNOWN SymbioticVaultType = iota
+	WSTETH_VAULT
+	LBTC_VAULT
+	ETHFI_VAULT
+)
+
 // Relevant contracts to each AVS
 type Config struct {
+
+	////////////////////////////////////////////
+	//            Eigenlayer                  //
+	////////////////////////////////////////////
 
 	// Eigenlayer core contracts
 	AvsDirectoryAddress      common.Address
@@ -95,6 +108,52 @@ type Config struct {
 	// Witnesschain
 	WitnessChainOperatorRegistryAddress common.Address
 	WitnessChainWitnessHubAddress       common.Address
+
+	////////////////////////////////////////////
+	//             Symbiotic                  //
+	////////////////////////////////////////////
+
+	SymbioticVaults map[SymbioticVaultType]SymbioticVaultConfig
+
+	/*
+		// wstETH Vault
+		WstEthVault     common.Address
+		WstEthDelegator common.Address
+		WstEthBurner    common.Address
+
+		// LBTC Vault
+		LbtcVault          common.Address
+		LbtcVaultDelegator common.Address
+		LbtcVaultBurner    common.Address
+
+		// ETHFI Vault
+		EthfiVault     common.Address
+		EthfiDelegator common.Address
+		EthfiBurner    common.Address
+	*/
+
+	// Networks
+	CapXNetwork      common.Address
+	CycleNetwork     common.Address
+	DittoNetwork     common.Address
+	HyperlaneNetwork common.Address
+	HyveNetwork      common.Address
+	MarlinNetwork    common.Address
+	RadiusNetwork    common.Address
+	RouterNetwork    common.Address
+	SymbiosisNetwork common.Address
+
+	// Operators
+	BlockdaemonSymbioticOperator common.Address
+	KilnSymbioticOperator        common.Address
+	P2PSymbioticOperator         common.Address
+	Pier2SymbioticOperator       common.Address
+}
+
+type SymbioticVaultConfig struct {
+	Vault     common.Address
+	Delegator common.Address
+	Burner    common.Address
 }
 
 var Mainnet = Config{
@@ -142,6 +201,47 @@ var Mainnet = Config{
 	UniFiAvsManagerAddress:                 common.HexToAddress("0x2d86E90ED40a034C753931eE31b1bD5E1970113d"),
 	WitnessChainOperatorRegistryAddress:    common.HexToAddress("0xEf1a89841fd189ba28e780A977ca70eb1A5e985D"),
 	WitnessChainWitnessHubAddress:          common.HexToAddress("0xD25c2c5802198CB8541987b73A8db4c9BCaE5cC7"),
+
+	// Symbiotic
+	SymbioticVaults: map[SymbioticVaultType]SymbioticVaultConfig{
+		WSTETH_VAULT: {
+			Vault:     common.HexToAddress("0x450a90fdEa8B87a6448Ca1C87c88Ff65676aC45b"),
+			Delegator: common.HexToAddress("0xd6c4b4267BFB908BBdf8C9BDa7d0Ae517aA145b0"),
+			Burner:    common.HexToAddress("0xD1e54Bf62e089287a9514d581c6b80aA75B81d15"),
+		},
+		LBTC_VAULT: {
+			Vault:     common.HexToAddress("0xd4E20ECA1f996Dab35883dC0AD5E3428AF888D45"),
+			Delegator: common.HexToAddress("0xA32E5868713CBeb1880578F5626ED53cc3E1A2fD"),
+			Burner:    common.HexToAddress("0xeb3d85be284d6F83daf1338B22d834ECaF1099fE"),
+		},
+		ETHFI_VAULT: {
+			Vault:     common.HexToAddress("0x2Bcfa0283C92b7845ECE12cEaDc521414BeF1067"),
+			Delegator: common.HexToAddress("0xCcA347C3d3CAFB909A7506eaD727805D38a82EE3"),
+			Burner:    common.HexToAddress("0x2242E802b5AAADcc7c4929EF77F0E530BCb5Ce3f"),
+		},
+	},
+
+	/*
+		WstEthVault:        common.HexToAddress("0x450a90fdEa8B87a6448Ca1C87c88Ff65676aC45b"),
+		WstEthDelegator:    common.HexToAddress("0xd6c4b4267BFB908BBdf8C9BDa7d0Ae517aA145b0"),
+		WstEthBurner:       common.HexToAddress("0xD1e54Bf62e089287a9514d581c6b80aA75B81d15"),
+		LbtcVault:          common.HexToAddress("0xd4E20ECA1f996Dab35883dC0AD5E3428AF888D45"),
+		LbtcVaultDelegator: common.HexToAddress("0xA32E5868713CBeb1880578F5626ED53cc3E1A2fD"),
+		LbtcVaultBurner:    common.HexToAddress("0xeb3d85be284d6F83daf1338B22d834ECaF1099fE"),
+		EthfiVault:         common.HexToAddress("0x2Bcfa0283C92b7845ECE12cEaDc521414BeF1067"),
+		EthfiDelegator:     common.HexToAddress("0xCcA347C3d3CAFB909A7506eaD727805D38a82EE3"),
+		EthfiBurner:        common.HexToAddress("0x2242E802b5AAADcc7c4929EF77F0E530BCb5Ce3f"),
+	*/
+
+	CapXNetwork:      common.HexToAddress("0xAD12e74847d6D1487A6a3A6b75D1f509f3F627e8"),
+	CycleNetwork:     common.HexToAddress("0x759D4335cb712aa188935C2bD3Aa6D205aC61305"),
+	DittoNetwork:     common.HexToAddress("0x8560C667Ae72F28D09465B342A480daB28821f6b"),
+	HyperlaneNetwork: common.HexToAddress("0x59cf937Ea9FA9D7398223E3aA33d92F7f5f986A2"),
+	HyveNetwork:      common.HexToAddress("0xE3a148b25Cca54ECCBD3A4aB01e235D154f03eFa"),
+	MarlinNetwork:    common.HexToAddress("0x3a7B173124DcFeCff1847FF7f8f56e72ABE02340"),
+	RadiusNetwork:    common.HexToAddress("0xfCa0128A19A5c06b0148c27ee7623417a11BaAbd"),
+	RouterNetwork:    common.HexToAddress("0xcf128e88e11507abad12a7624a34e3d22f731abc"),
+	SymbiosisNetwork: common.HexToAddress("0x5112EbA9bc2468Bb5134CBfbEAb9334EdaE7106a"),
 }
 
 var Holesky = Config{
