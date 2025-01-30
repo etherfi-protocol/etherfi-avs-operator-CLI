@@ -1,7 +1,6 @@
 package symbiotic
 
 import (
-	"fmt"
 	"os"
 	"testing"
 
@@ -9,7 +8,7 @@ import (
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/config"
 )
 
-func TestNetworkStats(t *testing.T) {
+func TestVaultReport(t *testing.T) {
 
 	cfg := config.Mainnet
 	rpcClient, err := ethclient.Dial(os.Getenv("RPC_URL"))
@@ -18,29 +17,10 @@ func TestNetworkStats(t *testing.T) {
 		t.Fatalf("failed to dial RPC: %v", err)
 	}
 
-	api := New(&cfg, rpcClient)
-
-	for name, vault := range cfg.SymbioticVaults {
-		fmt.Printf("Vault: %s\n", name)
-		for networkAddr, networkName := range cfg.SymbioticNetworks {
-			fmt.Printf("Network: %s\n", networkName)
-			api.NetworkStats(networkAddr, vault.Delegator)
-		}
-	}
-
-	//api.NetworkStats(cfg.CapXNetwork, cfg.SymbioticVaults[config.WSTETH_VAULT].Delegator)
-}
-
-func TestVaultTable(t *testing.T) {
-	cfg := config.Mainnet
-	rpcClient, err := ethclient.Dial(os.Getenv("RPC_URL"))
-
+	api := New(cfg, rpcClient)
+	report, err := api.VaultReport(cfg.SymbioticVaults["wstETH"])
 	if err != nil {
-		t.Fatalf("failed to dial RPC: %v", err)
+		t.Fatal(err)
 	}
-
-	api := New(&cfg, rpcClient)
-
-	api.PrintVaultTable(cfg.SymbioticVaults["wstETH"])
-
+	report.PrettyPrint()
 }
