@@ -41,7 +41,6 @@ func TestVaultTable(t *testing.T) {
 
 	api := New(&cfg, rpcClient)
 
-	n := "wstETH"
-	api.PrintVaultTable(cfg.SymbioticVaults[n], n)
+	api.PrintVaultTable(cfg.SymbioticVaults["wstETH"])
 
 }

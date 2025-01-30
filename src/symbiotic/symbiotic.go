@@ -3,32 +3,27 @@ package symbiotic
 import (
 	"fmt"
 	"math"
+	"math/big"
 	"os"
 	"text/tabwriter"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/config"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/gnosis"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/utils"
 	"github.com/fatih/color"
 )
 
 type API struct {
 	Client *ethclient.Client
 
-	Vault        *Vault
-	VaultAddress common.Address
-
-	Delegator        *Delegator
-	DelegatorAddress common.Address
-
-	BurnerRouter        *BurnerRouter
-	BurnerRouterAddress common.Address
-
 	KnownNetworks  map[common.Address]string
 	KnownOperators map[common.Address]string
+	KnownVaults    map[string]config.SymbioticVaultConfig
 }
 
-func New(cfg *config.Config, rpcClient *ethclient.Client) *API {
+func New(cfg config.Config, rpcClient *ethclient.Client) *API {
 
 	/*
 		knownNetworks := map[common.Address]string{
@@ -54,60 +49,136 @@ func New(cfg *config.Config, rpcClient *ethclient.Client) *API {
 		Client:         rpcClient,
 		KnownNetworks:  cfg.SymbioticNetworks,
 		KnownOperators: cfg.SymbioticOperators,
+		KnownVaults:    cfg.SymbioticVaults,
 	}
 }
 
 type VaultReport struct {
+	Asset         string
+	AssetDecimals int
+	ActiveStake   *big.Int
+
+	NetworkStats []VaultNetworkStats
 }
 
-func (a *API) PrintVaultTable(vaultData config.SymbioticVaultConfig, name string) error {
+type VaultNetworkStats struct {
+	Name            string
+	NetworkLimit    *big.Int
+	MaxNetworkLimit *big.Int
+}
 
-	//delegator, _ := NewDelegator(delegatorAddr, a.Client)
-	vault, _ := NewVault(vaultData.Vault, a.Client)
+func (v *VaultReport) PrettyPrint() {
 
-	currentVaultStakeBig, err := vault.ActiveStake(nil)
-	if err != nil {
-		return fmt.Errorf("failed to fetch current vault stake: %v", err)
+	activeVaultStake, _ := v.ActiveStake.Float64()
+	activeVaultStake /= math.Pow(10, float64(v.AssetDecimals))
+
+	color.HiCyan("%s Vault\n", v.Asset)
+	fmt.Printf("VaultStake: %0.2f %s\n", activeVaultStake, v.Asset)
+	for _, network := range v.NetworkStats {
+
+		maxNetworkLimit, _ := network.MaxNetworkLimit.Float64()
+		maxNetworkLimit /= math.Pow(10, float64(v.AssetDecimals))
+		networkLimit, _ := network.NetworkLimit.Float64()
+		networkLimit /= math.Pow(10, float64(v.AssetDecimals))
+
+		color.HiYellow("%s\n", network.Name)
+		padding := 4
+		w := tabwriter.NewWriter(os.Stdout, 5, 0, padding, ' ', tabwriter.AlignRight)
+		additionalAllocation := min(maxNetworkLimit-networkLimit, activeVaultStake-networkLimit)
+		fmt.Fprintf(w, "NetworkLimit (set by us)     \t%0.2f %s\t\n", networkLimit, v.Asset)
+		fmt.Fprintf(w, "NetworkMax (set by network)  \t%0.2f %s\t\n", maxNetworkLimit, v.Asset)
+		fmt.Fprintf(w, "PossibleAdditionalAllocation \t%0.2f %s\t\n", additionalAllocation, v.Asset)
+		w.Flush()
 	}
 
-	totalDelegation, _ := currentVaultStakeBig.Float64()
-	totalDelegation /= math.Pow(10, float64(vaultData.Decimals))
+}
 
-	// TODO: redo name
-	color.HiCyan("%s\n", name)
-	fmt.Printf("VaultStake: %0.2f %s\n", totalDelegation, vaultData.Asset)
+func (a *API) VaultReport(vaultData config.SymbioticVaultConfig) (*VaultReport, error) {
 
-	fmt.Printf("Networks: \n")
+	// Grab global vault data
+	vault, _ := NewVault(vaultData.Vault, a.Client)
+	activeVaultStakeBig, err := vault.ActiveStake(nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch current vault stake: %v", err)
+	}
+
+	// fetch stats for each network in the vault
+	var networkStats []VaultNetworkStats
 	for networkAddr, networkName := range a.KnownNetworks {
 
 		delegator, _ := NewDelegator(vaultData.Delegator, a.Client)
 		subnetwork := toSubnetwork(networkAddr)
-		maxLimitBig, err := delegator.MaxNetworkLimit(nil, subnetwork)
+
+		maxNetworkLimit, err := delegator.MaxNetworkLimit(nil, subnetwork)
 		if err != nil {
-			return fmt.Errorf("fectching MaxNetworkLimit: %w", err)
+			return nil, fmt.Errorf("fectching MaxNetworkLimit: %w", err)
 		}
-		currentLimitBig, err := delegator.NetworkLimit(nil, subnetwork)
+		networkLimit, err := delegator.NetworkLimit(nil, subnetwork)
 		if err != nil {
-			return fmt.Errorf("fectching NetworkLimit: %w", err)
+			return nil, fmt.Errorf("fectching NetworkLimit: %w", err)
 		}
 
-		// okay to be lossy, this is just for metrics
-		maxLimit, _ := maxLimitBig.Float64()
-		currentLimit, _ := currentLimitBig.Float64()
-		maxLimit /= math.Pow(10, float64(vaultData.Decimals))
-		currentLimit /= math.Pow(10, float64(vaultData.Decimals))
-
-		color.HiYellow("%s\n", networkName)
-		padding := 4
-		w := tabwriter.NewWriter(os.Stdout, 5, 0, padding, ' ', tabwriter.AlignRight)
-		additionalAllocation := min(maxLimit-currentLimit, totalDelegation-currentLimit)
-		fmt.Fprintf(w, "NetworkLimit (set by us)     \t%0.2f %s\t\n", currentLimit, vaultData.Asset)
-		fmt.Fprintf(w, "NetworkMax (set by network)  \t%0.2f %s\t\n", maxLimit, vaultData.Asset)
-		fmt.Fprintf(w, "PossibleAdditionalAllocation \t%0.2f %s\t\n", additionalAllocation, vaultData.Asset)
-		w.Flush()
+		networkStats = append(networkStats, VaultNetworkStats{
+			Name:            networkName,
+			NetworkLimit:    networkLimit,
+			MaxNetworkLimit: maxNetworkLimit,
+		})
 	}
 
-	return nil
+	return &VaultReport{
+		Asset:         vaultData.Asset,
+		AssetDecimals: vaultData.Decimals,
+		ActiveStake:   activeVaultStakeBig,
+		NetworkStats:  networkStats,
+	}, nil
+}
+
+type OperatorShareUpdate struct {
+	Operator common.Address
+	Shares   *big.Int
+}
+
+func (a *API) SetNetworkLimit(vaultCfg config.SymbioticVaultConfig, limit *big.Int, network common.Address, shareUpdates []OperatorShareUpdate) error {
+
+	// output in gnosis compatible format
+	batch := gnosis.GnosisBatch{
+		Version: "1.0",
+		ChainId: "1",
+		Meta:    gnosis.GnosisMetadata{Name: "symbiotic-set-network-limit"},
+	}
+
+	// manually pack tx data since we are submitting via gnosis instead of directly
+	delegatorABI, err := DelegatorMetaData.GetAbi()
+	if err != nil {
+		return fmt.Errorf("invalid delegator abi: %v", err)
+	}
+
+	// set the new limit
+	subnetwork := toSubnetwork(network)
+	limitCalldata, err := delegatorABI.Pack("setNetworkLimit", subnetwork, limit)
+	if err != nil {
+		return fmt.Errorf("failed to pack setNetworkLimit: %w", err)
+	}
+	batch.AddTransaction(gnosis.SubTransaction{
+		Target: vaultCfg.Delegator,
+		Value:  big.NewInt(0),
+		Data:   limitCalldata,
+	})
+
+	// do the requested share updates
+	for _, update := range shareUpdates {
+		shareCalldata, err := delegatorABI.Pack("setOperatorNetworkShares", subnetwork, update.Operator, update.Shares)
+		if err != nil {
+			return fmt.Errorf("failed to pack setOperatorNetworkShares: %w", err)
+		}
+		batch.AddTransaction(gnosis.SubTransaction{
+			Target: vaultCfg.Delegator,
+			Value:  big.NewInt(0),
+			Data:   shareCalldata,
+		})
+	}
+
+	return utils.ExportJSON("symbiotic-set-network-limit", 0, batch)
 }
 
 func (a *API) NetworkStats(networkAddr common.Address, delegatorAddr common.Address) error {
