@@ -64,18 +64,21 @@ func handleRegistrationStatus(ctx context.Context, cmd *cli.Command) error {
 		ServiceManager common.Address
 	}
 	activeAVSs := []AVS{
+		{Name: "AlignedLayer", ServiceManager: cfg.AlignedLayerServiceManagerAddress},
 		{Name: "AltLayer", ServiceManager: cfg.AltLayerServiceManagerAddress},
 		{Name: "ARPA", ServiceManager: cfg.ARPAServiceManagerAddress},
-		//		{Name: "ARPA", ServiceManager: cfg.ARPANodeRegistryAddress},
 		{Name: "Automata", ServiceManager: cfg.AutomataServiceManagerAddress},
 		{Name: "Brevis", ServiceManager: cfg.BrevisServiceManagerAddress},
 		{Name: "CyberMACH", ServiceManager: cfg.CyberMachServiceManagerAddress},
 		{Name: "EigenDA", ServiceManager: cfg.EigenDAServiceManagerAddress},
 		{Name: "eOracle", ServiceManager: cfg.EOracleServiceManagerAddress},
+		{Name: "Gasp", ServiceManager: cfg.GaspServiceManagerAddress},
 		{Name: "Hyperlane", ServiceManager: cfg.HyperlaneServiceManagerAddress},
 		{Name: "LagrangeSC", ServiceManager: cfg.LagrangeServiceAddress},
 		{Name: "LagrangeZK", ServiceManager: cfg.LagrangeZKMRServiceManagerAddress},
 		{Name: "Openlayer", ServiceManager: cfg.OpenlayerServiceManagerAddress},
+		{Name: "Ungate", ServiceManager: cfg.UngateAVSGovernanceAddress},
+		{Name: "Unifi", ServiceManager: cfg.UniFiAvsManagerAddress},
 		{Name: "Witnesschain", ServiceManager: cfg.WitnessChainWitnessHubAddress},
 	}
 
