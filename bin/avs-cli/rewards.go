@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"math/big"
 	"os"
 
 	"github.com/ethereum/go-ethereum/common"
@@ -21,7 +22,14 @@ var ClaimRewardsCmd = &cli.Command{
 		&cli.IntSliceFlag{
 			Name:     "operator-ids",
 			Usage:    "Operator ID",
-			Required: true,
+			Value:    []int64{}, // default to EIGEN
+			Required: false,
+		},
+		&cli.BoolFlag{
+			Name:    "all",
+			Aliases: []string{"a"},
+			Usage:   "Claim rewards for all operators",
+			Value:   false, // Default value
 		},
 		&cli.StringFlag{
 			Name:     "recipient",
@@ -43,13 +51,16 @@ func handleClaimRewards(ctx context.Context, cli *cli.Command) error {
 	operatorIDs := cli.IntSlice("operator-ids")
 	recipient := common.HexToAddress(cli.String("recipient"))
 	tokenStrs := cli.StringSlice("tokens")
-
+	isAllOperators := cli.Bool("all")
 	var tokens []common.Address
 	for _, token := range tokenStrs {
 		tokens = append(tokens, common.HexToAddress(token))
 	}
-	if len(operatorIDs) == 0 {
-		return fmt.Errorf("invalid operator-ids")
+	if len(operatorIDs) == 0 && !isAllOperators {
+		return fmt.Errorf("no operators provided")
+	}
+	if len(operatorIDs) > 0 && isAllOperators {
+		return fmt.Errorf("must use --all or operator-ids")
 	}
 
 	// try to load RPC_URL from env or flags
@@ -70,9 +81,20 @@ func handleClaimRewards(ctx context.Context, cli *cli.Command) error {
 	if err != nil {
 		return fmt.Errorf("loading config: %w", err)
 	}
+	etherfiAPI := etherfi.New(cfg, rpcClient)
+	var lastAvsId *big.Int
+	if isAllOperators {
+		lastAvsId, err = etherfiAPI.AvsOperatorManager.NextAvsOperatorId(nil)
+		if err != nil {
+			return err // Or handle the error appropriately
+		}
+		lastAvsIdInt := int(lastAvsId.Int64())
+		for i := 0; i < lastAvsIdInt; i++ {
+			operatorIDs = append(operatorIDs, int64(i))
+		}
+	}
 
 	// look up operator contracts associated with these ids
-	etherfiAPI := etherfi.New(cfg, rpcClient)
 	var operators []*etherfi.Operator
 	for _, id := range operatorIDs {
 		operator, err := etherfiAPI.LookupOperatorByID(id)

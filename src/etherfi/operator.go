@@ -34,3 +34,11 @@ func (e API) LookupOperatorByID(operatorID int64) (*Operator, error) {
 		ID:       operatorID,
 	}, nil
 }
+
+func (e API) getNextAvsOperatorID() (*big.Int, error) {
+	nextAvsId, err := e.AvsOperatorManager.NextAvsOperatorId(nil)
+	if err != nil {
+		return nil, fmt.Errorf("looking up next avs operator: %w", err)
+	}
+	return nextAvsId, nil
+}
