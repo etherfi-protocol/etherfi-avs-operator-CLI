@@ -25,6 +25,8 @@ jobs:
         run: make build
       
       - name: Claim rewards
+        env:
+          RPC_URL: ${{ secrets.RPC_URL }}
         run: |
           ./avs-cli claim-rewards --all --recipient 0x0c83EAe1FE72c390A02E426572854931EefF93BA
           # Verify the file was created
