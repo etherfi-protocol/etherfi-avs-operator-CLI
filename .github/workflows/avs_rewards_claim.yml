@@ -38,3 +38,4 @@ jobs:
           name: avs-rewards-claim
           path: avs-operator-bulk-reward-claim-0.json
           retention-days: 7 
+          
