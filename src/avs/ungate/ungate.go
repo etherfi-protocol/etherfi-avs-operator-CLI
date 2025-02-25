@@ -105,6 +105,29 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, othenticOperatorData 
 	return utils.ExportJSON("ungate-register-gnosis", operator.ID, batch)
 }
 
+func (a *API) UnregisterOperator(operator *etherfi.Operator) error {
+
+	// manually pack tx data since we are submitting via gnosis instead of directly
+	governanceABI, err := AVSGovernanceMetaData.GetAbi()
+	if err != nil {
+		return fmt.Errorf("fetching abi: %w", err)
+	}
+	calldata, err := governanceABI.Pack("unregisterAsOperator")
+	if err != nil {
+		return fmt.Errorf("packing input: %w", err)
+	}
+
+	// wrap the inner call to be forwarded via AvsOperatorManager
+	adminCall, err := utils.PackForwardCallForAdmin(operator.ID, calldata, a.AVSGovernanceAddress)
+	if err != nil {
+		return fmt.Errorf("wrapping call for admin: %w", err)
+	}
+
+	// output in gnosis compatible format
+	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("ungate-unregister-operator-%d", operator.ID))
+	return utils.ExportJSON("ungate-unregister-gnosis", operator.ID, batch)
+}
+
 /*
 
 keeping this in case we want to entirely replace the othentic typescript cli

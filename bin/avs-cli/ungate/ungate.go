@@ -26,6 +26,7 @@ var UngateCmd = &cli.Command{
 	Before: prepareCmd,
 	Commands: []*cli.Command{
 		RegisterCmd,
+		UnregisterCmd,
 	},
 }
 
@@ -111,4 +112,31 @@ func handleRegister(ctx context.Context, cli *cli.Command) error {
 	whitelistEnabled := true // TODO: this could change
 
 	return ungateAPI.RegisterOperator(operator, &othenticOutput, signingKey, whitelistEnabled)
+}
+
+var UnregisterCmd = &cli.Command{
+	Name:   "unregister",
+	Usage:  "(Admin) Unregister target operator from the AVS",
+	Action: handleUnregister,
+	Flags: []cli.Flag{
+		&cli.IntFlag{
+			Name:     "operator-id",
+			Usage:    "Operator ID",
+			Required: true,
+		},
+	},
+}
+
+func handleUnregister(ctx context.Context, cli *cli.Command) error {
+
+	// parse cli params
+	operatorID := cli.Int("operator-id")
+
+	// look up operator contract associated with this id
+	operator, err := etherfiAPI.LookupOperatorByID(operatorID)
+	if err != nil {
+		return fmt.Errorf("looking up operator address: %w", err)
+	}
+
+	return ungateAPI.UnregisterOperator(operator)
 }
