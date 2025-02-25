@@ -19,7 +19,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '^1.21'  # Adjust version to match your project requirements
+          go-version: '^1.21'
       
       - name: Build AVS CLI
         run: make build
@@ -37,4 +37,4 @@ jobs:
         with:
           name: avs-rewards-claim
           path: avs-operator-bulk-reward-claim-0.json
-          retention-days: 30  # Customize retention period as needed
+          retention-days: 7 

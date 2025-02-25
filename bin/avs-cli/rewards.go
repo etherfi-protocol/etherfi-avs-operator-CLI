@@ -29,7 +29,7 @@ var ClaimRewardsCmd = &cli.Command{
 			Name:    "all",
 			Aliases: []string{"a"},
 			Usage:   "Claim rewards for all operators",
-			Value:   false, // Default value
+			Value:   false,
 		},
 		&cli.StringFlag{
 			Name:     "recipient",
@@ -86,7 +86,7 @@ func handleClaimRewards(ctx context.Context, cli *cli.Command) error {
 	if isAllOperators {
 		lastAvsId, err = etherfiAPI.AvsOperatorManager.NextAvsOperatorId(nil)
 		if err != nil {
-			return err // Or handle the error appropriately
+			return err
 		}
 		lastAvsIdInt := int(lastAvsId.Int64())
 		for i := 0; i < lastAvsIdInt; i++ {
