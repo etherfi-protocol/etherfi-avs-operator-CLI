@@ -86,7 +86,7 @@ func handleClaimRewards(ctx context.Context, cli *cli.Command) error {
 	if isAllOperators {
 		lastAvsId, err = etherfiAPI.AvsOperatorManager.NextAvsOperatorId(nil)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to get next avs operator id: %w", err)
 		}
 		lastAvsIdInt := int(lastAvsId.Int64())
 		for i := 0; i < lastAvsIdInt; i++ {

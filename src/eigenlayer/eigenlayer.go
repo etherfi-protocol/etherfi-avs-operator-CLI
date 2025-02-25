@@ -156,7 +156,6 @@ func (a *API) ClaimAvsOperatorRewards(operators []*etherfi.Operator, rewardsReci
 			if strings.HasPrefix(err.Error(), "earner index not found") {
 				continue
 			}
-			fmt.Println(err.Error())
 			return fmt.Errorf("failed to generate claim proof for earner: %w", err)
 		}
 
