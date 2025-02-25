@@ -22,7 +22,7 @@ var ClaimRewardsCmd = &cli.Command{
 		&cli.IntSliceFlag{
 			Name:     "operator-ids",
 			Usage:    "Operator ID",
-			Value:    []int64{}, // default to EIGEN
+			Value:    []int64{},
 			Required: false,
 		},
 		&cli.BoolFlag{
