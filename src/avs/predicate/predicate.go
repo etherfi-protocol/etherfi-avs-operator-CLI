@@ -85,3 +85,26 @@ func (a *API) RegisterOperator(operator *etherfi.Operator, info RegistrationInfo
 	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("predicate-register-operator-%d", operator.ID))
 	return utils.ExportJSON("predicate-register-gnosis", operator.ID, batch)
 }
+
+func (a *API) RotateSigningKey(operator *etherfi.Operator, currentSigner common.Address, newSigner common.Address) error {
+
+	// manually pack tx data since we are submitting via gnosis instead of directly
+	serviceManagerABI, err := ServiceManagerMetaData.GetAbi()
+	if err != nil {
+		return fmt.Errorf("fetching abi: %w", err)
+	}
+	calldata, err := serviceManagerABI.Pack("rotatePredicateSigningKey", currentSigner, newSigner)
+	if err != nil {
+		return fmt.Errorf("packing input: %w", err)
+	}
+
+	// wrap the inner call to be forwarded via AvsOperatorManager
+	adminCall, err := utils.PackForwardCallForAdmin(operator.ID, calldata, a.ServiceManagerAddress)
+	if err != nil {
+		return fmt.Errorf("wrapping call for admin: %w", err)
+	}
+
+	// output in gnosis compatible format
+	batch := gnosis.NewSingleTxBatch(adminCall, a.AvsOperatorManagerAddress, fmt.Sprintf("predicate-rotate-signing-key-operator-%d", operator.ID))
+	return utils.ExportJSON("predicate-rotate-signing-key-gnosis", operator.ID, batch)
+}
