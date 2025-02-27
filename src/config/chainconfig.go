@@ -8,8 +8,21 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
+type SymbioticVaultType int
+
+const (
+	UNKNOWN SymbioticVaultType = iota
+	WSTETH_VAULT
+	LBTC_VAULT
+	ETHFI_VAULT
+)
+
 // Relevant contracts to each AVS
 type Config struct {
+
+	////////////////////////////////////////////
+	//            Eigenlayer                  //
+	////////////////////////////////////////////
 
 	// Eigenlayer core contracts
 	AvsDirectoryAddress      common.Address
@@ -95,6 +108,22 @@ type Config struct {
 	// Witnesschain
 	WitnessChainOperatorRegistryAddress common.Address
 	WitnessChainWitnessHubAddress       common.Address
+
+	////////////////////////////////////////////
+	//             Symbiotic                  //
+	////////////////////////////////////////////
+
+	SymbioticVaults    map[string]SymbioticVaultConfig
+	SymbioticNetworks  map[common.Address]string
+	SymbioticOperators map[common.Address]string
+}
+
+type SymbioticVaultConfig struct {
+	Vault     common.Address
+	Delegator common.Address
+	Burner    common.Address
+	Asset     string
+	Decimals  int
 }
 
 var Mainnet = Config{
@@ -142,6 +171,48 @@ var Mainnet = Config{
 	UniFiAvsManagerAddress:                 common.HexToAddress("0x2d86E90ED40a034C753931eE31b1bD5E1970113d"),
 	WitnessChainOperatorRegistryAddress:    common.HexToAddress("0xEf1a89841fd189ba28e780A977ca70eb1A5e985D"),
 	WitnessChainWitnessHubAddress:          common.HexToAddress("0xD25c2c5802198CB8541987b73A8db4c9BCaE5cC7"),
+
+	// Symbiotic
+	SymbioticVaults: map[string]SymbioticVaultConfig{
+		"wstETH": {
+			Vault:     common.HexToAddress("0x450a90fdEa8B87a6448Ca1C87c88Ff65676aC45b"),
+			Delegator: common.HexToAddress("0xd6c4b4267BFB908BBdf8C9BDa7d0Ae517aA145b0"),
+			Burner:    common.HexToAddress("0xD1e54Bf62e089287a9514d581c6b80aA75B81d15"),
+			Asset:     "wstETH",
+			Decimals:  18,
+		},
+		"LBTC": {
+			Vault:     common.HexToAddress("0xd4E20ECA1f996Dab35883dC0AD5E3428AF888D45"),
+			Delegator: common.HexToAddress("0xA32E5868713CBeb1880578F5626ED53cc3E1A2fD"),
+			Burner:    common.HexToAddress("0xeb3d85be284d6F83daf1338B22d834ECaF1099fE"),
+			Asset:     "LBTC",
+			Decimals:  8,
+		},
+		"ETHFI": {
+			Vault:     common.HexToAddress("0x2Bcfa0283C92b7845ECE12cEaDc521414BeF1067"),
+			Delegator: common.HexToAddress("0xCcA347C3d3CAFB909A7506eaD727805D38a82EE3"),
+			Burner:    common.HexToAddress("0x2242E802b5AAADcc7c4929EF77F0E530BCb5Ce3f"),
+			Asset:     "ETHFI",
+			Decimals:  18,
+		},
+	},
+	SymbioticOperators: map[common.Address]string{
+		common.HexToAddress("0x087c25f83ED20bda587CFA035ED0c96338D4660f"): "P2P",
+		common.HexToAddress("0xfF645D02C79141424fb4F8bBB5e494f05067c08B"): "Kiln",
+		common.HexToAddress("0x51B6D824bd35AeD4FD1a9E253E41Dc7C9feeFa30"): "Pier 2",
+		common.HexToAddress("0x888F7454E65D213C89bA92020e0d716428898f7f"): "Blockdaemon",
+	},
+	SymbioticNetworks: map[common.Address]string{
+		common.HexToAddress("0xAD12e74847d6D1487A6a3A6b75D1f509f3F627e8"): "CapX",
+		common.HexToAddress("0x759D4335cb712aa188935C2bD3Aa6D205aC61305"): "Cycle Network",
+		common.HexToAddress("0x8560C667Ae72F28D09465B342A480daB28821f6b"): "Ditto",
+		common.HexToAddress("0x59cf937Ea9FA9D7398223E3aA33d92F7f5f986A2"): "Hyperlane",
+		common.HexToAddress("0xE3a148b25Cca54ECCBD3A4aB01e235D154f03eFa"): "Hyve",
+		common.HexToAddress("0x3a7B173124DcFeCff1847FF7f8f56e72ABE02340"): "Marlin",
+		common.HexToAddress("0xfCa0128A19A5c06b0148c27ee7623417a11BaAbd"): "Radius",
+		common.HexToAddress("0xcf128e88e11507abad12a7624a34e3d22f731abc"): "Router",
+		common.HexToAddress("0x5112EbA9bc2468Bb5134CBfbEAb9334EdaE7106a"): "Symbiosis",
+	},
 }
 
 var Holesky = Config{

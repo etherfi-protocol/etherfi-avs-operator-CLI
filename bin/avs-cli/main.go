@@ -19,6 +19,7 @@ import (
 	lagrangezk "github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/lagrangeZK"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/openlayer"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/predicate"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/symbiotic"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/ungate"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/unifi"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/witness-chain"
@@ -43,6 +44,7 @@ func main() {
 			operatorDetailsCmd,
 			updateEcdsaSignerCmd,
 			ClaimRewardsCmd,
+			symbiotic.SymbioticCmd,
 
 			// AVS specific commands
 			alignedlayer.AlignedLayerCmd,

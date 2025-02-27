@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math/big"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/etherfi-protocol/eigenlayer-rewards-proofs/pkg/claimgen"
@@ -152,6 +153,11 @@ func (a *API) ClaimAvsOperatorRewards(operators []*etherfi.Operator, rewardsReci
 	for _, operator := range operators {
 		_, claim, err := cg.GenerateClaimProofForEarner(operator.Address, rewardTokens, rootIndex)
 		if err != nil {
+			// not all operators earn all tokens because of how we allocate funds
+			if strings.Contains(err.Error(), "token not found") {
+				fmt.Printf("operator %d has not earned target token, skipping...\n")
+				continue
+			}
 			return fmt.Errorf("failed to generate claim proof for earner: %w", err)
 		}
 
