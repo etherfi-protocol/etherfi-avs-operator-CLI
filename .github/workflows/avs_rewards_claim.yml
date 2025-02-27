@@ -1,0 +1,40 @@
+name: AVS Rewards Claim
+
+on:
+  # Run weekly on Monday at 00:00 UTC
+  schedule:
+    - cron: '0 0 * * 1'
+  
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  claim-rewards:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '^1.21'
+      
+      - name: Build AVS CLI
+        run: make build
+      
+      - name: Claim rewards
+        env:
+          RPC_URL: ${{ secrets.RPC_URL }}
+        run: |
+          ./avs-cli claim-rewards --all --recipient 0x0c83EAe1FE72c390A02E426572854931EefF93BA
+          # Verify the file was created
+          ls -la avs-operator-bulk-reward-claim-0.json
+      
+      - name: Upload rewards claim file
+        uses: actions/upload-artifact@v4
+        with:
+          name: avs-rewards-claim
+          path: avs-operator-bulk-reward-claim-0.json
+          retention-days: 7
