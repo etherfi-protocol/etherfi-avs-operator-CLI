@@ -75,6 +75,10 @@ type Config struct {
 	EOracleRegistryCoordinatorAddress common.Address
 	EOracleServiceManagerAddress      common.Address
 
+	// Ethgas
+	EthgasStakeRegistryAddress  common.Address
+	EthgasServiceManagerAddress common.Address
+
 	// Gasp
 	GaspRegistryCoordinatorAddress common.Address
 	GaspServiceManagerAddress      common.Address
@@ -155,6 +159,8 @@ var Mainnet = Config{
 	EigenDAServiceManagerAddress:           common.HexToAddress("0x870679E138bCdf293b7Ff14dD44b70FC97e12fc0"),
 	EOracleRegistryCoordinatorAddress:      common.HexToAddress("0x757E6f572AfD8E111bD913d35314B5472C051cA8"),
 	EOracleServiceManagerAddress:           common.HexToAddress("0x23221c5bB90C7c57ecc1E75513e2E4257673F0ef"),
+	EthgasStakeRegistryAddress:             common.HexToAddress("0xfF94c9859E4b15341c1BA3e80CF80044cA2C4e76"),
+	EthgasServiceManagerAddress:            common.HexToAddress("0x6201bc0A699e3b10f324204e6F8EcdD0983De227"),
 	GaspRegistryCoordinatorAddress:         common.HexToAddress("0x9A986296d45C327dAa5998519AE1B3757F1e6Ba1"),
 	GaspServiceManagerAddress:              common.HexToAddress("0x3aDdEb54ddd43Eb40235eC32DfA7928F28A44bb5"),
 	HyperlaneStakeRegistryAddress:          common.HexToAddress("0x272CF0BB70D3B4f79414E0823B426d2EaFd48910"),
