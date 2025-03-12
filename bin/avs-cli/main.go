@@ -15,7 +15,6 @@ import (
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/eoracle"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/gasp"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/hyperlane"
-	lagrangesc "github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/lagrangeSC"
 	lagrangezk "github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/lagrangeZK"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/openlayer"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/predicate"
@@ -57,7 +56,6 @@ func main() {
 			eoracle.EOracleCmd,
 			gasp.GaspCmd,
 			hyperlane.HyperlaneCmd,
-			lagrangesc.LagrangeSCCmd,
 			lagrangezk.LagrangeZKCmd,
 			openlayer.OpenlayerCmd,
 			predicate.PredicateCmd,

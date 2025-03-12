@@ -74,7 +74,6 @@ func handleRegistrationStatus(ctx context.Context, cmd *cli.Command) error {
 		{Name: "eOracle", ServiceManager: cfg.EOracleServiceManagerAddress},
 		{Name: "Gasp", ServiceManager: cfg.GaspServiceManagerAddress},
 		{Name: "Hyperlane", ServiceManager: cfg.HyperlaneServiceManagerAddress},
-		{Name: "LagrangeSC", ServiceManager: cfg.LagrangeServiceAddress},
 		{Name: "LagrangeZK", ServiceManager: cfg.LagrangeZKMRServiceManagerAddress},
 		{Name: "Openlayer", ServiceManager: cfg.OpenlayerServiceManagerAddress},
 		{Name: "Ungate", ServiceManager: cfg.UngateAVSGovernanceAddress},
