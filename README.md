@@ -36,9 +36,9 @@ You will be assigned an operatorID and an operator smart contract that is regist
 * [Cyber MACH](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#cyber-mach)
 * [EigenDA](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#eigenda)
 * [eOracle](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#eoracle)
+* [Ethgas](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#ethgas)
 * [gasp](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#gasp)
 * [Hyperlane](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#hyperlane)
-* [Lagrange State Committees](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#lagrange-state-committees)
 * [Lagrange ZK Coprocessor](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#lagrange-zk-coprocessor)
 * [Openlayer](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#openlayer)
 * [Predicate](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#predicate)
@@ -110,7 +110,7 @@ and note the address of the key you generated
            ./avs-cli predicate prepare-registration --operator-id {operator_id} --avs-signer {address_of_generated_ecdsa_key}
 
 3. Wait for confirmation from the ether.fi team that your registration is complete
-4. Proceed to run the hyperlane node software
+4. Proceed to run the predicate node software
 
 
 ## Ether.fi Admin Flow
@@ -213,36 +213,6 @@ Be sure to save the `public_key` hex string that will be returned as part of the
 3. Register the operator contract with lagrange ZK Coprocessor
 
            ./avs-cli lagrangeZK register --registration-input lagrangeZK-input.json
-
-           // submit resulting output as a gnosis TX via AVS admin gnosis
-
----
-
-# Lagrange State Committees
-
-## Operator Flow
-
-1. Generate a new BLS and ECSDA key via the lagrange tooling https://docs.lagrange.dev/state-committees/run-node/commands
-2. Run the following command and send the output to the ether.fi team via `restaking@ether.fi`
-
-           ./avs-cli lagrangeSC prepare-registration --operator-id {operator_id} --bls-keystore {path_to_keystore} --bls-password {encryption_password} --signer-address {address_of_generated_ecdsa_key}
-
-3. Wait for confirmation from the ether.fi team that your registration is complete
-4. Proceed to run the lagrange state committee node software
-
-## Ether.fi Admin Flow
-
-1. Recieve prepared registration json file from target node operator
-2. Ensure target operator contract is whitelisted by lagrange team (Whitelisting was requested for operators 1-12)
-3. Register the operator contract with lagrange state committees
-
-           ./avs-cli lagrangeSC register --registration-input lagrangeSC-input.json
-
-           // submit resulting output as a gnosis TX via AVS admin gnosis
-
-4. Subscribe the operator to target chains so that the operator can recieve workloads
-
-           ./avs-cli lagrangeSC subscribe --registration-input lagrangeSC-input.json
 
            // submit resulting output as a gnosis TX via AVS admin gnosis
 
@@ -425,6 +395,31 @@ and note the address of the key you generated
 2. Register the operator contract with Hyperlane
 
            ./avs-cli hyperlane register --registration-input hyperlane-input.json
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
+
+---
+
+# Ethgas
+
+## Operator Flow
+
+1. Generate a new ECDSA key using [EigenLayer CLI](https://docs.eigenlayer.xyz/eigenlayer/operator-guides/operator-installation#create-and-list-keys)
+and note the address of the key you generated
+2. Run the following command and send the output to the ether.fi team via `restaking@ether.fi`
+
+           ./avs-cli ethgas prepare-registration --operator-id {operator_id} --avs-signer {address_of_generated_ecdsa_key}
+
+3. Wait for confirmation from the ether.fi team that your registration is complete
+4. Proceed to run the ethgas node software
+
+
+## Ether.fi Admin Flow
+
+1. Receive prepared registration json file from target node operator
+2. Register the operator contract with Ethgas
+
+           ./avs-cli ethgas register --registration-input ethgas-input.json
 
            // submit resulting output as a gnosis TX via AVS admin gnosis
 
