@@ -3,13 +3,21 @@ package main
 import (
 	"context"
 	"fmt"
+	"math/big"
+	"os"
 
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/ethereum/go-ethereum/params"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/config"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/eigenlayer"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
 	"github.com/urfave/cli/v3"
 )
 
 // TODO(Dave): dynamically scan via events
-const TotalOperators = 12
+const TotalOperators = 15
 
 var operatorDetailsCmd = &cli.Command{
 	Name:   "operator-details",
@@ -27,41 +35,59 @@ var operatorDetailsCmd = &cli.Command{
 			Usage:    "list details of all operators",
 			Required: false,
 		},
-		&cli.StringFlag{
-			Name:     "rpc-url",
-			Usage:    "rpc url",
-			Required: true,
-		},
 	},
 }
 
-func handleOperatorDetails(ctx context.Context, cli *cli.Command) error {
+func handleOperatorDetails(ctx context.Context, cmd *cli.Command) error {
 
-	operatorID := cli.Int("operator-id")
-	allOperators := cli.Bool("all")
-	rpcURL := cli.String("rpc-url")
+	// parse cli input
+	operatorID := cmd.Int("operator-id")
 
-	if !allOperators && operatorID == 0 {
-		return fmt.Errorf("must provide --operator-id or --all flag")
+	// try to load RPC_URL from env or flags
+	rpcURL := os.Getenv("RPC_URL")
+	if cmd.String("rpc-url") != "" {
+		rpcURL = cmd.String("rpc-url")
 	}
-
-	// connect to RPC node
+	if rpcURL == "" {
+		return fmt.Errorf("must set env var $RPC_URL or use --rpc-url flag")
+	}
 	rpcClient, err := ethclient.Dial(rpcURL)
 	if err != nil {
-		return fmt.Errorf("dialing rpc: %w", err)
+		return fmt.Errorf("dialing RPC: %w", err)
 	}
 
-	if allOperators {
-		for x := range TotalOperators {
-			operatorID := x + 1 // operator contracts started at index 1
-			if err != operatorDetails(int64(operatorID), rpcClient) {
-				return fmt.Errorf("fetching operator details: %w", err)
-			}
-		}
-		return nil
+	// load all required addresses for this chain
+	cfg, err := config.AutodetectConfig(rpcClient)
+	if err != nil {
+		return fmt.Errorf("loading config: %w", err)
 	}
 
-	return operatorDetails(operatorID, rpcClient)
+	etherfiAPI := etherfi.New(cfg, rpcClient)
+
+	// look up operator contract associated with this id
+	operator, err := etherfiAPI.LookupOperatorByID(operatorID)
+	if err != nil {
+		return fmt.Errorf("looking up operator address: %w", err)
+	}
+
+	delegationManager, err := eigenlayer.NewDelegationManager(cfg.DelegationManagerAddress, rpcClient)
+	if err != nil {
+		return fmt.Errorf("binding delegationManager: %w", err)
+	}
+	shares, err := delegationManager.GetOperatorShares(&bind.CallOpts{}, operator.Address, []common.Address{cfg.BeaconEthStrategyAddress, cfg.EigenStrategyAddress})
+	if err != nil {
+		return fmt.Errorf("fetching delegated shares: %w", err)
+	}
+	for _, s := range shares {
+		v, _ := weiToEther(s).Float64()
+		fmt.Printf("%.04f\n", v)
+	}
+	return nil
+
+}
+
+func weiToEther(wei *big.Int) *big.Float {
+	return new(big.Float).Quo(new(big.Float).SetInt(wei), big.NewFloat(params.Ether))
 }
 
 func operatorDetails(operatorID int64, rpcClient *ethclient.Client) error {

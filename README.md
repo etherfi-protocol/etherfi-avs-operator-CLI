@@ -42,6 +42,7 @@ You will be assigned an operatorID and an operator smart contract that is regist
 * [Lagrange ZK Coprocessor](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#lagrange-zk-coprocessor)
 * [Openlayer](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#openlayer)
 * [Predicate](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#predicate)
+* [Redstone](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#redstone)
 * [Ungate](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#ungate)
 * [UniFi](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#unifi)
 * [Witness Chain](https://github.com/etherfi-protocol/etherfi-avs-operator-CLI?tab=readme-ov-file#witness-chain)
@@ -124,6 +125,27 @@ and note the address of the key you generated
 
 ---
 
+# Redstone
+
+## Operator Flow
+
+1. generate a bls key and signature using Othentic's tooling https://github.com/Othentic-Labs/othentic-eip1271-operator-registration-script?tab=readme-ov-file#generate-avs-bls-public-key--auth-signature
+2. Send the resulting json artifact from the previous command to the ether.fi team via `restaking@ether.fi`
+5. Wait for confirmation from the ether.fi team that your registration is complete
+6. Proceed to run the node software
+
+## Ether.fi Admin Flow
+
+1. Receive prepared registration json file from target node operator
+2. Register the operator contract
+
+           ./avs-cli redstone register --registration-input input.json
+
+           // submit resulting output as a gnosis TX via AVS admin gnosis
+
+
+---
+
 # Ungate
 
 ## Operator Flow
@@ -138,7 +160,7 @@ and note the address of the key you generated
 1. Receive prepared registration json file from target node operator
 2. Register the operator contract
 
-           ./avs-cli alignedlayer register --registration-input input.json
+           ./avs-cli ungate register --registration-input input.json
 
            // submit resulting output as a gnosis TX via AVS admin gnosis
 

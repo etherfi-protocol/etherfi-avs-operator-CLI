@@ -19,6 +19,7 @@ import (
 	lagrangezk "github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/lagrangeZK"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/openlayer"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/predicate"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/redstone"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/symbiotic"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/ungate"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/bin/avs-cli/unifi"
@@ -61,6 +62,7 @@ func main() {
 			lagrangezk.LagrangeZKCmd,
 			openlayer.OpenlayerCmd,
 			predicate.PredicateCmd,
+			redstone.RedstoneCmd,
 			ungate.UngateCmd,
 			unifi.UniFiCmd,
 			witness.WitnessCmd,

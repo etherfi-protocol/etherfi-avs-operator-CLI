@@ -100,6 +100,9 @@ type Config struct {
 	// Predicate
 	PredicateServiceManagerAddress common.Address
 
+	// Redstone
+	RedstoneAVSGovernanceAddress common.Address
+
 	// Ungate
 	UngateAVSGovernanceAddress common.Address
 
@@ -169,6 +172,7 @@ var Mainnet = Config{
 	OpenlayerServiceManagerAddress:         common.HexToAddress("0xF7fcff55d5FDAf2C3Bbeb140Be5e62a2c7D26Db3"),
 	OpenlayerStakeRegistryAddress:          common.HexToAddress("0x8702C01EAbC9E5E376ACaB9358383DBDdCdDF018"),
 	PredicateServiceManagerAddress:         common.HexToAddress("0xf6f4A30EeF7cf51Ed4Ee1415fB3bFDAf3694B0d2"),
+	RedstoneAVSGovernanceAddress:           common.HexToAddress("0x6f943318b05AD7c6EE596A220510A6D64B518dd8"),
 	UngateAVSGovernanceAddress:             common.HexToAddress("0xB3e069FD6dDA251AcBDE09eDa547e0AB207016ee"),
 	UniFiAvsManagerAddress:                 common.HexToAddress("0x2d86E90ED40a034C753931eE31b1bD5E1970113d"),
 	WitnessChainOperatorRegistryAddress:    common.HexToAddress("0xEf1a89841fd189ba28e780A977ca70eb1A5e985D"),
