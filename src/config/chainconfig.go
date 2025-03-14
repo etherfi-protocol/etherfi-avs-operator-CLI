@@ -36,6 +36,7 @@ type Config struct {
 
 	// strategies (how eigenlayer tracks different LRT's + beacon eth)
 	BeaconEthStrategyAddress common.Address
+	EigenStrategyAddress     common.Address
 	WethStrategyAddress      common.Address
 
 	// Etherfi AVS contracts
@@ -132,6 +133,7 @@ var Mainnet = Config{
 	StrategyManagerAddress:   common.HexToAddress("0x858646372CC42E1A627fcE94aa7A7033e7CF075A"),
 	EigenpodManagerAddress:   common.HexToAddress("0x91E677b07F7AF907ec9a428aafA9fc14a0d3A338"),
 	BeaconEthStrategyAddress: common.HexToAddress("0xbeaC0eeEeeeeEEeEeEEEEeeEEeEeeeEeeEEBEaC0"),
+	EigenStrategyAddress:     common.HexToAddress("0xaCB55C530Acdb2849e6d4f36992Cd8c9D50ED8F7"),
 	WethStrategyAddress:      common.HexToAddress(""),
 
 	EigenlayerOperatorRegistryClaimAddress: common.HexToAddress("0x8bB56D1CBA6273478E9B4D79F89857ac8D766eb3"),
@@ -147,8 +149,8 @@ var Mainnet = Config{
 	ARPAServiceManagerAddress:              common.HexToAddress("0x1DE75EaAb2df55d467494A172652579E6FA4540E"),
 	AutomataRegistryCoordinatorAddress:     common.HexToAddress("0x414696E4F7f06273973E89bfD3499e8666D63Bd4"),
 	AutomataServiceManagerAddress:          common.HexToAddress("0xe5445838c475a2980e6a88054ff1514230b83aeb"),
-	BrevisRegistryCoordinatorAddress:       common.HexToAddress("0x434621cfd8BcDbe8839a33c85aE2B2893a4d596C"),
-	BrevisServiceManagerAddress:            common.HexToAddress("0x9FC952BdCbB7Daca7d420fA55b942405B073A89d"),
+	BrevisRegistryCoordinatorAddress:       common.HexToAddress("0x8B83b9808DE79D5EEE97417bB14f82c41bCcD6F0"),
+	BrevisServiceManagerAddress:            common.HexToAddress("0x0328635BA5FF28476118595234b5b7236b906c0B"),
 	CyberMachRegistryCoordinatorAddress:    common.HexToAddress("0x118610D207A32f10F4f7C3a1FEFac5b3327c2bad"),
 	CyberMachServiceManagerAddress:         common.HexToAddress("0x1F2c296448f692af840843d993fFC0546619Dcdb"),
 	EigenDARegistryCoordinatorAddress:      common.HexToAddress("0x0BAAc79acD45A023E19345c352d8a7a83C4e5656"),
