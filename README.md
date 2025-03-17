@@ -411,7 +411,7 @@ and note the address of the key you generated
            ./avs-cli ethgas prepare-registration --operator-id {operator_id} --avs-signer {address_of_generated_ecdsa_key}
 
 3. Wait for confirmation from the ether.fi team that your registration is complete
-4. Proceed to run the ethgas node software
+4. You are done (there is no client software that needs to be run at this time)
 
 
 ## Ether.fi Admin Flow
