@@ -4,10 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/big"
+	"strings"
 	"testing"
 
 	"github.com/consensys/gnark-crypto/ecc/bn254"
 	"github.com/consensys/gnark-crypto/ecc/bn254/fp"
+	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -77,4 +79,46 @@ func TestKeystore_BLSSign(t *testing.T) {
 	// TODO: Verify signature
 	// input should be [32]byte format but how get I get this?
 	//signature.Verify(blsKeyPair.GetPubKeyG2(), )
+}
+
+func TestKeystore_LoadECDSA(t *testing.T) {
+	// fixtures
+	ecdsaKeyFile := "./fixtures/fixture.ecdsa.key.json"
+	expectedAddress := "0x287B703F25CE707D7974D26DBE5B78121f70794f"
+	passwd := "fixture@test1234"
+
+	ks := NewKeystoreV3()
+	ecdsaKey, err := ks.LoadECDSA(ecdsaKeyFile, passwd)
+
+	assert.Nil(t, err)
+	assert.NotNil(t, ecdsaKey)
+
+	// Verify the loaded key generates the expected address
+	address := crypto.PubkeyToAddress(ecdsaKey.PublicKey)
+	assert.Equal(t, strings.ToLower(expectedAddress), strings.ToLower(address.Hex()))
+
+	fmt.Printf("Loaded ECDSA key for address: %s\n", address.Hex())
+}
+
+func TestKeystore_LoadECDSA_InvalidPassword(t *testing.T) {
+	ecdsaKeyFile := "./fixtures/fixture.ecdsa.key.json"
+	wrongPasswd := "wrongpassword"
+
+	ks := NewKeystoreV3()
+	ecdsaKey, err := ks.LoadECDSA(ecdsaKeyFile, wrongPasswd)
+
+	assert.NotNil(t, err)
+	assert.Nil(t, ecdsaKey)
+	assert.Contains(t, err.Error(), "could not decrypt key")
+}
+
+func TestKeystore_LoadECDSA_NonexistentFile(t *testing.T) {
+	nonexistentFile := "./fixtures/nonexistent.json"
+	passwd := "fixture@test1234"
+
+	ks := NewKeystoreV3()
+	ecdsaKey, err := ks.LoadECDSA(nonexistentFile, passwd)
+
+	assert.NotNil(t, err)
+	assert.Nil(t, ecdsaKey)
 }

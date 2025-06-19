@@ -20,6 +20,68 @@ make build
 ### Prerequisites
 - Ethereum RPC endpoint to send transactions.
 
+## ECDSA Key Management
+
+The CLI supports two methods for providing ECDSA private keys for transaction signing:
+
+### Option 1: Encrypted Keystore Files (Recommended)
+
+For enhanced security, use encrypted keystore files compatible with EigenLayer CLI:
+
+```bash
+# Generate a new ECDSA key using EigenLayer CLI
+eigenlayer operator keys create --key-type ecdsa [keyname]
+
+# Use the keystore file with etherfi-avs-operator-CLI
+./avs-cli arpa register-node \
+  --operator-id 1 \
+  --dkg-public-key "0x..." \
+  --registration-signature input.json \
+  --ecdsa-keystore /path/to/keystore.json \
+  --ecdsa-password "your_password"
+```
+
+### Option 2: Environment Variables (Legacy)
+
+For backward compatibility, you can still use environment variables:
+
+```bash
+export PRIVATE_KEY="your_private_key_hex"
+export ADMIN_1271_SIGNING_KEY="admin_signing_key_hex"
+export WATCHTOWER_PRIVATE_KEY="watchtower_private_key_hex"  # For witness-chain only
+
+./avs-cli arpa register-node \
+  --operator-id 1 \
+  --dkg-public-key "0x..." \
+  --registration-signature input.json
+```
+
+### Migration Guide
+
+If you're currently using environment variables, we recommend migrating to encrypted keystore files:
+
+1. **Create a keystore file from your existing private key:**
+   ```bash
+   # Using EigenLayer CLI
+   eigenlayer operator keys import --key-type ecdsa [keyname] [private_key_hex]
+   ```
+
+2. **Update your commands to use keystore flags:**
+   - Add `--ecdsa-keystore /path/to/keystore.json`
+   - Add `--ecdsa-password "your_password"`
+   - Remove environment variable exports
+
+3. **Supported commands with keystore support:**
+   - `arpa register-node`
+   - `arpa generate-registration-signature`
+   - `update-ecdsa-signer`
+   - `witness-chain prepare-registration`
+
+### Security Benefits
+
+- **No raw private keys in environment:** Keystore files are encrypted with your password
+- **Industry standard:** Compatible with EigenLayer CLI keystore format
+- **Better operational security:** Reduces risk of key exposure in process environments
 
 ## Step 1: Request ether.fi team to be registered as a Delegated AVS operator
 

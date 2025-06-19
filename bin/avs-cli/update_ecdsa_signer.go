@@ -6,14 +6,13 @@ import (
 	"encoding/hex"
 	"fmt"
 	"math/big"
-	"os"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/config"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/utils"
 	"github.com/urfave/cli/v3"
 )
 
@@ -21,7 +20,7 @@ var updateEcdsaSignerCmd = &cli.Command{
 	Name:   "update-ecdsa-signer",
 	Usage:  "(Ether.fi Admin) the signer associated with this operator",
 	Action: handleUpdateEcdsaSigner,
-	Flags: []cli.Flag{
+	Flags: append([]cli.Flag{
 		&cli.IntFlag{
 			Name:     "operator-id",
 			Usage:    "Operator ID",
@@ -40,7 +39,7 @@ var updateEcdsaSignerCmd = &cli.Command{
 			Name:  "rpc-url",
 			Usage: "rpc url",
 		},
-	},
+	}, utils.GetECDSAKeystoreFlags()...),
 }
 
 func handleUpdateEcdsaSigner(ctx context.Context, cli *cli.Command) error {
@@ -56,10 +55,10 @@ func handleUpdateEcdsaSigner(ctx context.Context, cli *cli.Command) error {
 		return fmt.Errorf("dialing rpc: %w", err)
 	}
 
-	return updateEcdsaSigner(rpcClient, operatorID, ecdsaSigner, broadcast)
+	return updateEcdsaSigner(rpcClient, operatorID, ecdsaSigner, broadcast, cli)
 }
 
-func updateEcdsaSigner(rpcClient *ethclient.Client, operatorID int64, ecdsaSigner common.Address, broadcast bool) error {
+func updateEcdsaSigner(rpcClient *ethclient.Client, operatorID int64, ecdsaSigner common.Address, broadcast bool, cli *cli.Command) error {
 
 	// load configuration
 	chainID, err := rpcClient.ChainID(context.Background())
@@ -78,7 +77,7 @@ func updateEcdsaSigner(rpcClient *ethclient.Client, operatorID int64, ecdsaSigne
 	}
 
 	// load signing key
-	privateKey, err := crypto.HexToECDSA(os.Getenv("PRIVATE_KEY"))
+	privateKey, err := utils.LoadECDSAKey(cli, "PRIVATE_KEY")
 	if err != nil {
 		return fmt.Errorf("loading signing key: %w", err)
 	}
