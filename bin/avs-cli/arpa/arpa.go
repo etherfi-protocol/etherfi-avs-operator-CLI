@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/avs/arpa"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/config"
 	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/etherfi"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/utils"
 	"github.com/urfave/cli/v3"
 )
 
@@ -61,7 +61,7 @@ var RegisterCmd = &cli.Command{
 	Name:   "register-node",
 	Usage:  "(Node Operator) register a node with the ARPA service",
 	Action: handleRegistration,
-	Flags: []cli.Flag{
+	Flags: append([]cli.Flag{
 		&cli.IntFlag{
 			Name:     "operator-id",
 			Usage:    "Operator ID",
@@ -77,7 +77,7 @@ var RegisterCmd = &cli.Command{
 			Usage:    "path to registration signature file created by prepare-registration command",
 			Required: true,
 		},
-	},
+	}, utils.GetECDSAKeystoreFlags()...),
 }
 
 func handleRegistration(ctx context.Context, cli *cli.Command) error {
@@ -119,9 +119,9 @@ func handleRegistration(ctx context.Context, cli *cli.Command) error {
 	}
 
 	// load `Node Account` private key
-	signingKey, err := crypto.HexToECDSA(os.Getenv("PRIVATE_KEY"))
+	signingKey, err := utils.LoadECDSAKey(cli, "PRIVATE_KEY")
 	if err != nil {
-		return fmt.Errorf("invalid private key: %w", err)
+		return fmt.Errorf("loading Node Account private key: %w", err)
 	}
 
 	return arpaAPI.Register(operator, dkgPublicKey, inputSignature, signingKey)
@@ -131,13 +131,13 @@ var GenerationRegisterSignatureCmd = &cli.Command{
 	Name:   "generate-registration-signature",
 	Usage:  "(Admin) generate a registration signature for the given operator",
 	Action: handleGenerateRegistrationSignature,
-	Flags: []cli.Flag{
+	Flags: append([]cli.Flag{
 		&cli.IntFlag{
 			Name:     "operator-id",
 			Usage:    "Operator ID",
 			Required: true,
 		},
-	},
+	}, utils.GetECDSAKeystoreFlags()...),
 }
 
 func handleGenerateRegistrationSignature(ctx context.Context, cli *cli.Command) error {
@@ -152,9 +152,9 @@ func handleGenerateRegistrationSignature(ctx context.Context, cli *cli.Command) 
 	}
 
 	// load eip-1271 admin signing key
-	signingKey, err := crypto.HexToECDSA(os.Getenv("ADMIN_1271_SIGNING_KEY"))
+	signingKey, err := utils.LoadECDSAKey(cli, "ADMIN_1271_SIGNING_KEY")
 	if err != nil {
-		return fmt.Errorf("invalid private key: %w", err)
+		return fmt.Errorf("loading admin signing key: %w", err)
 	}
 
 	return arpaAPI.GenerateAVSRegistrationSignature(operator, signingKey)
