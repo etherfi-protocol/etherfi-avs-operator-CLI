@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/etherfi-protocol/etherfi-avs-operator-tool/src/utils"
 	"github.com/urfave/cli/v3"
 )
 
@@ -22,13 +22,13 @@ var WitnessPrepareRegistrationCmd = &cli.Command{
 	Name:   "prepare-registration",
 	Usage:  "(Node Operator) gather all inputs required to register for avs",
 	Action: handleWitnessPrepareRegistration,
-	Flags: []cli.Flag{
+	Flags: append([]cli.Flag{
 		&cli.IntFlag{
 			Name:     "operator-id",
 			Usage:    "Operator ID",
 			Required: true,
 		},
-	},
+	}, utils.GetECDSAKeystoreFlags()...),
 }
 
 func handleWitnessPrepareRegistration(ctx context.Context, cli *cli.Command) error {
@@ -37,9 +37,9 @@ func handleWitnessPrepareRegistration(ctx context.Context, cli *cli.Command) err
 	operatorID := cli.Int("operator-id")
 
 	// load watchtower private key
-	watchtowerPrivateKey, err := crypto.HexToECDSA(os.Getenv("WATCHTOWER_PRIVATE_KEY"))
+	watchtowerPrivateKey, err := utils.LoadECDSAKey(cli, "WATCHTOWER_PRIVATE_KEY")
 	if err != nil {
-		return fmt.Errorf("invalid WATCHTOWER_PRIVATE_KEY env var: %w", err)
+		return fmt.Errorf("loading watchtower private key: %w", err)
 	}
 
 	// look up operator contract associated with this id
