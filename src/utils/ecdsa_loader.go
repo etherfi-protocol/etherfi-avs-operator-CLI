@@ -10,9 +10,14 @@ import (
 	"github.com/urfave/cli/v3"
 )
 
+// CommandStringGetter interface for getting string values from CLI commands
+type CommandStringGetter interface {
+	String(name string) string
+}
+
 // LoadECDSAKey loads an ECDSA private key from keystore file if provided,
 // otherwise falls back to environment variable for backward compatibility
-func LoadECDSAKey(cmd *cli.Command, envVarName string) (*ecdsa.PrivateKey, error) {
+func LoadECDSAKey(cmd CommandStringGetter, envVarName string) (*ecdsa.PrivateKey, error) {
 	keystoreFile := cmd.String("ecdsa-keystore")
 	keystorePassword := cmd.String("ecdsa-password")
 
