@@ -138,7 +138,7 @@ and note the address of the key you generated
 1. Receive prepared registration json file from target node operator
 2. Register the operator contract
 
-           ./avs-cli alignedlayer register --registration-input input.json
+           ./avs-cli ungate register --operator-id {operator_id} --othentic-output {path_to_othentic_output}
 
            // submit resulting output as a gnosis TX via AVS admin gnosis
 
